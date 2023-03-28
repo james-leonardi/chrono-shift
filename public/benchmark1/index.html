@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chrono-Switch Benchmark 1</title>
+    <style>
+        img {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1 align="center">
+        Chrono-Switch
+    </h1>
+    
+    <h2 align="center"> 
+        by Kevin Tao, Kyle Yee, James Leonardi 
+    </h2>
+    <div style="text-align: center">
+            <img src="./images/Logo.png" style="max-width: 25%">
+    </div>
+    
+    
+    <h3> INTRODUCTION </h3>
+    <p>
+        This document describes a game called “Chrono-Switch,” which is a 2D platformer with time travel and grappling hook mechanics, built using the Wolfie2D engine. It employs sprite-based animation, 2D physics, enemy AI, and creative level design. 
+    </p>
+    <br>
+
+    <h3> TECHNOLOGY </h3>
+    <p>
+        Chrono-Switch will be developed using the Wolfie2D engine (https://github.com/WolfieEngine). The game will be written in TypeScript, and gulp will be used to transpile this into executable JavaScript code for browsers. We will use Audacity to create sound effects, and FL Studio to create music. Sprites will be created in Photoshop. The game will be hosted on Firebase. 
+    </p>
+    <br>
+    
+    <h3>BACK STORY</h3>
+    <p>
+        Tepster Tomsper is a distinguished and capable hitman. One day while out running errands at Trader Joe’s, he stumbled upon the Chrono-Switch, a device that, when activated, allows him to travel back in time. Using his newfound god-like powers, he decided that it is his duty to eliminate the anachronistic fiends that are infesting the past and present. 
+    </p>
+    <br>
+    
+    <h3>OBJECTIVE</h3>
+    <p>
+        Find ways to traverse the level and kill the given target. You will have to use both the grappling hook and the Chrono-Switch to find unique ways to get past certain obstacles such as spikes, enemies, gaps, and more.  
+
+		Tepster Tomsper uses the grappling hook and eventually a gun to defeat his opponents in a stylish and fun manner.  
+    </p>
+    <br>
+    
+    <h3>GAMEPLAY</h3>
+    <p>
+        This game is played like a 2D platformer (move left/right, jump) with a few unique mechanics: 
+	</p>
+	<p>
+		Pressing ‘s’ will allow you to switch between the past and the present. The game world will change depending on which timeline you’re in. 
+	</p>
+	<p>
+		Once obtained, right-clicking will launch a grappling hook in the direction of the mouse cursor. The grappling hook will pull you towards it until you release right-click.  
+	</p>
+	<p>
+		Traversing the level will require well-thought use of these mechanics. The goal of each level is to assassinate the target at the end. 
+	</p>
+	<p>
+		Throughout the level there will be enemies patrolling, who will shoot at you if they see you. You can make use of your grappling hook or gun to dispatch them. Hitting them with your grappling hook will continuously pull them towards you, allowing you to use level hazards to your advantage. 
+    </p>
+    <br>
+    
+    <h3>CONTROLS</h3>
+    <p>
+        This game will use a combination of keyboard and mouse inputs to control the character. The control scheme is listed below:
+    </p>
+    <ul>
+        <li><strong>A</strong> - Move Left</li>
+        <li><strong>D</strong> - Move Right</li>
+        <li><strong>W</strong> - Jump</li>
+        <li><strong>S</strong> - Switch Timelines</li>
+        <li><strong>Left-Click</strong> - Shoot Gun</li>
+        <li><strong>Right-Click</strong> - Shoot grappling hook</li>
+        <li><strong>Esc</strong> - Pause</li>
+    </ul>
+    <br>
+    
+    <h3>GRAPHICAL USER INTERFACE</h3>
+    <ul>
+        <li><strong>Splash Screen</strong> - A simple screen with the game logo and name. Clicking anywhere will bring the user to the Main Menu. See Splash Screen under UI Mockups.</li>
+        <li><strong>Main Menu</strong> - The main menu of the game, with 4 buttons: Play, Level Select, Controls, and Help.</li>
+        <ul>
+            <li><strong>Play</strong> - The user will be loaded into the most recently unlocked level.</li>
+            <li><strong>Level Select</strong> - The user will be brought into a submenu with a selection of levels to choose from. 		They can click on any unlocked level to play it. Locked levels will show a locked symbol.</li>
+            <li><strong>Controls</strong> - The user will be shown a page containing the game’s controls.</li>
+            <li><strong>Help</strong> - The user will be shown a page containing the game’s backstory, developer info, and cheat 		codes.</li>
+			See Main Menu under UI Mockups. 
+        </ul>
+        <li><strong>Pause Menu</strong> - Upon pressing ESC, the game will be paused and the user will be shown a pause menu with the following options:</li>
+		<ul>
+            <li><strong>Resume</strong> - Closes the pause menu and resumes the game.</li>
+            <li><strong>Main Menu</strong> - Exits to main menu.</li>
+        </ul>
+        <li><strong>In-Game GUI</strong> - While in game, the following elements will be shown:</li>
+		<ul>
+            <li><strong>Health bar</strong> - Bar in the top right of the screen showing the player’s current health. </li>
+        </ul>
+    </ul>
+    <br>
+
+    <h3>ARTWORK</h3>
+    <p>
+        Tepster Tomsper: The main character, who will have animations for the following actions: 
+    </p>
+    <ul>
+        <li>Idling</li>
+		<li>Walking</li>
+		<li>Jumping</li>
+		<li>Swinging</li>
+		<li>Taking Damage</li>
+		<li>Dying</li>
+		<li>Shooting (gun/grappling hook)</li>
+    </ul>
+	<p>
+        Enemies: Non-boss enemies scattered throughout the level which will have animations for the following actions: 
+    </p>
+    <ul>
+        <li>Idling</li>
+		<li>Walking</li>
+		<li>Shooting (gun)</li>
+		<li>Taking Damage</li>
+		<li>Dying</li>
+    </ul>
+	<p>
+        Ground, walls, and platforms: These assets will be tiled to allow for greater flexibility when creating levels. Walls and platforms will be able to be interacted with using the player actor or the grappling hook.  
+    </p>
+	<p>
+        Background: We will have a parallax background depicting a high-quality render of the level that the player is currently playing. 
+    </p>
+	<p>
+        Splash Screens: There will be a main menu splash screen with original artwork and there will be a level complete splash screen. 
+    </p>
+    <br>
+    
+    <h3>SOUND EFFECTS</h3>
+    <p>
+		All sound effects will be original. We will add sound effects for at least the following events:
+	</p>
+    <ul>
+        <li>Walking</li>
+        <li>Jumping</li>
+        <li>Landing</li>
+        <li>Shooting Grappling Hook</li>
+        <li>Grappling Hook Hit</li>
+        <li>Grappling Hook Pull</li>
+        <li>Shooting Gun</li>
+        <li>Bullet Hit</li>
+        <li>Enemy Death</li>
+        <li>Player Damage</li>
+        <li>Player Death</li>
+		<li>Switching Timelines</li>
+		<li>Level Complete</li>
+    </ul>
+	<p>
+		Additionally, each level will have its own original music track. Reverb will be added to the music while in the past for atmospheric purposes. 
+	</p>
+    <br>
+    
+    <h3>UI Mockups</h3>
+    <p>
+        Splash Screen
+    </p>
+	<img src="./images/Splash.png" align="center" style="max-width: 25%">
+	<p>
+        Main Menu
+    </p>
+	<img src="./images/MainMenu.png" align="center" style="max-width: 25%">
+	<p>
+        Level Select
+    </p>
+	<img src="./images/LevelSelect.png" align="center" style="max-width: 25%">
+	<p>
+        Controls
+    </p>
+	<img src="./images/Controls.png" align="center" style="max-width: 25%">
+	<p>
+        Help
+    </p>
+	<img src="./images/Help.png" align="center" style="max-width: 25%">
+	<p>
+        In-Game Pause Menu
+    </p>
+	<img src="./images/Pause.png" align="center" style="max-width: 25%">
+    <br>
+    
+</body>
+</html>
