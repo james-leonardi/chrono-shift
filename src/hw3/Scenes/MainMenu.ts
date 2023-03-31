@@ -21,15 +21,26 @@ export default class MainMenu extends Scene {
     public static readonly MUSIC_KEY = "MAIN_MENU_MUSIC";
     public static readonly MUSIC_PATH = "hw4_assets/music/menu.mp3";
     public static readonly LOGO_KEY = "MAIN_MENU_LOGO";
-    public static readonly LOGO_PATH = "hw4_assets/logo.png";
+    public static readonly LOGO_PATH = "hw4_assets/Logo.png";
+    public static readonly CHRONO_KEY = "CHRONO";
+    public static readonly CHRONO_PATH = "hw4_assets/Chrono.png";
+    public static readonly SWITCH_KEY = "SWITCH";
+    public static readonly SWITCH_PATH = "hw4_assets/Switch.png";
+    public static readonly BACKGROUND_KEY = "MAIN_MENU_BACKGROUND";
+    public static readonly BACKGROUND_PATH = "hw4_assets/Background.png";
     private mainMenu: Layer;
     private controls: Layer;
     private about: Layer;
     private logo: Sprite;
+    private chrono: Sprite;
+    private switch: Sprite;
 
     public loadScene(): void {
         // Load the menu song
-        this.load.image(MainMenu.LOGO_KEY, MainMenu.LOGO_PATH)
+        this.load.image(MainMenu.LOGO_KEY, MainMenu.LOGO_PATH);
+        this.load.image(MainMenu.CHRONO_KEY, MainMenu.CHRONO_PATH);
+        this.load.image(MainMenu.SWITCH_KEY, MainMenu.SWITCH_PATH);
+        this.load.image(MainMenu.BACKGROUND_KEY, MainMenu.BACKGROUND_PATH);
         this.load.audio(MainMenu.MUSIC_KEY, MainMenu.MUSIC_PATH);
     }
 
@@ -47,11 +58,25 @@ export default class MainMenu extends Scene {
         this.viewport.setFocus(size);
         this.viewport.setZoomLevel(1);
 
-        this.logo = this.add.sprite(MainMenu.LOGO_KEY, MenuLayers.MAIN);
+        // Background
+        let background = this.add.sprite(MainMenu.BACKGROUND_KEY, MenuLayers.MAIN);
+        background.position.set(size.x, size.y);
+        background.scale.set(0.7, 0.7);
+
+        // Logo stuff
+        /* this.logo = this.add.sprite(MainMenu.LOGO_KEY, MenuLayers.MAIN);
         this.logo.position.set(size.x, size.y - 200);
-        this.logo.scale.set(0.6, 0.6);
+        this.logo.scale.set(0.72, 0.72); */
+        this.chrono = this.add.sprite(MainMenu.CHRONO_KEY, MenuLayers.MAIN);
+        this.chrono.position.set(size.x - 355, size.y - 220);
+        this.chrono.scale.set(0.65, 0.65);
+        this.switch = this.add.sprite(MainMenu.SWITCH_KEY, MenuLayers.MAIN);
+        this.switch.position.set(size.x + 355, size.y - 220);
+        this.switch.scale.set(0.65, 0.65);
+
+
         // Create a play button
-        let playBtn = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.MAIN, {position: new Vec2(size.x, size.y), text: "PLAY"});
+        let playBtn = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.MAIN, {position: new Vec2(size.x, size.y+10), text: "PLAY"});
         playBtn.backgroundColor = Color.WHITE;
         playBtn.borderColor = Color.WHITE;
         playBtn.textColor = Color.BLACK;
@@ -62,7 +87,7 @@ export default class MainMenu extends Scene {
         playBtn.font = "MyFont";
 
         // Create a LevelSelect button
-        let levelSelect = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.MAIN, { position: new Vec2(size.x, size.y + 80), text: "LEVELS" });
+        let levelSelect = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.MAIN, { position: new Vec2(size.x, size.y + 90), text: "LEVELS" });
         levelSelect.backgroundColor = Color.WHITE;
         levelSelect.borderColor = Color.WHITE;
         levelSelect.textColor = Color.BLACK;
