@@ -12,6 +12,7 @@ import Level1 from "./HW3Level1";
 
 // Layers for the main menu scene
 export const MenuLayers = {
+    SPLASH: "SPLASH",
     MAIN: "MAIN",
     LEVELSELECT: "LEVELSELECT",
     CONTROLS: "CONTROLS",
@@ -22,6 +23,8 @@ export default class MainMenu extends Scene {
 
     public static readonly MUSIC_KEY = "MAIN_MENU_MUSIC";
     public static readonly MUSIC_PATH = "hw4_assets/music/menu.mp3";
+    public static readonly SPLASH_KEY = "SPLASH";
+    public static readonly SPLASH_PATH = "hw4_assets/Splash.png";
     public static readonly LOGO_KEY = "MAIN_MENU_LOGO";
     public static readonly LOGO_PATH = "hw4_assets/Logo.png";
     public static readonly CHRONO_KEY = "CHRONO";
@@ -31,6 +34,7 @@ export default class MainMenu extends Scene {
     public static readonly BACKGROUND_KEY = "MAIN_MENU_BACKGROUND";
     public static readonly BACKGROUND_PATH = "hw4_assets/Background.png";
     private mainMenu: Layer;
+    private splash: Layer;
     private controls: Layer;
     private levelSelect: Layer;
     private about: Layer;
@@ -40,6 +44,7 @@ export default class MainMenu extends Scene {
 
     public loadScene(): void {
         // Load the menu song
+        this.load.image(MainMenu.SPLASH_KEY, MainMenu.SPLASH_PATH);
         this.load.image(MainMenu.LOGO_KEY, MainMenu.LOGO_PATH);
         this.load.image(MainMenu.CHRONO_KEY, MainMenu.CHRONO_PATH);
         this.load.image(MainMenu.SWITCH_KEY, MainMenu.SWITCH_PATH);
@@ -48,7 +53,9 @@ export default class MainMenu extends Scene {
     }
 
     public startScene(): void {
+        this.splash = this.addUILayer(MenuLayers.SPLASH);
         this.mainMenu = this.addUILayer(MenuLayers.MAIN);
+        this.mainMenu.setHidden(true);
         this.controls = this.addUILayer(MenuLayers.CONTROLS);
         this.controls.setHidden(true);
         this.levelSelect = this.addUILayer(MenuLayers.LEVELSELECT);
@@ -67,6 +74,9 @@ export default class MainMenu extends Scene {
             background.position.set(size.x, size.y);
             background.scale.set(0.7, 0.7);
         }
+        const splashbg = this.add.sprite(MainMenu.SPLASH_KEY, MenuLayers.SPLASH);
+        splashbg.position.set(size.x, size.y);
+        splashbg.scale.set(0.85, 0.85);
 
         // Logo stuff
         this.chrono = this.add.sprite(MainMenu.CHRONO_KEY, MenuLayers.MAIN);
@@ -77,6 +87,16 @@ export default class MainMenu extends Scene {
         this.switch.scale.set(0.65, 0.65);
 
         const defaultProperties = { backgroundColor: Color.WHITE, borderColor: Color.WHITE, textColor: Color.BLACK, borderRadius: 10, font: "MyFont" }
+
+        {   /* Splash Screen */
+            let clickAnywhere = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.SPLASH, {position: new Vec2(size.x, size.y), text: ""});
+            clickAnywhere.size = new Vec2(1000,1000);
+            clickAnywhere.onClick = () => {
+                this.splash.setHidden(true);
+                this.mainMenu.setHidden(false);
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: MainMenu.MUSIC_KEY, loop: true, holdReference: true});
+            }
+        }
 
         {   /* Main Menu */
             // Create a play button
@@ -124,6 +144,7 @@ export default class MainMenu extends Scene {
                 this.about.setHidden(false);
             }
         }
+
         {   /* Level Select */
             // Create a back button
             let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
@@ -162,6 +183,7 @@ export default class MainMenu extends Scene {
                 this.levelSelect.setHidden(true);
             }
         }
+
         {   /* Controls */
             // Create a back button
             let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.CONTROLS, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
@@ -181,6 +203,7 @@ export default class MainMenu extends Scene {
                 this.controls.setHidden(true);
             }
         }
+
         {   /* About */
             // Create a back button
             let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.ABOUT, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
@@ -201,7 +224,7 @@ export default class MainMenu extends Scene {
             }
         }
         // Scene has started, so start playing music
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: MainMenu.MUSIC_KEY, loop: true, holdReference: true});
+        /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: MainMenu.MUSIC_KEY, loop: true, holdReference: true}); */
     }
 
     public unloadScene(): void {
