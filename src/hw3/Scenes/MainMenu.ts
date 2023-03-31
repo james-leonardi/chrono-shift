@@ -1,6 +1,7 @@
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 import { UIElementType } from "../../Wolfie2D/Nodes/UIElements/UIElementTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
@@ -48,13 +49,10 @@ export default class MainMenu extends Scene {
 
     public startScene(): void {
         this.mainMenu = this.addUILayer(MenuLayers.MAIN);
-
         this.controls = this.addUILayer(MenuLayers.CONTROLS);
         this.controls.setHidden(true);
-
         this.levelSelect = this.addUILayer(MenuLayers.LEVELSELECT);
         this.levelSelect.setHidden(true);
-
         this.about = this.addUILayer(MenuLayers.ABOUT);
         this.about.setHidden(true);
 
@@ -126,7 +124,82 @@ export default class MainMenu extends Scene {
                 this.about.setHidden(false);
             }
         }
+        {   /* Level Select */
+            // Create a back button
+            let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
+            Object.assign(bacc, defaultProperties);
+            bacc.size = new Vec2(185, 50);
+            bacc.fontSize = 28;
+            bacc.setPadding(new Vec2(50, 15));
 
+            let lvl1 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 300, size.y + 35), text: "preview1" });
+            Object.assign(lvl1, defaultProperties);
+            lvl1.size = new Vec2(235, 155);
+
+            let lvl2 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 35), text: "preview2" });
+            Object.assign(lvl2, defaultProperties);
+            lvl2.size = new Vec2(235, 155);
+
+            let lvl3 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 300, size.y + 35), text: "preview3" });
+            Object.assign(lvl3, defaultProperties);
+            lvl3.size = new Vec2(235, 155);
+
+            let lvl4 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 300, size.y + 220), text: "preview4" });
+            Object.assign(lvl4, defaultProperties);
+            lvl4.size = new Vec2(235, 155);
+
+            let lvl5 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 220), text: "preview5" });
+            Object.assign(lvl5, defaultProperties);
+            lvl5.size = new Vec2(235, 155);
+
+            let lvl6 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 300, size.y + 220), text: "preview6" });
+            Object.assign(lvl6, defaultProperties);
+            lvl6.size = new Vec2(235, 155);
+
+
+            bacc.onClick = () => {
+                this.mainMenu.setHidden(false);
+                this.levelSelect.setHidden(true);
+            }
+        }
+        {   /* Controls */
+            // Create a back button
+            let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.CONTROLS, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
+            Object.assign(bacc, defaultProperties);
+            bacc.size = new Vec2(185, 50);
+            bacc.fontSize = 28;
+            bacc.setPadding(new Vec2(50, 15));
+
+            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.CONTROLS, { position: new Vec2(size.x, size.y + 100), text: "add controls image here" });
+            Object.assign(main, defaultProperties);
+            main.size = new Vec2(900, 320);
+            main.fontSize = 20;
+            main.setPadding(new Vec2(50, 15));
+
+            bacc.onClick = () => {
+                this.mainMenu.setHidden(false);
+                this.controls.setHidden(true);
+            }
+        }
+        {   /* About */
+            // Create a back button
+            let bacc = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.ABOUT, { position: new Vec2(size.x, size.y + 350), text: "BACK" });
+            Object.assign(bacc, defaultProperties);
+            bacc.size = new Vec2(185, 50);
+            bacc.fontSize = 28;
+            bacc.setPadding(new Vec2(50, 15));
+
+            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, { position: new Vec2(size.x, size.y + 100), text: "cock" });
+            Object.assign(main, defaultProperties);
+            main.size = new Vec2(900, 320);
+            main.fontSize = 20;
+            main.setPadding(new Vec2(50, 15));
+
+            bacc.onClick = () => {
+                this.mainMenu.setHidden(false);
+                this.about.setHidden(true);
+            }
+        }
         // Scene has started, so start playing music
         this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: MainMenu.MUSIC_KEY, loop: true, holdReference: true});
     }
