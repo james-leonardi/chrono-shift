@@ -32,6 +32,7 @@ export default class Platformer extends Scene {
 
         // Add physics so the player can move
         this.player.addPhysics();
+        this.player.setGroup("PLAYER");
         this.player.addAI(PlayerController, {jumpSoundKey: "jump"});
 
         // Size of the tilemap is 64x20. Tile size is 16x16

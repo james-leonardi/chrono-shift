@@ -2,11 +2,11 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import HW3Level from "./HW3Level";
 import MainMenu from "./MainMenu";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import RenderingManager from "../../Wolfie2D/Rendering/RenderingManager";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
-import Level1 from "./HW3Level1";
 
 /**
  * The second level for HW4. It should be the goose dungeon / cave.
@@ -15,7 +15,7 @@ export default class Level2 extends HW3Level {
 
     public static readonly PLAYER_SPAWN = new Vec2(32, 32);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
-    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Hero.json";
+    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
 
     public static readonly TILEMAP_KEY = "LEVEL2";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/HW4Level2.json";
@@ -24,10 +24,16 @@ export default class Level2 extends HW3Level {
     public static readonly WALLS_LAYER_KEY = "Main";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
-    public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/hw5_level_music.wav";
+    public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/bgm.mp3";
 
     public static readonly JUMP_AUDIO_KEY = "PLAYER_JUMP";
     public static readonly JUMP_AUDIO_PATH = "hw4_assets/sounds/jump.wav";
+    
+    public static readonly DAMAGED_AUDIO_KEY = "PLAYER_DAMAGED";
+    public static readonly DAMAGED_AUDIO_PATH = "hw4_assets/sounds/takedamage.mp3";
+
+    public static readonly DEADGE_AUDIO_KEY = "PLAYER_DEADGE";
+    public static readonly DEADGE_AUDIO_PATH = "hw4_assets/sounds/deadge.mp3";
 
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
@@ -44,14 +50,16 @@ export default class Level2 extends HW3Level {
         this.wallsLayerKey = Level2.WALLS_LAYER_KEY;
 
         // Set the key for the player's sprite
-        this.playerSpriteKey = Level1.PLAYER_SPRITE_KEY;
+        this.playerSpriteKey = Level2.PLAYER_SPRITE_KEY;
         // Set the player's spawn
         this.playerSpawn = Level2.PLAYER_SPAWN;
 
         // Music and sound
-        this.levelMusicKey = Level1.LEVEL_MUSIC_KEY
-        this.jumpAudioKey = Level1.JUMP_AUDIO_KEY;
-        this.tileDestroyedAudioKey = Level1.TILE_DESTROYED_KEY;
+        this.levelMusicKey = Level2.LEVEL_MUSIC_KEY
+        this.jumpAudioKey = Level2.JUMP_AUDIO_KEY;
+        this.tileDestroyedAudioKey = Level2.TILE_DESTROYED_KEY;
+        this.damagedAudioKey = Level2.DAMAGED_AUDIO_KEY;
+        this.deadgeAudioKey = Level2.DEADGE_AUDIO_KEY;
 
         // Level end size and position
         this.levelEndPosition = new Vec2(32, 216).mult(this.tilemapScale);
@@ -64,6 +72,19 @@ export default class Level2 extends HW3Level {
     public loadScene(): void {
         // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level2.TILEMAP_PATH);
+        // Load in the player's sprite
+        /* this.load.spritesheet(this.playerSpriteKey, Level2.PLAYER_SPRITE_PATH); */
+        // Audio and music
+        this.load.audio(this.levelMusicKey, Level2.LEVEL_MUSIC_PATH);
+        /* this.load.audio(this.jumpAudioKey, Level2.JUMP_AUDIO_PATH);
+        this.load.audio(this.tileDestroyedAudioKey, Level2.TILE_DESTROYED_PATH);
+        this.load.audio(this.damagedAudioKey, Level2.DAMAGED_AUDIO_PATH);
+        this.load.audio(this.deadgeAudioKey, Level2.DEADGE_AUDIO_PATH); */
+    }
+
+    public unloadScene(): void {
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level2.LEVEL_MUSIC_KEY});
+        // TODO decide which resources to keep/cull 
     }
 
     public startScene(): void {

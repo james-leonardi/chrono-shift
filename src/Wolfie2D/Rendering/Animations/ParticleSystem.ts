@@ -67,6 +67,8 @@ export default class ParticleSystem implements Updateable {
             this.particlePool[i].addPhysics();
             this.particlePool[i].isCollidable = false;
             this.particlePool[i].visible = false;
+            this.particlePool[i].setGroup("WEAPON");
+            this.particlePool[i].setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
         }
     }
 

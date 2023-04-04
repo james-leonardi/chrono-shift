@@ -2,6 +2,7 @@ import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import HW3Level from "./HW3Level";
 import RenderingManager from "../../Wolfie2D/Rendering/RenderingManager";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
 import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import HW4Level2 from "./HW3Level2";
@@ -11,9 +12,9 @@ import HW4Level2 from "./HW3Level2";
  */
 export default class Level1 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 32);
+    public static readonly PLAYER_SPAWN = new Vec2(32, 300);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
-    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Hero.json";
+    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
 
     public static readonly TILEMAP_KEY = "LEVEL1";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/HW4Level1.json";
@@ -26,6 +27,12 @@ export default class Level1 extends HW3Level {
 
     public static readonly JUMP_AUDIO_KEY = "PLAYER_JUMP";
     public static readonly JUMP_AUDIO_PATH = "hw4_assets/sounds/jump.wav";
+    
+    public static readonly DAMAGED_AUDIO_KEY = "PLAYER_DAMAGED";
+    public static readonly DAMAGED_AUDIO_PATH = "hw4_assets/sounds/takedamage.mp3";
+
+    public static readonly DEADGE_AUDIO_KEY = "PLAYER_DEADGE";
+    public static readonly DEADGE_AUDIO_PATH = "hw4_assets/sounds/deadge.mp3";
 
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
@@ -50,9 +57,11 @@ export default class Level1 extends HW3Level {
         this.levelMusicKey = Level1.LEVEL_MUSIC_KEY
         this.jumpAudioKey = Level1.JUMP_AUDIO_KEY;
         this.tileDestroyedAudioKey = Level1.TILE_DESTROYED_KEY;
+        this.damagedAudioKey = Level1.DAMAGED_AUDIO_KEY;
+        this.deadgeAudioKey = Level1.DEADGE_AUDIO_KEY;
 
         // Level end size and position
-        this.levelEndPosition = new Vec2(32, 216).mult(this.tilemapScale);
+        this.levelEndPosition = new Vec2(128, 232).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
     }
 
@@ -68,16 +77,21 @@ export default class Level1 extends HW3Level {
         this.load.audio(this.levelMusicKey, Level1.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level1.JUMP_AUDIO_PATH);
         this.load.audio(this.tileDestroyedAudioKey, Level1.TILE_DESTROYED_PATH);
+        this.load.audio(this.damagedAudioKey, Level1.DAMAGED_AUDIO_PATH);
+        this.load.audio(this.deadgeAudioKey, Level1.DEADGE_AUDIO_PATH);
     }
 
     /**
-     * Unload resources for level 1 - decide what to keep
+     * Unload resources for level 1
      */
     public unloadScene(): void {
-        this.load.keepSpritesheet(this.playerSpriteKey);
-        this.load.keepAudio(this.levelMusicKey);
+        // TODO decide which resources to keep/cull 
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level1.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
         this.load.keepAudio(this.tileDestroyedAudioKey);
+        this.load.keepAudio(this.damagedAudioKey);
+        this.load.keepAudio(this.deadgeAudioKey);
+        this.load.keepSpritesheet(this.playerSpriteKey);
     }
 
     public startScene(): void {
