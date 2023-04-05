@@ -116,8 +116,9 @@ export default class PlayerController extends StateMachineAI {
         switch (event.type) {
             case HW3Events.GRAPPLE_HIT: {
                 console.log("Grapple!");
-                if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
-                this.velocity = this.velocity.add(event.data.get('velocity'));
+                //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
+                this.velocity.mult(Vec2.ZERO);
+                this.velocity.add(event.data.get('velocity'));
                 /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
                 else {
                     this.velocity.x += event.data.get('velocity').x;
