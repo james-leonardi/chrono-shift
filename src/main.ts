@@ -12,7 +12,7 @@ import { HW3Controls } from "./hw3/HW3Controls";
         inputs: [
             {name: HW3Controls.MOVE_LEFT, keys: ["a"]},
             {name: HW3Controls.MOVE_RIGHT, keys: ["d"]},
-            {name: HW3Controls.JUMP, keys: ["w"]},
+            {name: HW3Controls.JUMP, keys: ["w","space"]},
             {name: HW3Controls.SWITCH, keys: ["s"]},
             {name: HW3Controls.ATTACK, keys: ["x"]},
             {name: HW3Controls.GRAPPLE, keys: ["right_click"]},

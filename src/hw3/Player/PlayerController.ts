@@ -8,6 +8,7 @@ import Jump from "./PlayerStates/Jump";
 import Walk from "./PlayerStates/Walk";
 
 import PlayerWeapon from "./PlayerWeapon";
+import PlayerGrapple from "./PlayerGrapple";
 import Input from "../../Wolfie2D/Input/Input";
 
 import { HW3Controls } from "../HW3Controls";
@@ -71,12 +72,14 @@ export default class PlayerController extends StateMachineAI {
     protected tilemap: OrthogonalTilemap;
     // protected cannon: Sprite;
     protected weapon: PlayerWeapon;
+    protected grapple: PlayerGrapple;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
         this.owner = owner;
 
         this.weapon = options.weaponSystem;
+        this.grapple = options.grappleSystem;
         this.owner.setGroup("PLAYER");
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -118,6 +121,13 @@ export default class PlayerController extends StateMachineAI {
         if (Input.isPressed(HW3Controls.ATTACK) && !this.weapon.isSystemRunning()) {
             // Start the particle system at the player's current position
             this.weapon.startSystem(500, 0, this.owner.position);
+            if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
+            else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
+            this.owner.animation.queue("IDLE", false, undefined);
+        }
+
+        if (Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
+            this.grapple.startSystem(500, 0, this.owner.position);
             if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
             else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);

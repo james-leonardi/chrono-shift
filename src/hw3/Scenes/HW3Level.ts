@@ -19,6 +19,7 @@ import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import PlayerController, { PlayerTweens } from "../Player/PlayerController";
 import PlayerWeapon from "../Player/PlayerWeapon";
+import PlayerGrapple from "../Player/PlayerGrapple";
 
 import { HW3Events } from "../HW3Events";
 import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
@@ -50,6 +51,7 @@ export default abstract class HW3Level extends Scene {
 
     /** The particle system used for the player's weapon */
     protected playerWeaponSystem: PlayerWeapon
+    protected playerGrappleSystem: PlayerGrapple;
     /** The key for the player's animated sprite */
     protected playerSpriteKey: string;
     /** The animated sprite that is the player */
@@ -111,6 +113,7 @@ export default abstract class HW3Level extends Scene {
 
         // Initialize the sprite and particle system for the players weapon 
         this.initializeWeaponSystem();
+        this.initializeGrappleSystem();
 
         this.initializeUI();
 
@@ -424,6 +427,13 @@ export default abstract class HW3Level extends Scene {
         this.playerWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
     }
     /**
+     * Initializes the particles system used by the player's weapon.
+     */
+    protected initializeGrappleSystem(): void {
+        this.playerGrappleSystem = new PlayerGrapple(80, Vec2.ZERO, 1000, 2, 0, 50);
+        this.playerGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+    }
+    /**
      * Initializes the player, setting the player's initial position to the given position.
      * @param position the player's spawn position
      */
@@ -492,6 +502,7 @@ export default abstract class HW3Level extends Scene {
         // Give the player it's AI
         this.player.addAI(PlayerController, { 
             weaponSystem: this.playerWeaponSystem, 
+            grappleSystem: this.playerGrappleSystem,
             tilemap: "Destructable" 
         });
     }

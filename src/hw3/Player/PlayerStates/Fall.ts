@@ -14,7 +14,7 @@ export default class Fall extends PlayerState {
 
         // If the player hits the ground, start idling and check if we should take damage
         if (this.owner.onGround) {
-            let nhealth = this.parent.health - Math.floor(this.parent.velocity.y / 200);
+            let nhealth = this.parent.health - Math.floor(this.parent.velocity.y / 300);
             if (nhealth != this.parent.health) {
                 this.parent.health = nhealth;
                 let damagedAudio = this.owner.getScene().getDamagedAudioKey();
