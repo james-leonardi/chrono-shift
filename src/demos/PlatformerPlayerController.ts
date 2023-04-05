@@ -6,6 +6,7 @@ import GameEvent from "../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../Wolfie2D/Events/GameEventType";
 import Input from "../Wolfie2D/Input/Input";
 import AnimatedSprite from "../Wolfie2D/Nodes/Sprites/AnimatedSprite";
+import { HW3Events } from "../hw3/HW3Events";
 
 export default class PlayerController extends ControllerAI {
     public owner: AnimatedSprite;
@@ -18,14 +19,14 @@ export default class PlayerController extends ControllerAI {
         this.jumpSoundKey = options.jumpSoundKey;
         this.emitter = new Emitter();
         this.receiver = new Receiver();
-        this.receiver.subscribe("GRAPPLE");
+        this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
     }
 
     activate(options: Record<string, any>): void {}
 
     handleEvent(event: GameEvent): void {
         switch(event.type) {
-            case "GRAPPLE": {
+            case HW3Events.GRAPPLE_HIT: {
                 console.log("Grapple!");
                 this.owner.move(event.data.get('velocity'));
                 break;

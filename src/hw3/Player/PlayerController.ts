@@ -18,6 +18,7 @@ import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 import MathUtils from "../../Wolfie2D/Utils/MathUtils";
 import { HW3Events } from "../HW3Events";
 import Dead from "./PlayerStates/Dead";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 
 // TODO play your heros animations
 
@@ -84,10 +85,10 @@ export default class PlayerController extends StateMachineAI {
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
-        this.owner.setGroup("PLAYER");
+        this.owner.setGroup(HW3PhysicsGroups.PLAYER);
 
         this.receiver = new Receiver();
-        this.receiver.subscribe("GRAPPLE");
+        this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
@@ -109,7 +110,7 @@ export default class PlayerController extends StateMachineAI {
 
     handleEvent(event: GameEvent): void {
         switch (event.type) {
-            case "GRAPPLE": {
+            case HW3Events.GRAPPLE_HIT: {
                 console.log("Grapple!");
                 if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
                 this.velocity = this.velocity.add(event.data.get('velocity'));

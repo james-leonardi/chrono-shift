@@ -16,6 +16,8 @@ import Input from "../../Wolfie2D/Input/Input";
  */
 export default class PlayerGrapple extends ParticleSystem {
 
+    private grapple_length: number = 200;
+
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
     }
@@ -33,9 +35,7 @@ export default class PlayerGrapple extends ParticleSystem {
         // Give the particle a random velocity.
         let mpos: Vec2 = Input.getGlobalMousePosition();
         let cpos: Vec2 = particle.position;
-        let vec = new Vec2(mpos.x - cpos.x, mpos.y - cpos.y).scale(1.5);
-        /* vec.normalize().scale(150); */
-        /* vec.scale(1.5); */
+        let vec = new Vec2(mpos.x - cpos.x, mpos.y - cpos.y).normalize().scale(this.grapple_length);
         const rand = Math.random()*1.5;
         particle.vel = new Vec2(rand*vec.x, rand*vec.y);
         particle.color = Color.CYAN;
