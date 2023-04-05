@@ -240,6 +240,47 @@ export default abstract class HW3Level extends Scene {
                     }
                 }
             }
+            return;
+        }
+
+        particles = this.playerGrappleSystem.getPool();
+        particle = particles.find(particle => particle.id === particleId);
+        if (particle !== undefined) {
+            // Get the destructable tilemap
+            let tilemap = this.destructable;
+
+            let min = new Vec2(particle.sweptRect.left, particle.sweptRect.top);
+            let max = new Vec2(particle.sweptRect.right, particle.sweptRect.bottom);
+
+            // Convert the min/max x/y to the min and max row/col in the tilemap array
+            let minIndex = tilemap.getColRowAt(min);
+            let maxIndex = tilemap.getColRowAt(max);
+
+            // Loop over all possible tiles the particle could be colliding with 
+            for (let col = minIndex.x; col <= maxIndex.x; col++) {
+                for (let row = minIndex.y; row <= maxIndex.y; row++) {
+                    // If the tile is collideable -> check if this particle is colliding with the tile
+                    if (tilemap.isTileCollidable(col, row) && this.particleHitTile(tilemap, particle, col, row)) {
+                        particle.visible = false;
+                        const dir = this.player.position.dirTo(particle.position).scale(250, 350);
+                        /* console.log(`(${dir.x}, ${dir.y})`); */
+                        /* this.player.move(dir); */
+                        if (this.playerGrappleSystem.isSystemRunning()) {
+                            this.emitter.fireEvent("GRAPPLE", { velocity: dir });
+                            this.playerGrappleSystem.stopSystem();
+                        }
+                        /* console.log(`${this.player._velocity.x}, ${this.player._velocity.y}`);
+                        this.player._velocity.set(dir.x, dir.y);
+                        this.player.move(dir);
+                        this.player.position = new Vec2(this.player.position.x, this.player.position.y - 10)
+                        this.player.onGround = false; */
+                        /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: this.tileDestroyedAudioKey, loop: false, holdReference: false });
+                        tilemap.setTileAtRowCol(new Vec2(col, row), 0); */
+                        // TODO Destroy the tile
+                    }
+                }
+            }
+            return;
         }
     }
 

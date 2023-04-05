@@ -8,7 +8,7 @@ export default class Idle extends PlayerState {
 	public onEnter(options: Record<string, any>): void {
         this.owner.animation.play(PlayerAnimations.IDLE);
 		this.parent.speed = this.parent.MIN_SPEED;
-        this.parent.velocity.x = 0;
+        /* this.parent.velocity.x = 0; */
         this.parent.velocity.y = 0;
 	}
 
@@ -33,6 +33,9 @@ export default class Idle extends PlayerState {
         } 
         // Otherwise, do nothing (keep idling)
         else {
+            // Update the horizontal velocity of the player
+            const friction = this.owner.onGround ? 7 : 3;
+            this.parent.velocity.x = (this.parent.velocity.x > 0) ? Math.max(this.parent.velocity.x - friction, 0) : Math.min(this.parent.velocity.x + friction, 0);
             // Update the vertical velocity of the player
             this.parent.velocity.y += this.gravity*deltaT;
             // Move the player

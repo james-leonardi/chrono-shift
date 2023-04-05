@@ -33,15 +33,10 @@ export default class PlayerWeapon extends ParticleSystem {
         // Give the particle a random velocity.
         let mpos: Vec2 = Input.getGlobalMousePosition();
         let cpos: Vec2 = particle.position;
-        /* console.log(`mpos: ${mpos.x}, ${mpos.y}, cpos: ${cpos.x}, ${cpos.y}`); */
-        /* particle.vel = RandUtils.randVec(100, 200, -32, 32); */
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
-        /* particle.vel = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y); */
         particle.color = Color.MAGENTA;
-        /* particle.setGroup("WEAPON"); */
-        /* particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined); */
 
         // Give the particle tweens
         particle.tweens.add("active", {
