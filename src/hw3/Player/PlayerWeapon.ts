@@ -37,6 +37,8 @@ export default class PlayerWeapon extends ParticleSystem {
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
         particle.color = Color.MAGENTA;
+        particle.setGroup("WEAPON");
+        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

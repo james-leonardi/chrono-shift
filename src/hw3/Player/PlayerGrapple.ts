@@ -44,6 +44,8 @@ export default class PlayerGrapple extends ParticleSystem {
         const rand = Math.random()*1.5;
         particle.vel = new Vec2(rand*vec.x, rand*vec.y);
         particle.color = Color.CYAN;
+        particle.setGroup("WEAPON");
+        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

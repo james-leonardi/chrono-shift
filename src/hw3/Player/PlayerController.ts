@@ -180,11 +180,8 @@ export default class PlayerController extends StateMachineAI {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
-                this.owner.position.x += (this.owner.position.x < 770) ? 770 : -770;
-                console.log(this.owner.position.x);
-            } else {
-                console.log("CD!");
-            }
+                this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+            } else console.log("CD!");
         }
 	}
 
