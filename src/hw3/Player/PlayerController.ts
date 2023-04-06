@@ -83,6 +83,8 @@ export default class PlayerController extends StateMachineAI {
     protected switch_last_used: number;
     protected switch_cooldown: number = 1000;
 
+    protected peeking: boolean = false;
+
     protected receiver: Receiver;
 
     
@@ -182,6 +184,17 @@ export default class PlayerController extends StateMachineAI {
                 console.log("Switch!");
                 this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
             } else console.log("CD!");
+        }
+
+        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking) {
+            this.peeking = true;
+            this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+            this.owner.visible = false;
+        } 
+        if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
+            this.peeking = false;
+            this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+            this.owner.visible = true;
         }
 	}
 
