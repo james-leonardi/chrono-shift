@@ -266,7 +266,7 @@ export default abstract class HW3Level extends Scene {
                         /* console.log(`(${dir.x}, ${dir.y})`); */
                         /* this.player.move(dir); */
                         if (this.playerGrappleSystem.isSystemRunning()) {
-                            this.emitter.fireEvent("GRAPPLE", { velocity: dir });
+                            this.emitter.fireEvent(HW3Events.GRAPPLE_HIT, { velocity: dir });
                             this.playerGrappleSystem.stopSystem();
                         }
                         /* console.log(`${this.player._velocity.x}, ${this.player._velocity.y}`);

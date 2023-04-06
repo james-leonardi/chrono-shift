@@ -28,7 +28,7 @@ export default class Fall extends PlayerState {
             // Get the movement direction from the player 
             let dir = this.parent.inputDir;
             // Update the horizontal velocity of the player
-            this.parent.velocity.x += dir.x * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
+            if (dir.x !== 0) this.parent.velocity.x += dir.x * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
             // Update the vertical velocity of the player
             this.parent.velocity.y += this.gravity*deltaT;
             // Move the player
