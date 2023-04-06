@@ -1,6 +1,7 @@
 import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
+import GameEvent from "../../Wolfie2D/Events/GameEvent";
 
 import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
@@ -10,12 +11,14 @@ import Walk from "./PlayerStates/Walk";
 import PlayerWeapon from "./PlayerWeapon";
 import PlayerGrapple from "./PlayerGrapple";
 import Input from "../../Wolfie2D/Input/Input";
+import Receiver from "../../Wolfie2D/Events/Receiver";
 
 import { HW3Controls } from "../HW3Controls";
 import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 import MathUtils from "../../Wolfie2D/Utils/MathUtils";
 import { HW3Events } from "../HW3Events";
 import Dead from "./PlayerStates/Dead";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 
 // TODO play your heros animations
 
@@ -73,6 +76,11 @@ export default class PlayerController extends StateMachineAI {
     // protected cannon: Sprite;
     protected weapon: PlayerWeapon;
     protected grapple: PlayerGrapple;
+    protected grapple_last_used: number;
+    protected grapple_cooldown: number = 1000;
+    protected grapple_enabled: boolean = true;
+
+    protected receiver: Receiver;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
@@ -80,7 +88,11 @@ export default class PlayerController extends StateMachineAI {
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
-        this.owner.setGroup("PLAYER");
+        this.grapple_last_used = 0;
+        this.owner.setGroup(HW3PhysicsGroups.PLAYER);
+
+        this.receiver = new Receiver();
+        this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
@@ -100,6 +112,28 @@ export default class PlayerController extends StateMachineAI {
         this.initialize(PlayerStates.IDLE);
     }
 
+    handleEvent(event: GameEvent): void {
+        switch (event.type) {
+            case HW3Events.GRAPPLE_HIT: {
+                console.log("Grapple!");
+                //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
+                this.velocity.mult(Vec2.ZERO);
+                this.velocity.add(event.data.get('velocity'));
+                /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
+                else {
+                    this.velocity.x += event.data.get('velocity').x;
+                    this.velocity.y += event.data.get('velocity').y*2;
+                } */
+                /* this.changeState(PlayerStates.IDLE); */
+                /* this.owner.move(event.data.get('velocity')); */
+                break;
+            }
+            default: {
+                console.log("DEFAULT");
+            }
+        }
+    }
+
     /** 
 	 * Get the inputs from the keyboard, or Vec2.Zero if nothing is being pressed
 	 */
@@ -116,9 +150,11 @@ export default class PlayerController extends StateMachineAI {
 
     public update(deltaT: number): void {
 		super.update(deltaT);
-
+        while (this.receiver.hasNextEvent()) {
+            this.handleEvent(this.receiver.getNextEvent());
+        }
         // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
-        if (Input.isPressed(HW3Controls.ATTACK) && !this.weapon.isSystemRunning()) {
+        if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
             // Start the particle system at the player's current position
             this.weapon.startSystem(500, 0, this.owner.position);
             if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
@@ -126,11 +162,16 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.queue("IDLE", false, undefined);
         }
 
-        if (Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
-            this.grapple.startSystem(500, 0, this.owner.position);
-            if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
-            else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
-            this.owner.animation.queue("IDLE", false, undefined);
+        // Detect right-click and handle with grapple firing
+        if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
+            if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
+                this.grapple_last_used = Date.now();
+                this.grapple.setDir(Input.getGlobalMousePosition());
+                this.grapple.startSystem(500, 0, this.owner.position);
+                if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
+                else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
+                this.owner.animation.queue("IDLE", false, undefined);
+            } else console.log("CD!");
         }
 
 	}
