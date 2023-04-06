@@ -80,6 +80,9 @@ export default class PlayerController extends StateMachineAI {
     protected grapple_cooldown: number = 1000;
     protected grapple_enabled: boolean = true;
 
+    protected switch_last_used: number;
+    protected switch_cooldown: number = 1000;
+
     protected receiver: Receiver;
 
     
@@ -89,6 +92,7 @@ export default class PlayerController extends StateMachineAI {
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
         this.grapple_last_used = 0;
+        this.switch_last_used = 0;
         this.owner.setGroup(HW3PhysicsGroups.PLAYER);
 
         this.receiver = new Receiver();
@@ -157,8 +161,7 @@ export default class PlayerController extends StateMachineAI {
         if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
             // Start the particle system at the player's current position
             this.weapon.startSystem(500, 0, this.owner.position);
-            if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
-            else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
+            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
         }
 
@@ -168,12 +171,21 @@ export default class PlayerController extends StateMachineAI {
                 this.grapple_last_used = Date.now();
                 this.grapple.setDir(Input.getGlobalMousePosition());
                 this.grapple.startSystem(500, 0, this.owner.position);
-                if (this.faceDir.x < 0) this.owner.animation.play("ATTACKING_LEFT", false, undefined);
-                else this.owner.animation.play("ATTACKING_RIGHT", false, undefined);
+                this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
                 this.owner.animation.queue("IDLE", false, undefined);
             } else console.log("CD!");
         }
 
+        if (Input.isPressed(HW3Controls.SWITCH)) {
+            if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
+                this.switch_last_used = Date.now();
+                console.log("Switch!");
+                this.owner.position.x += (this.owner.position.x < 770) ? 770 : -770;
+                console.log(this.owner.position.x);
+            } else {
+                console.log("CD!");
+            }
+        }
 	}
 
     public get velocity(): Vec2 { return this._velocity; }

@@ -61,7 +61,7 @@ export default class Level1 extends HW3Level {
         this.deadgeAudioKey = Level1.DEADGE_AUDIO_KEY;
 
         // Level end size and position
-        this.levelEndPosition = new Vec2(128, 232).mult(this.tilemapScale);
+        this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
     }
 
@@ -108,7 +108,7 @@ export default class Level1 extends HW3Level {
      */
     protected initializeViewport(): void {
         super.initializeViewport();
-        this.viewport.setBounds(16, 16, 496, 512);
+        this.viewport.setBounds(16, 16, 1200, 512);
     }
 
 }
