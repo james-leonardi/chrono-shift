@@ -74,6 +74,11 @@ export default abstract class HW3Level extends Scene {
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
 
+    /* The Past */
+    protected pastPosition: Vec2 = new Vec2(0,0);
+    protected pastHalfSize: Vec2 = new Vec2(952, 820);
+    protected pastArea: Rect;
+
     // Level end transition timer and graphic
     protected levelTransitionTimer: Timer;
     protected levelTransitionScreen: Rect;
@@ -127,6 +132,8 @@ export default abstract class HW3Level extends Scene {
 
         // Initialize the ends of the levels - must be initialized after the primary layer has been added
         this.initializeLevelEnds();
+
+        this.initializeThePast();
 
         this.levelTransitionTimer = new Timer(500);
         this.levelEndTimer = new Timer(3000, () => {
@@ -571,6 +578,14 @@ export default abstract class HW3Level extends Scene {
         this.levelEndArea.setTrigger(HW3PhysicsGroups.PLAYER, HW3Events.PLAYER_ENTERED_LEVEL_END, null);
         this.levelEndArea.color = new Color(255, 0, 255, .20);
         
+    }
+
+    protected initializeThePast(): void {
+        if (!this.layers.has(HW3Layers.PRIMARY)) {
+            throw new Error("Can't initialize the past until the primary layer has been added to the scene!");
+        }
+        this.pastArea = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: this.pastPosition, size: this.pastHalfSize });
+        this.pastArea.color = new Color(184, 177, 53, .25);
     }
 
     /* Misc methods */

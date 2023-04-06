@@ -182,18 +182,18 @@ export default class PlayerController extends StateMachineAI {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
-                this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+                this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
             } else console.log("CD!");
         }
 
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking) {
             this.peeking = true;
-            this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+            this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
             this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             this.peeking = false;
-            this.owner.position.x += (this.owner.position.x < 768) ? 768 : -768;
+            this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
             this.owner.visible = true;
         }
 	}
