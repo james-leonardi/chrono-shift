@@ -87,12 +87,15 @@ export default abstract class HW3Level extends Scene {
     protected tilemapKey: string;
     protected destructibleLayerKey: string;
     protected wallsLayerKey: string;
+    protected deathLayerKey: string;
     /** The scale for the tilemap */
     protected tilemapScale: Vec2;
     /** The destrubtable layer of the tilemap */
     protected destructable: OrthogonalTilemap;
     /** The wall layer of the tilemap */
     protected walls: OrthogonalTilemap;
+
+    protected death: OrthogonalTilemap;
 
     /** Sound and music */
     protected levelMusicKey: string;
@@ -103,8 +106,13 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE"],
-            collisions: [[0,1,1,0],[1,0,0,1],[1,0,0,1],[0,1,1,0]]
+            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH"],
+            collisions: [
+            /* GROUND   */  [0,1,1,0,0],
+            /* PLAYER   */  [1,0,0,1,1],
+            /* WEAPON   */  [1,0,0,1,0],
+            /* DESTRUCT */  [0,1,1,0,0],
+            /* DEATH    */  [0,1,0,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -221,8 +229,8 @@ export default abstract class HW3Level extends Scene {
      * @param particleId the id of the particle
      */
     protected handleParticleHit(particleId: number): void {
-        /* console.log("BLAH"); */
-        let particles = this.playerWeaponSystem.getPool();
+        /* Don't want terrain to be destructable */
+/*         let particles = this.playerWeaponSystem.getPool();
 
         let particle = particles.find(particle => particle.id === particleId);
         if (particle !== undefined) {
@@ -248,20 +256,20 @@ export default abstract class HW3Level extends Scene {
                 }
             }
             return;
-        }
+        } */
 
-        particles = this.playerGrappleSystem.getPool();
-        particle = particles.find(particle => particle.id === particleId);
+        const particles = this.playerGrappleSystem.getPool();
+        const particle = particles.find(particle => particle.id === particleId);
         if (particle !== undefined) {
             // Get the destructable tilemap
-            let tilemap = this.destructable;
+            const tilemap = this.destructable;
 
-            let min = new Vec2(particle.sweptRect.left, particle.sweptRect.top);
-            let max = new Vec2(particle.sweptRect.right, particle.sweptRect.bottom);
+            const min = new Vec2(particle.sweptRect.left, particle.sweptRect.top);
+            const max = new Vec2(particle.sweptRect.right, particle.sweptRect.bottom);
 
             // Convert the min/max x/y to the min and max row/col in the tilemap array
-            let minIndex = tilemap.getColRowAt(min);
-            let maxIndex = tilemap.getColRowAt(max);
+            const minIndex = tilemap.getColRowAt(min);
+            const maxIndex = tilemap.getColRowAt(max);
 
             // Loop over all possible tiles the particle could be colliding with 
             for (let col = minIndex.x; col <= maxIndex.x; col++) {
@@ -269,7 +277,7 @@ export default abstract class HW3Level extends Scene {
                     // If the tile is collideable -> check if this particle is colliding with the tile
                     if (tilemap.isTileCollidable(col, row) && this.particleHitTile(tilemap, particle, col, row)) {
                         particle.visible = false;
-                        const dir = this.player.position.dirTo(particle.position).scale(250, 350);
+                        const dir = this.player.position.dirTo(particle.position).scale(250, 350).scale(1.2);
                         /* console.log(`(${dir.x}, ${dir.y})`); */
                         /* this.player.move(dir); */
                         if (this.playerGrappleSystem.isSystemRunning()) {
@@ -364,6 +372,7 @@ export default abstract class HW3Level extends Scene {
         // Get the wall and destructible layers 
         this.walls = this.getTilemap(this.wallsLayerKey) as OrthogonalTilemap;
         this.destructable = this.getTilemap(this.destructibleLayerKey) as OrthogonalTilemap;
+        this.death = this.getTilemap(this.deathLayerKey) as OrthogonalTilemap;
 
         // Add physicss to the wall layer
         this.walls.addPhysics();
@@ -373,6 +382,9 @@ export default abstract class HW3Level extends Scene {
         this.destructable.setTrigger("WEAPON", "PARTICLE", undefined);
         this.walls.setGroup("GROUND");
         /* this.getTilemap(this.tilemapKey).setGroup("GROUND"); */
+        this.death.addPhysics();
+        this.death.setGroup("DEATH");
+        this.death.setTrigger("PLAYER", "DYING", undefined);
 
     }
     /**

@@ -82,6 +82,9 @@ export default class PlayerController extends StateMachineAI {
 
     protected switch_last_used: number;
     protected switch_cooldown: number = 1000;
+    protected switch_dist: number = 816;
+
+    protected peek_offset: number = 0;
 
     protected peeking: boolean = false;
 
@@ -99,6 +102,7 @@ export default class PlayerController extends StateMachineAI {
 
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
+        this.receiver.subscribe("DYING");
 
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
@@ -132,6 +136,10 @@ export default class PlayerController extends StateMachineAI {
                 } */
                 /* this.changeState(PlayerStates.IDLE); */
                 /* this.owner.move(event.data.get('velocity')); */
+                break;
+            }
+            case "DYING": {
+                this.changeState(PlayerStates.DEAD);
                 break;
             }
             default: {
@@ -178,23 +186,24 @@ export default class PlayerController extends StateMachineAI {
             } else console.log("CD!");
         }
 
-        if (Input.isPressed(HW3Controls.SWITCH)) {
+        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
-                this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
+                this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
             } else console.log("CD!");
         }
 
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking) {
             this.peeking = true;
-            this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
-            this.owner.visible = false;
+            this.peek_offset = (this.owner.position.x < 100) ? 100 : (this.owner.position.x > 1100) ? -100 : 0;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
+            this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             this.peeking = false;
-            this.owner.position.x += (this.owner.position.x < 816) ? 816 : -816;
-            this.owner.visible = true;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
+            this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
 

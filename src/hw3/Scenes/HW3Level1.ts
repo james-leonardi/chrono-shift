@@ -12,7 +12,7 @@ import HW4Level2 from "./HW3Level2";
  */
 export default class Level1 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 80);
+    public static readonly PLAYER_SPAWN = new Vec2(32, 76);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
 
@@ -20,6 +20,7 @@ export default class Level1 extends HW3Level {
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L0cpy.json";
     public static readonly TILEMAP_SCALE = new Vec2(2, 2);
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
+    public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
@@ -47,6 +48,7 @@ export default class Level1 extends HW3Level {
         this.tilemapScale = Level1.TILEMAP_SCALE;
         this.destructibleLayerKey = Level1.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level1.WALLS_LAYER_KEY;
+        this.deathLayerKey = Level1.DEATH_LAYER_KEY;
 
         // Set the key for the player's sprite
         this.playerSpriteKey = Level1.PLAYER_SPRITE_KEY;

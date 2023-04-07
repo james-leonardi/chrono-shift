@@ -37,7 +37,7 @@ export default class Idle extends PlayerState {
             const friction = this.owner.onGround ? 7 : 3;
             this.parent.velocity.x = (this.parent.velocity.x > 0) ? Math.max(this.parent.velocity.x - friction, 0) : Math.min(this.parent.velocity.x + friction, 0);
             // Update the vertical velocity of the player
-            this.parent.velocity.y += this.gravity*deltaT;
+            this.parent.velocity.y += (this.owner.frozen) ? 0 : this.gravity*deltaT;
             // Move the player
             this.owner.move(this.parent.velocity.scaled(deltaT));
         }
