@@ -33,6 +33,8 @@ export default class MainMenu extends Scene {
     public static readonly SWITCH_PATH = "hw4_assets/Switch.png";
     public static readonly BACKGROUND_KEY = "MAIN_MENU_BACKGROUND";
     public static readonly BACKGROUND_PATH = "hw4_assets/Background.png";
+    public static readonly CONTROLS_KEY = "CONTROLS";
+    public static readonly CONTROLS_PATH = "hw4_assets/Controls.png";
     private mainMenu: Layer;
     private splash: Layer;
     private controls: Layer;
@@ -42,6 +44,8 @@ export default class MainMenu extends Scene {
     private chrono: Sprite;
     private switch: Sprite;
 
+    private lastClick: Date = new Date();
+
     public loadScene(): void {
         // Load the menu song
         this.load.image(MainMenu.SPLASH_KEY, MainMenu.SPLASH_PATH);
@@ -49,6 +53,7 @@ export default class MainMenu extends Scene {
         this.load.image(MainMenu.CHRONO_KEY, MainMenu.CHRONO_PATH);
         this.load.image(MainMenu.SWITCH_KEY, MainMenu.SWITCH_PATH);
         this.load.image(MainMenu.BACKGROUND_KEY, MainMenu.BACKGROUND_PATH);
+        this.load.image(MainMenu.CONTROLS_KEY, MainMenu.CONTROLS_PATH);
         this.load.audio(MainMenu.MUSIC_KEY, MainMenu.MUSIC_PATH);
     }
 
@@ -92,6 +97,8 @@ export default class MainMenu extends Scene {
             let clickAnywhere = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.SPLASH, {position: new Vec2(size.x, size.y), text: ""});
             clickAnywhere.size = new Vec2(1000,1000);
             clickAnywhere.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.splash.setHidden(true);
                 this.mainMenu.setHidden(false);
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: MainMenu.MUSIC_KEY, loop: true, holdReference: true});
@@ -129,17 +136,25 @@ export default class MainMenu extends Scene {
             // When the play button is clicked, go to the next scene
 
             playBtn.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level1);
             }
             levelSelect.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(true);
                 this.levelSelect.setHidden(false);
             }
             controls.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(true);
                 this.controls.setHidden(false);
             }
             about.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(true);
                 this.about.setHidden(false);
             }
@@ -179,6 +194,8 @@ export default class MainMenu extends Scene {
 
 
             bacc.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(false);
                 this.levelSelect.setHidden(true);
             }
@@ -192,13 +209,19 @@ export default class MainMenu extends Scene {
             bacc.fontSize = 28;
             bacc.setPadding(new Vec2(50, 15));
 
-            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.CONTROLS, { position: new Vec2(size.x, size.y + 100), text: "add controls image here" });
+            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.CONTROLS, { position: new Vec2(size.x, size.y + 100), text: "" });
             Object.assign(main, defaultProperties);
             main.size = new Vec2(900, 320);
             main.fontSize = 20;
             main.setPadding(new Vec2(50, 15));
 
+            let ctrlsImage = this.add.sprite(MainMenu.CONTROLS_KEY, MenuLayers.CONTROLS);
+            ctrlsImage.position.set(size.x - 25, size.y + 95);
+            ctrlsImage.scale.set(0.78, 0.78);
+
             bacc.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(false);
                 this.controls.setHidden(true);
             }
@@ -212,13 +235,41 @@ export default class MainMenu extends Scene {
             bacc.fontSize = 28;
             bacc.setPadding(new Vec2(50, 15));
 
-            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, { position: new Vec2(size.x, size.y + 100), text: "cock" });
+            let main = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, { position: new Vec2(size.x, size.y + 100), text: "" });
             Object.assign(main, defaultProperties);
             main.size = new Vec2(900, 320);
             main.fontSize = 20;
             main.setPadding(new Vec2(50, 15));
 
+            let line1 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y - 15), text: "Tepster Tomsper is a distinguished and capable hitman. One day while out"
+            });
+            let line2 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 15), text: "running errands at Shader Joe's, he stumbles upon the Chrono-Switch,"
+            });
+            let line3 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 45), text: "a device that, when activated, allows him to travel back in time."
+            });
+            let line4 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 75), text: "Using his newfound god-like powers, he decided that it is his duty"
+            });
+            let line5 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 105), text: "to eliminate the anachronistic fiends that are infesting the past."
+            });
+            line1.font = "MyFont"; line1.fontSize = 20;
+            line2.font = "MyFont"; line2.fontSize = 20;
+            line3.font = "MyFont"; line3.fontSize = 20;
+            line4.font = "MyFont"; line4.fontSize = 20;
+            line5.font = "MyFont"; line5.fontSize = 20;
+
+            let madeBy = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 210), text: "Made with <3 by: Kevin Tao, James Leonardi, and Kyle Yee"
+            });
+            madeBy.font = "MyFont"; madeBy.fontSize = 22;
+
             bacc.onClick = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
                 this.mainMenu.setHidden(false);
                 this.about.setHidden(true);
             }
