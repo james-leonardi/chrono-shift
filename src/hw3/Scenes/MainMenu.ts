@@ -35,6 +35,21 @@ export default class MainMenu extends Scene {
     public static readonly BACKGROUND_PATH = "hw4_assets/Background.png";
     public static readonly CONTROLS_KEY = "CONTROLS";
     public static readonly CONTROLS_PATH = "hw4_assets/Controls.png";
+
+    public static readonly L0PREVIEW_KEY = "L0PREVIEW";
+    public static readonly L0PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL0.png";
+/*     public static readonly L1PREVIEW_KEY = "L1PREVIEW";
+    public static readonly L1PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL1.png";
+    public static readonly L2PREVIEW_KEY = "L2PREVIEW";
+    public static readonly L2PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL2.png";
+    public static readonly L3PREVIEW_KEY = "L3PREVIEW";
+    public static readonly L3PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL3.png";
+    public static readonly L4PREVIEW_KEY = "L4PREVIEW";
+    public static readonly L4PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL4.png";
+    public static readonly L5PREVIEW_KEY = "L5PREVIEW";
+    public static readonly L5PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL5.png"; */
+
+
     private mainMenu: Layer;
     private splash: Layer;
     private controls: Layer;
@@ -54,6 +69,13 @@ export default class MainMenu extends Scene {
         this.load.image(MainMenu.SWITCH_KEY, MainMenu.SWITCH_PATH);
         this.load.image(MainMenu.BACKGROUND_KEY, MainMenu.BACKGROUND_PATH);
         this.load.image(MainMenu.CONTROLS_KEY, MainMenu.CONTROLS_PATH);
+
+        this.load.image(MainMenu.L0PREVIEW_KEY, MainMenu.L0PREVIEW_PATH);
+/*      this.load.image(MainMenu.L1PREVIEW_KEY, MainMenu.L1PREVIEW_PATH);
+        this.load.image(MainMenu.L2PREVIEW_KEY, MainMenu.L2PREVIEW_PATH);
+        this.load.image(MainMenu.L3PREVIEW_KEY, MainMenu.L3PREVIEW_PATH);
+        this.load.image(MainMenu.L4PREVIEW_KEY, MainMenu.L4PREVIEW_PATH);
+        this.load.image(MainMenu.L5PREVIEW_KEY, MainMenu.L5PREVIEW_PATH); */
         this.load.audio(MainMenu.MUSIC_KEY, MainMenu.MUSIC_PATH);
     }
 
@@ -168,29 +190,58 @@ export default class MainMenu extends Scene {
             bacc.fontSize = 28;
             bacc.setPadding(new Vec2(50, 15));
 
-            let lvl1 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 300, size.y + 35), text: "preview1" });
-            Object.assign(lvl1, defaultProperties);
-            lvl1.size = new Vec2(235, 155);
+            let preview1 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview1.position.set(size.x - 325, size.y + 35);
+            preview1.scale.set(0.25, 0.3);
+            let lvl1 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 325, size.y + 35), text: "" });
+            lvl1.backgroundColor = Color.TRANSPARENT;
+            lvl1.size = new Vec2(280, 155);
+            const changeToLvl1 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level1);
+            }
+            lvl1.onClick = changeToLvl1;
 
-            let lvl2 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 35), text: "preview2" });
-            Object.assign(lvl2, defaultProperties);
-            lvl2.size = new Vec2(235, 155);
+            let preview2 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview2.position.set(size.x, size.y + 35);
+            preview2.scale.set(0.25, 0.3);
+            let lvl2 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 35), text: "" });
+            lvl2.backgroundColor = Color.TRANSPARENT;
+            lvl2.size = new Vec2(280, 155);
+            lvl2.onClick = changeToLvl1;
 
-            let lvl3 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 300, size.y + 35), text: "preview3" });
-            Object.assign(lvl3, defaultProperties);
-            lvl3.size = new Vec2(235, 155);
+            let preview3 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview3.position.set(size.x + 325, size.y + 35);
+            preview3.scale.set(0.25, 0.3);
+            let lvl3 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 35), text: "" });
+            lvl3.backgroundColor = Color.TRANSPARENT;
+            lvl3.size = new Vec2(280, 155);
+            lvl3.onClick = changeToLvl1;
 
-            let lvl4 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 300, size.y + 220), text: "preview4" });
-            Object.assign(lvl4, defaultProperties);
-            lvl4.size = new Vec2(235, 155);
+            let preview4 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview4.position.set(size.x - 325, size.y + 220);
+            preview4.scale.set(0.25, 0.3);
+            let lvl4 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 325, size.y + 220), text: "" });
+            lvl4.backgroundColor = Color.TRANSPARENT;
+            lvl4.size = new Vec2(280, 155);
+            lvl4.onClick = changeToLvl1;
 
-            let lvl5 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 220), text: "preview5" });
-            Object.assign(lvl5, defaultProperties);
-            lvl5.size = new Vec2(235, 155);
+            let preview5 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview5.position.set(size.x, size.y + 220);
+            preview5.scale.set(0.25, 0.3);
+            let lvl5 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 220), text: "" });
+            lvl5.backgroundColor = Color.TRANSPARENT;
+            lvl5.size = new Vec2(280, 155);
+            lvl5.onClick = changeToLvl1;
 
-            let lvl6 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 300, size.y + 220), text: "preview6" });
-            Object.assign(lvl6, defaultProperties);
-            lvl6.size = new Vec2(235, 155);
+            let preview6 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            preview6.position.set(size.x + 325, size.y + 220);
+            preview6.scale.set(0.25, 0.3);
+            let lvl6 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 220), text: "" });
+            lvl6.backgroundColor = Color.TRANSPARENT;
+            lvl6.size = new Vec2(280, 155);
+            lvl6.onClick = changeToLvl1;
 
 
             bacc.onClick = () => {
