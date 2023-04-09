@@ -205,13 +205,14 @@ export default class PlayerController extends StateMachineAI {
         // TODO: on level start, this is inaccurate (left-aligned)
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             this.peeking = true;
-            this.peek_offset = (this.owner.position.x < 100) ? 100 : (this.owner.position.x > 1100) ? -100 : 0;
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
+            this.peek_offset = (this.owner.position.x < 180) ? 180 - this.owner.position.x : (this.owner.position.x > 1100) ? (180 - (1200 - this.owner.position.x)) : 0;
+            this.peek_offset *= 0.8;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -0.85*this.switch_dist - this.peek_offset;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             this.peeking = false;
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? 0.85*this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
