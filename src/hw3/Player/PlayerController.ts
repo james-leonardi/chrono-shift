@@ -88,6 +88,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected peeking: boolean = false;
 
+    protected double_jump: boolean = true;
+
     protected receiver: Receiver;
 
     
@@ -243,4 +245,7 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent("DYING");
         }
     }
+
+    public get has_double_jump(): boolean { return this.double_jump; }
+    public set has_double_jump(doublejump: boolean) { this.double_jump = doublejump; } 
 }
