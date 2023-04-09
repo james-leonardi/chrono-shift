@@ -175,6 +175,7 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.queue("IDLE", false, undefined);
         }
 
+        // How much of this can we replace with events? Is this even necessary?
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
             if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
@@ -186,7 +187,11 @@ export default class PlayerController extends StateMachineAI {
             } else console.log("CD!");
         }
 
-        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking) {
+        // Handle switching when the switch key is pressed
+        // TODO: on level start, player ends up in middle of screen
+        // To fix, should we make every level top-to-bottom?
+        // Or add extra tiles to the left of the first section
+        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
@@ -194,7 +199,11 @@ export default class PlayerController extends StateMachineAI {
             } else console.log("CD!");
         }
 
-        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking) {
+        // Handle peeking
+        // TODO: remove 'pan' effect, make it instant
+        // TODO: draw outline of sprite where it would appear
+        // TODO: on level start, this is inaccurate (left-aligned)
+        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             this.peeking = true;
             this.peek_offset = (this.owner.position.x < 100) ? 100 : (this.owner.position.x > 1100) ? -100 : 0;
             this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
