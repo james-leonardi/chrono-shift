@@ -176,6 +176,11 @@ export default class PlayerController extends StateMachineAI {
         while (this.receiver.hasNextEvent()) {
             this.handleEvent(this.receiver.getNextEvent());
         }
+        const tile = this.tilemap.getColRowAt(this.owner.position);
+        if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+            this.emitter.fireEvent("DYING"); return;
+        }
+
         // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
         if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
             // Start the particle system at the player's current position
@@ -200,13 +205,20 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Handle switching when the switch key is pressed
-        // todo: don't allow switching into a collidable wall! (play a special sound if this occurs, to be recorded)
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
-                console.log("Switch!");
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist_x) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
-                this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+                const newPos = (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+                console.log(`New pos: ${newPos}`);
+                const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x + newPos, this.owner.position.y));
+                if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+                    console.log("COLLIDABLE!");
+                } else {
+                    console.log("Switch!");
+                    this.owner.position.x += newPos;
+                }
+                /* this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x; */
             } else console.log("CD!");
         }
 
