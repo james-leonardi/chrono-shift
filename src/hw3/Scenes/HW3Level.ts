@@ -506,7 +506,7 @@ export default abstract class HW3Level extends Scene {
 
         // Add the player to the scene
         this.player = this.add.animatedSprite(key, HW3Layers.PRIMARY);
-        this.player.scale.set(.125, .125);
+        this.player.scale.set(0.5, 0.5);
         this.player.position.copy(this.playerSpawn);
         
         // Give the player physics

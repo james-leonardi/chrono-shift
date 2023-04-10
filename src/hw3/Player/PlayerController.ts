@@ -33,6 +33,7 @@ export const PlayerAnimations = {
     TAKING_DAMAGE: "TAKING_DAMAGE",
     DYING: "DYING",
     DEATH: "DEAD",
+    GRAPPLE: "GRAPPLE"
 } as const
 
 /**
