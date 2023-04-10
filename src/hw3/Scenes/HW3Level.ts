@@ -320,7 +320,6 @@ export default abstract class HW3Level extends Scene {
      */
     protected handleEnteredLevelEnd(): void {
         // If the timer hasn't run yet, start the end level animation
-        /* console.log("Player ended level"); */
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");
