@@ -32,10 +32,6 @@ export default class Jump extends PlayerState {
         else if(this.owner.onCeiling || this.parent.velocity.y >= 0){
             this.finished(PlayerStates.FALL);
 		}
-        else if(Input.isJustPressed(HW3Controls.JUMP) && this.parent.has_double_jump) {
-            this.parent.has_double_jump = false;
-            this.finished(PlayerStates.JUMP);
-        }
         else if(Input.isJustPressed(HW3Controls.DASH) && (Input.isPressed(HW3Controls.MOVE_LEFT) || Input.isPressed(HW3Controls.MOVE_RIGHT)) && this.parent.has_dash) {
             this.parent.has_dash = false;
             this.finished(PlayerStates.DASH);

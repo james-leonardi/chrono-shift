@@ -90,8 +90,6 @@ export default class PlayerController extends StateMachineAI {
 
     protected peeking: boolean = false;
 
-    protected double_jump: boolean = true;
-
     protected dash: boolean = true;
 
     protected receiver: Receiver;
@@ -250,9 +248,6 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent("DYING");
         }
     }
-
-    public get has_double_jump(): boolean { return this.double_jump; }
-    public set has_double_jump(double_jump: boolean) { this.double_jump = double_jump; } 
 
     public get has_dash(): boolean { return this.dash; }
     public set has_dash(dash: boolean) { this.dash = dash; } 
