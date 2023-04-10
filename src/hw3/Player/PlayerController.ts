@@ -2,6 +2,7 @@ import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
@@ -132,6 +133,7 @@ export default class PlayerController extends StateMachineAI {
             case HW3Events.GRAPPLE_HIT: {
                 console.log("Grapple!");
                 //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
                 this.velocity.mult(Vec2.ZERO);
                 this.velocity.add(event.data.get('velocity'));
                 /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
@@ -188,6 +190,10 @@ export default class PlayerController extends StateMachineAI {
                 this.grapple.startSystem(500, 0, this.owner.position);
                 this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
                 this.owner.animation.queue("IDLE", false, undefined);
+                /* console.log("GRAPPLE_" + Math.floor(Math.random() * 3)); */
+                /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "GRAPPLE_" + Math.floor(Math.random()*3), loop: false, holdReference: false }); */
+
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
         }
 
@@ -196,6 +202,7 @@ export default class PlayerController extends StateMachineAI {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                 this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
             } else console.log("CD!");
         }
