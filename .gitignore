@@ -2,7 +2,7 @@
 node_modules
 
 # Exclude the compiled project
-dist/*
+# dist/*
 
 # Include the demo_assets folder
 !dist/demo_assets/
