@@ -14,7 +14,7 @@ export default class Level1 extends HW3Level {
 
     public static readonly PLAYER_SPAWN = new Vec2(32, 76);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
-    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
+    public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly TILEMAP_KEY = "LEVEL1";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L0cpy.json";

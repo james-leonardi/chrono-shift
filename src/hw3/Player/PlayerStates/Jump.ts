@@ -1,6 +1,6 @@
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import { PlayerStates, PlayerTweens } from "../PlayerController";
+import { PlayerAnimations, PlayerStates, PlayerTweens } from "../PlayerController";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 
@@ -13,7 +13,8 @@ export default class Jump extends PlayerState {
         let jumpAudio = this.owner.getScene().getJumpAudioKey();
         /* console.log(this.parent.velocity.x); */
         /* if (this.parent.velocity.x > 0) this.owner.tweens.play(PlayerTweens.FLIPL);
-        else */ this.owner.tweens.play(PlayerTweens.FLIPR);
+        else */ //this.owner.tweens.play(PlayerTweens.FLIPR);
+        this.owner.animation.play(PlayerAnimations.JUMP);
         // Give the player a burst of upward momentum
         this.parent.velocity.y = -200;
         // Play the jump sound for the player
@@ -50,7 +51,7 @@ export default class Jump extends PlayerState {
 	}
 
 	public onExit(): Record<string, any> {
-		this.owner.animation.stop();
+		//this.owner.animation.stop();
 		return {};
 	}
 }
