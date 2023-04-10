@@ -16,8 +16,7 @@ import { HW3Controls } from "./hw3/HW3Controls";
             {name: HW3Controls.SWITCH, keys: ["s"]},
             {name: HW3Controls.ATTACK, keys: ["x"]},
             {name: HW3Controls.GRAPPLE, keys: ["right_click"]},
-            {name: HW3Controls.PEEK, keys: ["e"]},
-            {name: HW3Controls.DASH, keys: ["shift"]}
+            {name: HW3Controls.PEEK, keys: ["e"]}
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                       // Whether to show debug messages. You can change this to true if you want

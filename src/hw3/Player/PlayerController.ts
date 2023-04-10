@@ -7,7 +7,6 @@ import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
 import Jump from "./PlayerStates/Jump";
 import Walk from "./PlayerStates/Walk";
-import Dash from "./PlayerStates/Dash";
 
 import PlayerWeapon from "./PlayerWeapon";
 import PlayerGrapple from "./PlayerGrapple";
@@ -54,7 +53,6 @@ export const PlayerStates = {
 	JUMP: "JUMP",
     FALL: "FALL",
     DEAD: "DEAD",
-    DASH: "DASH"
 } as const
 
 /**
@@ -90,10 +88,6 @@ export default class PlayerController extends StateMachineAI {
 
     protected peeking: boolean = false;
 
-    protected double_jump: boolean = true;
-
-    protected dash: boolean = true;
-
     protected receiver: Receiver;
 
     
@@ -123,7 +117,6 @@ export default class PlayerController extends StateMachineAI {
         this.addState(PlayerStates.JUMP, new Jump(this, this.owner));
         this.addState(PlayerStates.FALL, new Fall(this, this.owner));
         this.addState(PlayerStates.DEAD, new Dead(this, this.owner));
-        this.addState(PlayerStates.DASH, new Dash(this, this.owner))
         
         // Start the player in the Idle state
         this.initialize(PlayerStates.IDLE);
@@ -250,10 +243,4 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent("DYING");
         }
     }
-
-    public get has_double_jump(): boolean { return this.double_jump; }
-    public set has_double_jump(double_jump: boolean) { this.double_jump = double_jump; } 
-
-    public get has_dash(): boolean { return this.dash; }
-    public set has_dash(dash: boolean) { this.dash = dash; } 
 }

@@ -9,6 +9,5 @@ export const HW3Controls = {
     SWITCH: "SWITCH",
     GRAPPLE: "GRAPPLE",
     PEEK: "PEEK",
-    PAUSE: "PAUSE",
-    DASH: "DASH"
+    PAUSE: "PAUSE"
 } as const;
