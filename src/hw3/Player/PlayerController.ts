@@ -86,7 +86,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected switch_last_used: number;
     protected switch_cooldown: number = 1000;
-    protected switch_dist: number = 816;
+    protected switch_dist_x: number = 816;
+    protected switch_dist_y: number = 0;
 
     protected peek_offset: number = 0;
 
@@ -199,12 +200,13 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Handle switching when the switch key is pressed
+        // todo: don't allow switching into a collidable wall! (play a special sound if this occurs, to be recorded)
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
-                this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist_x) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
+                this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
             } else console.log("CD!");
         }
 
@@ -216,7 +218,7 @@ export default class PlayerController extends StateMachineAI {
             /*this.owner.position.x += (pos < this.switch_dist) ? 
                 this.switch_dist + this.peek_offset : 
                 ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;*/
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
@@ -224,7 +226,7 @@ export default class PlayerController extends StateMachineAI {
             /*this.owner.position.x += (pos < this.switch_dist) ? 
                 ((pos > 1200-this.switch_dist-this.peek_offset) ? 0.85 : 1) * this.switch_dist + this.peek_offset : 
                 -this.switch_dist - this.peek_offset;*/
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
+            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
