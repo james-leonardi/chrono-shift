@@ -91,6 +91,7 @@ export default class Level1 extends HW3Level {
         this.load.audio("PSHH", "hw4_assets/sounds/pshh.mp3");
         this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
         this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
+        this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
     /**
