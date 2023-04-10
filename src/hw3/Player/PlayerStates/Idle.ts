@@ -40,10 +40,7 @@ export default class Idle extends PlayerState {
             if (this.owner.onGround && this.parent.velocity.y > 0) {
                 this.parent.velocity.y = 0;
             }
-            if (this.owner.onCeiling && this.parent.velocity.y < 0) {
-                this.parent.velocity.y *= -1;
-                this.parent.velocity.y = Math.min(this.parent.velocity.y, 20);
-            }
+            if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.max(-this.parent.velocity.y, -20);
             this.parent.velocity.y += (this.owner.frozen) ? 0 : this.gravity*deltaT;
             // Move the player
             this.owner.move(this.parent.velocity.scaled(deltaT));
