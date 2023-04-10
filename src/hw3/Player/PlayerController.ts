@@ -7,6 +7,7 @@ import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
 import Jump from "./PlayerStates/Jump";
 import Walk from "./PlayerStates/Walk";
+import Dash from "./PlayerStates/Dash";
 
 import PlayerWeapon from "./PlayerWeapon";
 import PlayerGrapple from "./PlayerGrapple";
@@ -53,6 +54,7 @@ export const PlayerStates = {
 	JUMP: "JUMP",
     FALL: "FALL",
     DEAD: "DEAD",
+    DASH: "DASH"
 } as const
 
 /**
@@ -88,6 +90,10 @@ export default class PlayerController extends StateMachineAI {
 
     protected peeking: boolean = false;
 
+    protected double_jump: boolean = true;
+
+    protected dash: boolean = true;
+
     protected receiver: Receiver;
 
     
@@ -117,6 +123,7 @@ export default class PlayerController extends StateMachineAI {
         this.addState(PlayerStates.JUMP, new Jump(this, this.owner));
         this.addState(PlayerStates.FALL, new Fall(this, this.owner));
         this.addState(PlayerStates.DEAD, new Dead(this, this.owner));
+        this.addState(PlayerStates.DASH, new Dash(this, this.owner))
         
         // Start the player in the Idle state
         this.initialize(PlayerStates.IDLE);
@@ -175,6 +182,7 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.queue("IDLE", false, undefined);
         }
 
+        // How much of this can we replace with events? Is this even necessary?
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
             if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
@@ -186,7 +194,11 @@ export default class PlayerController extends StateMachineAI {
             } else console.log("CD!");
         }
 
-        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking) {
+        // Handle switching when the switch key is pressed
+        // TODO: on level start, player ends up in middle of screen
+        // To fix, should we make every level top-to-bottom?
+        // Or add extra tiles to the left of the first section
+        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
@@ -194,7 +206,11 @@ export default class PlayerController extends StateMachineAI {
             } else console.log("CD!");
         }
 
-        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking) {
+        // Handle peeking
+        // TODO: remove 'pan' effect, make it instant
+        // TODO: draw outline of sprite where it would appear
+        // TODO: on level start, this is inaccurate (left-aligned)
+        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             this.peeking = true;
             this.peek_offset = (this.owner.position.x < 180) ? 180 - this.owner.position.x : (this.owner.position.x > 1100) ? (180 - (1200 - this.owner.position.x)) : 0;
             this.peek_offset *= 0.8;
@@ -234,4 +250,10 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent("DYING");
         }
     }
+
+    public get has_double_jump(): boolean { return this.double_jump; }
+    public set has_double_jump(double_jump: boolean) { this.double_jump = double_jump; } 
+
+    public get has_dash(): boolean { return this.dash; }
+    public set has_dash(dash: boolean) { this.dash = dash; } 
 }
