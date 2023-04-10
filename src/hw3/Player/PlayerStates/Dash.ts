@@ -6,18 +6,18 @@ import { HW3Controls } from "../../HW3Controls";
 
 import PlayerState from "./PlayerState";
 
-export default class Jump extends PlayerState {
+export default class Dash extends PlayerState {
 
 	public onEnter(options: Record<string, any>): void {
-        // Get the jump audio key for the player
-        let jumpAudio = this.owner.getScene().getJumpAudioKey();
-        /* console.log(this.parent.velocity.x); */
-        /* if (this.parent.velocity.x > 0) this.owner.tweens.play(PlayerTweens.FLIPL);
-        else */ this.owner.tweens.play(PlayerTweens.FLIPR);
-        // Give the player a burst of upward momentum
-        this.parent.velocity.y = -200;
-        // Play the jump sound for the player
-		this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: jumpAudio, loop: false, holdReference: false});
+        
+        if(Input.isPressed(HW3Controls.MOVE_RIGHT)) {
+            this.parent.velocity.x = 1000;
+            this.parent.velocity.y = 0;
+        }
+        else if (Input.isPressed(HW3Controls.MOVE_LEFT)) {
+            this.parent.velocity.x = -1000;
+            this.parent.velocity.y = 0;
+        }
 	}
 
 	public update(deltaT: number): void {
@@ -32,13 +32,9 @@ export default class Jump extends PlayerState {
         else if(this.owner.onCeiling || this.parent.velocity.y >= 0){
             this.finished(PlayerStates.FALL);
 		}
-        else if(Input.isJustPressed(HW3Controls.JUMP) && this.parent.has_double_jump) {
+        else if (Input.isJustPressed(HW3Controls.JUMP) && this.parent.has_double_jump) {
             this.parent.has_double_jump = false;
             this.finished(PlayerStates.JUMP);
-        }
-        else if(Input.isJustPressed(HW3Controls.DASH) && (Input.isPressed(HW3Controls.MOVE_LEFT) || Input.isPressed(HW3Controls.MOVE_RIGHT)) && this.parent.has_dash) {
-            this.parent.has_dash = false;
-            this.finished(PlayerStates.DASH);
         }
         // Otherwise move the player
         else {
