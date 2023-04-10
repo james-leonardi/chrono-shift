@@ -36,6 +36,7 @@ export default class Walk extends PlayerState {
             this.parent.velocity.x = dir.x * this.parent.speed
             this.owner.move(this.parent.velocity.scaled(deltaT));
         }
+        if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y *= -1;
 
 	}
 
