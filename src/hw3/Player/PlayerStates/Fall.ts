@@ -38,7 +38,7 @@ export default class Fall extends PlayerState {
             // Update the horizontal velocity of the player
             if (dir.x !== 0) this.parent.velocity.x += dir.x * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
             // Update the vertical velocity of the player
-            if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.max(-this.parent.velocity.y, -20);
+            if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
             this.parent.velocity.y += (this.owner.frozen) ? 0 : this.gravity*deltaT;
             // Move the player
             this.owner.move(this.parent.velocity.scaled(deltaT));

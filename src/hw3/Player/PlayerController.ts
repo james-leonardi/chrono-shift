@@ -212,7 +212,7 @@ export default class PlayerController extends StateMachineAI {
         // TODO: remove 'pan' effect, make it instant
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             const pos = this.owner.position.x; this.peeking = true;
-            this.peek_offset = 0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
+            this.peek_offset = 0; //0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
             this.owner.position.x += (pos < this.switch_dist) ? 
                 this.switch_dist + this.peek_offset : 
                 ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;
