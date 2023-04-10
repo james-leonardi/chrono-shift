@@ -213,16 +213,18 @@ export default class PlayerController extends StateMachineAI {
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             const pos = this.owner.position.x; this.peeking = true;
             this.peek_offset = 0; //0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
-            this.owner.position.x += (pos < this.switch_dist) ? 
+            /*this.owner.position.x += (pos < this.switch_dist) ? 
                 this.switch_dist + this.peek_offset : 
-                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;
+                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;*/
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             const pos = this.owner.position.x; this.peeking = false;
-            this.owner.position.x += (pos < this.switch_dist) ? 
+            /*this.owner.position.x += (pos < this.switch_dist) ? 
                 ((pos > 1200-this.switch_dist-this.peek_offset) ? 0.85 : 1) * this.switch_dist + this.peek_offset : 
-                -this.switch_dist - this.peek_offset;
+                -this.switch_dist - this.peek_offset;*/
+            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
