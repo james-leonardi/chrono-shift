@@ -203,7 +203,7 @@ export default class PlayerController extends StateMachineAI {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
                 console.log("Switch!");
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
                 this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
             } else console.log("CD!");
         }
