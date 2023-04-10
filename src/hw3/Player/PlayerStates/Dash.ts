@@ -32,10 +32,6 @@ export default class Dash extends PlayerState {
         else if(this.owner.onCeiling || this.parent.velocity.y >= 0){
             this.finished(PlayerStates.FALL);
 		}
-        else if (Input.isJustPressed(HW3Controls.JUMP) && this.parent.has_double_jump) {
-            this.parent.has_double_jump = false;
-            this.finished(PlayerStates.JUMP);
-        }
         // Otherwise move the player
         else {
             // Get the input direction from the player

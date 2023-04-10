@@ -33,6 +33,7 @@ export const PlayerAnimations = {
     TAKING_DAMAGE: "TAKING_DAMAGE",
     DYING: "DYING",
     DEATH: "DEAD",
+    GRAPPLE: "GRAPPLE"
 } as const
 
 /**
@@ -89,8 +90,6 @@ export default class PlayerController extends StateMachineAI {
     protected peek_offset: number = 0;
 
     protected peeking: boolean = false;
-
-    protected double_jump: boolean = true;
 
     protected dash: boolean = true;
 
@@ -182,7 +181,6 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.queue("IDLE", false, undefined);
         }
 
-        // How much of this can we replace with events? Is this even necessary?
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
             if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
@@ -195,9 +193,6 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Handle switching when the switch key is pressed
-        // TODO: on level start, player ends up in middle of screen
-        // To fix, should we make every level top-to-bottom?
-        // Or add extra tiles to the left of the first section
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
@@ -208,18 +203,19 @@ export default class PlayerController extends StateMachineAI {
 
         // Handle peeking
         // TODO: remove 'pan' effect, make it instant
-        // TODO: draw outline of sprite where it would appear
-        // TODO: on level start, this is inaccurate (left-aligned)
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
-            this.peeking = true;
-            this.peek_offset = (this.owner.position.x < 180) ? 180 - this.owner.position.x : (this.owner.position.x > 1100) ? (180 - (1200 - this.owner.position.x)) : 0;
-            this.peek_offset *= 0.8;
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist + this.peek_offset : -0.85*this.switch_dist - this.peek_offset;
+            const pos = this.owner.position.x; this.peeking = true;
+            this.peek_offset = 0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
+            this.owner.position.x += (pos < this.switch_dist) ? 
+                this.switch_dist + this.peek_offset : 
+                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
-            this.peeking = false;
-            this.owner.position.x += (this.owner.position.x < this.switch_dist) ? 0.85*this.switch_dist + this.peek_offset : -this.switch_dist - this.peek_offset;
+            const pos = this.owner.position.x; this.peeking = false;
+            this.owner.position.x += (pos < this.switch_dist) ? 
+                ((pos > 1200-this.switch_dist-this.peek_offset) ? 0.85 : 1) * this.switch_dist + this.peek_offset : 
+                -this.switch_dist - this.peek_offset;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
@@ -250,9 +246,6 @@ export default class PlayerController extends StateMachineAI {
             this.emitter.fireEvent("DYING");
         }
     }
-
-    public get has_double_jump(): boolean { return this.double_jump; }
-    public set has_double_jump(double_jump: boolean) { this.double_jump = double_jump; } 
 
     public get has_dash(): boolean { return this.dash; }
     public set has_dash(dash: boolean) { this.dash = dash; } 

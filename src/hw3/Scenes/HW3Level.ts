@@ -320,7 +320,6 @@ export default abstract class HW3Level extends Scene {
      */
     protected handleEnteredLevelEnd(): void {
         // If the timer hasn't run yet, start the end level animation
-        /* console.log("Player ended level"); */
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");
@@ -507,7 +506,7 @@ export default abstract class HW3Level extends Scene {
 
         // Add the player to the scene
         this.player = this.add.animatedSprite(key, HW3Layers.PRIMARY);
-        this.player.scale.set(.125, .125);
+        this.player.scale.set(0.5, 0.5);
         this.player.position.copy(this.playerSpawn);
         
         // Give the player physics
