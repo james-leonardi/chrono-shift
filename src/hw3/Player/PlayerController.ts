@@ -2,6 +2,7 @@ import StateMachineAI from "../../Wolfie2D/AI/StateMachineAI";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
 import Fall from "./PlayerStates/Fall";
 import Idle from "./PlayerStates/Idle";
@@ -85,7 +86,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected switch_last_used: number;
     protected switch_cooldown: number = 1000;
-    protected switch_dist: number = 816;
+    protected switch_dist_x: number = 816;
+    protected switch_dist_y: number = 0;
 
     protected peek_offset: number = 0;
 
@@ -133,6 +135,7 @@ export default class PlayerController extends StateMachineAI {
             case HW3Events.GRAPPLE_HIT: {
                 console.log("Grapple!");
                 //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
                 this.velocity.mult(Vec2.ZERO);
                 this.velocity.add(event.data.get('velocity'));
                 /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
@@ -173,6 +176,11 @@ export default class PlayerController extends StateMachineAI {
         while (this.receiver.hasNextEvent()) {
             this.handleEvent(this.receiver.getNextEvent());
         }
+        const tile = this.tilemap.getColRowAt(this.owner.position);
+        if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+            this.emitter.fireEvent("DYING"); return;
+        }
+
         // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
         if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
             // Start the particle system at the player's current position
@@ -189,6 +197,10 @@ export default class PlayerController extends StateMachineAI {
                 this.grapple.startSystem(500, 0, this.owner.position);
                 this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
                 this.owner.animation.queue("IDLE", false, undefined);
+                /* console.log("GRAPPLE_" + Math.floor(Math.random() * 3)); */
+                /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "GRAPPLE_" + Math.floor(Math.random()*3), loop: false, holdReference: false }); */
+
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
         }
 
@@ -196,8 +208,17 @@ export default class PlayerController extends StateMachineAI {
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
-                console.log("Switch!");
-                this.owner.position.x += (this.owner.position.x < this.switch_dist) ? this.switch_dist : -this.switch_dist;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist_x) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
+                const newPos = (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+                console.log(`New pos: ${newPos}`);
+                const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x + newPos, this.owner.position.y));
+                if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+                    console.log("COLLIDABLE!");
+                } else {
+                    console.log("Switch!");
+                    this.owner.position.x += newPos;
+                }
+                /* this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x; */
             } else console.log("CD!");
         }
 
@@ -205,17 +226,19 @@ export default class PlayerController extends StateMachineAI {
         // TODO: remove 'pan' effect, make it instant
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             const pos = this.owner.position.x; this.peeking = true;
-            this.peek_offset = 0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
-            this.owner.position.x += (pos < this.switch_dist) ? 
+            this.peek_offset = 0; //0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
+            /*this.owner.position.x += (pos < this.switch_dist) ? 
                 this.switch_dist + this.peek_offset : 
-                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;
+                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;*/
+            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             const pos = this.owner.position.x; this.peeking = false;
-            this.owner.position.x += (pos < this.switch_dist) ? 
+            /*this.owner.position.x += (pos < this.switch_dist) ? 
                 ((pos > 1200-this.switch_dist-this.peek_offset) ? 0.85 : 1) * this.switch_dist + this.peek_offset : 
-                -this.switch_dist - this.peek_offset;
+                -this.switch_dist - this.peek_offset;*/
+            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}

@@ -12,7 +12,7 @@ import HW4Level2 from "./HW3Level2";
  */
 export default class Level1 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 76);
+    public static readonly PLAYER_SPAWN = new Vec2(300, 76);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -38,7 +38,7 @@ export default class Level1 extends HW3Level {
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
-    public static readonly LEVEL_END = new AABB(new Vec2(224, 232), new Vec2(24, 16));
+    public static readonly LEVEL_END = new AABB(new Vec2(500, 232), new Vec2(24, 16));
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, options);
@@ -65,7 +65,7 @@ export default class Level1 extends HW3Level {
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
-        this.pastPosition = new Vec2(100, 150).mult(this.tilemapScale);
+        this.pastPosition = new Vec2(150, 150).mult(this.tilemapScale);
     }
 
     /**
@@ -82,6 +82,16 @@ export default class Level1 extends HW3Level {
         this.load.audio(this.tileDestroyedAudioKey, Level1.TILE_DESTROYED_PATH);
         this.load.audio(this.damagedAudioKey, Level1.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level1.DEADGE_AUDIO_PATH);
+
+        this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
+        this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
+        this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
+        this.load.audio("ZIP_0", "hw4_assets/sounds/zip1.mp3");
+        this.load.audio("ZIP_1", "hw4_assets/sounds/zip2.mp3");
+        this.load.audio("PSHH", "hw4_assets/sounds/pshh.mp3");
+        this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
+        this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
+        this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
     /**
@@ -111,7 +121,7 @@ export default class Level1 extends HW3Level {
      */
     protected initializeViewport(): void {
         super.initializeViewport();
-        this.viewport.setBounds(16, 16, 1330, 512);
+        this.viewport.setBounds(16, 16, 1700, 512);
     }
 
 }

@@ -296,7 +296,7 @@ export default class MainMenu extends Scene {
                 position: new Vec2(size.x, size.y - 15), text: "Tepster Tomsper is a distinguished and capable hitman. One day while out"
             });
             let line2 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 15), text: "running errands at Shader Joe's, he stumbles upon the Chrono-Switch,"
+                position: new Vec2(size.x, size.y + 15), text: "running errands at Trader Joe's, he stumbles upon the Chrono-Switch,"
             });
             let line3 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
                 position: new Vec2(size.x, size.y + 45), text: "a device that, when activated, allows him to travel back in time."
@@ -314,7 +314,7 @@ export default class MainMenu extends Scene {
             line5.font = "MyFont"; line5.fontSize = 20;
 
             let madeBy = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 210), text: "Made with <3 by: Kevin Tao, James Leonardi, and Kyle Yee"
+                position: new Vec2(size.x, size.y + 210), text: "Made by: Kevin Tao, James Leonardi, and Kyle Yee"
             });
             madeBy.font = "MyFont"; madeBy.fontSize = 22;
 

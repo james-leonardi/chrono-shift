@@ -48,6 +48,7 @@ export default abstract class HW3Level extends Scene {
     /** Overrride the factory manager */
     public add: HW3FactoryManager;
 
+    private won: boolean = false;
 
     /** The particle system used for the player's weapon */
     protected playerWeaponSystem: PlayerWeapon
@@ -176,6 +177,10 @@ export default abstract class HW3Level extends Scene {
         switch (event.type) {
             case HW3Events.PLAYER_ENTERED_LEVEL_END: {
                 /* console.log("AYUSVKDUYVAKUYWVKUYAVA"); */
+                if (this.won) return;
+                this.won = true;
+                this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "LEVEL_MUSIC" });
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "WIN", loop: false, holdReference: true });
                 this.handleEnteredLevelEnd();
                 break;
             }
