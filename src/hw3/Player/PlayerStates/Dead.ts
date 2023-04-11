@@ -16,7 +16,7 @@ export default class Dead extends PlayerState {
         /* this.owner.animation.play("DYING", false, undefined);
         this.owner.animation.queue("DEATH", false, HW3Events.PLAYER_DEAD); */
         let deadgeAudio = this.owner.getScene().getDeadgeAudioKey();
-        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: deadgeAudio, loop: false, holdReference: false});
+        //this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: deadgeAudio, loop: false, holdReference: false});
     }
 
     // Ignore all events from the rest of the game

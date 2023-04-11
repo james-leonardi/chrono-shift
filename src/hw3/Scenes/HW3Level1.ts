@@ -83,15 +83,15 @@ export default class Level1 extends HW3Level {
         this.load.audio(this.damagedAudioKey, Level1.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level1.DEADGE_AUDIO_PATH);
 
-        this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
-        this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
-        this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
+        //this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
+        //this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
+        //this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
         this.load.audio("ZIP_0", "hw4_assets/sounds/zip1.mp3");
         this.load.audio("ZIP_1", "hw4_assets/sounds/zip2.mp3");
         this.load.audio("PSHH", "hw4_assets/sounds/pshh.mp3");
         this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
         this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
-        this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
+        //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
     /**

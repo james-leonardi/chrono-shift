@@ -180,7 +180,7 @@ export default abstract class HW3Level extends Scene {
                 if (this.won) return;
                 this.won = true;
                 this.emitter.fireEvent(GameEventType.STOP_SOUND, { key: "LEVEL_MUSIC" });
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "WIN", loop: false, holdReference: true });
+                //this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "WIN", loop: false, holdReference: true });
                 this.handleEnteredLevelEnd();
                 break;
             }
