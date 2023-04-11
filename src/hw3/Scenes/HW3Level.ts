@@ -77,7 +77,7 @@ export default abstract class HW3Level extends Scene {
 
     /* The Past */
     protected pastPosition: Vec2 = new Vec2(0,0);
-    protected pastHalfSize: Vec2 = new Vec2(952, 820);
+    protected pastHalfSize: Vec2 = new Vec2(2752, 2048);
     protected pastArea: Rect;
 
     // Level end transition timer and graphic

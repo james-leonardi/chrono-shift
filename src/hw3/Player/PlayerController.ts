@@ -86,8 +86,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected switch_last_used: number;
     protected switch_cooldown: number = 1000;
-    protected switch_dist_x: number = 816;
-    protected switch_dist_y: number = 0;
+    protected switch_dist_x: number = 0;
+    protected switch_dist_y: number = 2240;
 
     protected peek_offset: number = 0;
 
@@ -208,15 +208,17 @@ export default class PlayerController extends StateMachineAI {
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 this.switch_last_used = Date.now();
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.x < this.switch_dist_x) ? "SWITCH_2" : "SWITCH_1"), loop: false, holdReference: false });
-                const newPos = (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
+                const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
                 console.log(`New pos: ${newPos}`);
-                const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x + newPos, this.owner.position.y));
+                const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
                 if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
                     console.log("COLLIDABLE!");
                 } else {
                     console.log("Switch!");
-                    this.owner.position.x += newPos;
+                    console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
+                    this.owner.position.y += newPos;
+                    console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
                 }
                 /* this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x; */
             } else console.log("CD!");
@@ -225,20 +227,13 @@ export default class PlayerController extends StateMachineAI {
         // Handle peeking
         // TODO: remove 'pan' effect, make it instant
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
-            const pos = this.owner.position.x; this.peeking = true;
-            this.peek_offset = 0; //0.8*((pos < 180) ? 180 - pos : (pos > 1180) ? (180 - (1200 - pos)) : 0);
-            /*this.owner.position.x += (pos < this.switch_dist) ? 
-                this.switch_dist + this.peek_offset : 
-                ((pos > 1200) ? -0.85 : -1) * this.switch_dist - this.peek_offset;*/
-            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+            this.peeking = true;
+            this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
-            const pos = this.owner.position.x; this.peeking = false;
-            /*this.owner.position.x += (pos < this.switch_dist) ? 
-                ((pos > 1200-this.switch_dist-this.peek_offset) ? 0.85 : 1) * this.switch_dist + this.peek_offset : 
-                -this.switch_dist - this.peek_offset;*/
-            this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x;
+            this.peeking = false;
+            this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 	}
