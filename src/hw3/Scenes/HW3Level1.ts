@@ -12,7 +12,7 @@ import HW4Level2 from "./HW3Level2";
  */
 export default class Level1 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(300, 76);
+    public static readonly PLAYER_SPAWN = new Vec2(32, 608);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -38,7 +38,7 @@ export default class Level1 extends HW3Level {
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
-    public static readonly LEVEL_END = new AABB(new Vec2(500, 232), new Vec2(24, 16));
+    public static readonly LEVEL_END = new AABB(new Vec2(928, 3632), new Vec2(24, 16));
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, options);
@@ -121,7 +121,7 @@ export default class Level1 extends HW3Level {
      */
     protected initializeViewport(): void {
         super.initializeViewport();
-        this.viewport.setBounds(16, 16, 1700, 512);
+        this.viewport.setBounds(0, 0, 2752, 4096);
     }
 
 }
