@@ -194,6 +194,13 @@ export default abstract class HW3Level extends Scene {
                 this.sceneManager.changeToScene(this.nextLevel);
                 break;
             }
+            case "SWITCH": {
+                /* this.viewport.toggleTP(); */
+                /* setTimeout(() => {
+                    this.viewport.toggleTP();
+                }, 100); */
+                break;
+            }
             case "PARTICLE": {
                 /* console.log("BLAHasdasd"); */
                 this.handleParticleHit(event.data.get("node"));
@@ -402,6 +409,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe(HW3Events.PLAYER_DEAD);
         this.receiver.subscribe("PARTICLE");
         this.receiver.subscribe("DYING");
+        this.receiver.subscribe("SWITCH");
     }
     /**
      * Adds in any necessary UI to the game
