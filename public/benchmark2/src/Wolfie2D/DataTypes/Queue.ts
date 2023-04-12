@@ -78,6 +78,14 @@ export default class Queue<T> implements Collection {
         return item;
     }
 
+    peekLast(): T {
+        if(this.head === this.tail){
+            throw "Queue empty - cannot get element"
+        }
+        let item = this.q[this.tail - 1];
+        return item;
+    }
+
     /**
      * Returns true if the queue has items in it, false otherwise
      * @returns A boolean representing whether or not this queue has items

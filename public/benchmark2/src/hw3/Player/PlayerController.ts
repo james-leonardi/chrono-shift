@@ -84,8 +84,10 @@ export default class PlayerController extends StateMachineAI {
     protected grapple_cooldown: number = 1000;
     protected grapple_enabled: boolean = true;
 
+    protected mou_shindeiru: boolean = false;
+    protected switchedQ: boolean = false;
     protected switch_last_used: number;
-    protected switch_cooldown: number = 1000;
+    protected switch_cooldown: number = 500;
     protected switch_dist_x: number = 0;
     protected switch_dist_y: number = 2240;
 
@@ -172,22 +174,17 @@ export default class PlayerController extends StateMachineAI {
     public get faceDir(): Vec2 { return this.owner.position.dirTo(Input.getGlobalMousePosition()); }
 
     public update(deltaT: number): void {
+        if (this.mou_shindeiru) return;
 		super.update(deltaT);
         while (this.receiver.hasNextEvent()) {
             this.handleEvent(this.receiver.getNextEvent());
         }
         const tile = this.tilemap.getColRowAt(this.owner.position);
-        if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
-            this.emitter.fireEvent("DYING"); return;
+        if (!this.peeking && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+            this.emitter.fireEvent("DYING"); this.changeState(PlayerStates.DEAD); this.mou_shindeiru = true; return;
         }
 
         // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
-        if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
-            // Start the particle system at the player's current position
-            this.weapon.startSystem(500, 0, this.owner.position);
-            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
-            this.owner.animation.queue("IDLE", false, undefined);
-        }
 
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
@@ -202,12 +199,20 @@ export default class PlayerController extends StateMachineAI {
 
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
+        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
+            // Start the particle system at the player's current position
+            this.weapon.startSystem(500, 0, this.owner.position);
+            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
+            this.owner.animation.queue("IDLE", false, undefined);
         }
 
         // Handle switching when the switch key is pressed
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
+                if (!this.switchedQ) { this.switchedQ = true; return }
+                this.switchedQ = false;
                 this.switch_last_used = Date.now();
+                this.emitter.fireEvent("SWITCH");
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                 const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
                 console.log(`New pos: ${newPos}`);
@@ -231,11 +236,11 @@ export default class PlayerController extends StateMachineAI {
             
             const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
-            if (!(this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+            /* if (!(this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) { */
                 this.peeking = true
                 this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
                 this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
-            }
+            /* } */
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
             this.peeking = false;

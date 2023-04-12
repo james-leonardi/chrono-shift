@@ -31,6 +31,8 @@ export default class Viewport {
     /** A boolean tha represents whether the player can zoom by scrolling with the mouse wheel */
     private scrollZoomEnabled: boolean;
 
+    private tpcnt: number = 0;
+
     /** The amount that is zoomed in or out. */
     private ZOOM_FACTOR: number = 1.2;
 
@@ -227,11 +229,29 @@ export default class Viewport {
         if(this.lastPositions.getSize() > this.smoothingFactor){
             this.lastPositions.dequeue();
         }
-        
+        let pos: Vec2 = Vec2.ZERO;
         // Get the average of the last 10 positions
-        let pos = Vec2.ZERO;
-        this.lastPositions.forEach(position => pos.add(position));
+        /* if (!this.tp) { */
+/*         pos = Vec2.ZERO; let secondToLast: number = 0; let last: number = 0; let tp = false;
+        this.lastPositions.forEach(position => {
+            pos.add(position);
+            secondToLast = last;
+            last = position.y;
+        });
         pos.scale(1/this.lastPositions.getSize());
+        if (secondToLast - last > 500 || secondToLast - last < -500) { tp = true; this.tpcnt = 12;}
+        if (this.following && (tp || this.tpcnt > 0)) { */
+            if (this.following) pos = this.following.position.clone();
+/*             this.tpcnt--;
+            if (this.tpcnt == 1) {
+                this.lastPositions.enqueue(this.view.center.clone());
+                this.tpcnt = 0;
+                console.log("tpcnt = 1");
+            }
+        } */
+        /* } 
+        else pos = this.lastPositions.peekLast();
+        if (!pos) pos = this.following.position.clone(); */
 
         // Set this position either to the object or to its bounds
         pos.x = MathUtils.clamp(pos.x, this.boundary.left + this.view.hw, this.boundary.right - this.view.hw);

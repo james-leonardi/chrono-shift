@@ -16,7 +16,7 @@ export default class Fall extends PlayerState {
 
         // If the player hits the ground, start idling and check if we should take damage
         if (this.owner.onGround) {
-            let nhealth = this.parent.health - Math.floor(this.parent.velocity.y / 600);
+            let nhealth = this.parent.health - Math.floor(this.parent.velocity.y / 300);
             if (nhealth != this.parent.health) {
                 this.parent.health = nhealth;
                 let damagedAudio = this.owner.getScene().getDamagedAudioKey();
@@ -37,6 +37,10 @@ export default class Fall extends PlayerState {
             let dir = this.parent.inputDir;
             // Update the horizontal velocity of the player
             if (dir.x !== 0) this.parent.velocity.x += dir.x * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
+            else {
+                if (this.parent.velocity.x > 100) this.parent.velocity.x += 1 * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
+                else if (this.parent.velocity.x < -100) this.parent.velocity.x += -1 * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
+            }
             // Update the vertical velocity of the player
             if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
             this.parent.velocity.y += (this.owner.frozen) ? 0 : this.gravity*deltaT;
