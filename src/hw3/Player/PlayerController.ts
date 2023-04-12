@@ -87,7 +87,7 @@ export default class PlayerController extends StateMachineAI {
     protected mou_shindeiru: boolean = false;
     protected switchedQ: boolean = false;
     protected switch_last_used: number;
-    protected switch_cooldown: number = 1000;
+    protected switch_cooldown: number = 500;
     protected switch_dist_x: number = 0;
     protected switch_dist_y: number = 2240;
 
@@ -185,12 +185,6 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
-        if ((Input.isPressed(HW3Controls.ATTACK)/*  || Input.isMouseJustPressed(0) */) && !this.weapon.isSystemRunning()) {
-            // Start the particle system at the player's current position
-            this.weapon.startSystem(500, 0, this.owner.position);
-            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
-            this.owner.animation.queue("IDLE", false, undefined);
-        }
 
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
@@ -205,6 +199,11 @@ export default class PlayerController extends StateMachineAI {
 
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
+        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
+            // Start the particle system at the player's current position
+            this.weapon.startSystem(500, 0, this.owner.position);
+            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
+            this.owner.animation.queue("IDLE", false, undefined);
         }
 
         // Handle switching when the switch key is pressed
