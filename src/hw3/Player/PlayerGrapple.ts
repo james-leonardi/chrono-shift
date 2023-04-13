@@ -6,6 +6,8 @@ import RandUtils from "../../Wolfie2D/Utils/RandUtils";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../Wolfie2D/Input/Input";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import Scene from "../../Wolfie2D/Scene/Scene";
 
  
 
@@ -17,7 +19,7 @@ import Line from "../../Wolfie2D/Nodes/Graphics/Line";
  */
 export default class PlayerGrapple extends ParticleSystem {
 
-    private grapple_length: number = 175;
+    private grapple_length: number = 225;
 
     private grapple_line: Line
 
@@ -64,21 +66,16 @@ export default class PlayerGrapple extends ParticleSystem {
         });
     }
 
-    public initializeLine(line: Line) {
-        this.grapple_line = line;
+    public initializeLine(scene: Scene, layer: string) {
+        this.grapple_line = <Line>scene.add.graphic(GraphicType.LINE, layer, { "start": Vec2.ZERO, "end": Vec2.ZERO })
         this.grapple_line.color = Color.BLACK;
         this.grapple_line.thickness = 8;
     }
 
-    public renderLine(start: Vec2, alpha: number) {
-        this.grapple_line.start = start;
-        this.grapple_line.end = this.particlePool[0].position
-        if(this.particlePool[0].visible) {
-            this.grapple_line.alpha = alpha;
-        }
-        else {
-            this.grapple_line.alpha = 0;
-        }
+    public renderLine(start: Vec2/* , alpha: number */) {
+        this.grapple_line.alpha = (this.particlePool[0].visible) ? 1 : 0;
+        if (!this.grapple_line.alpha) return;
+        this.grapple_line.start = start.clone();
+        this.grapple_line.end = this.particlePool[0].position.clone();
     }
-
 }

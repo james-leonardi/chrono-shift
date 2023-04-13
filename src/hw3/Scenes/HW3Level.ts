@@ -506,8 +506,8 @@ export default abstract class HW3Level extends Scene {
     protected initializeGrappleSystem(): void {
         this.playerGrappleSystem = new PlayerGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
         this.playerGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
-        this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO})
-        this.playerGrappleSystem.initializeLine(this.grappleLine);
+        /* this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO}) */
+        this.playerGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
     }
     /**
      * Initializes the player, setting the player's initial position to the given position.

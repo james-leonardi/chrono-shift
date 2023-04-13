@@ -83,7 +83,7 @@ export default class PlayerController extends StateMachineAI {
     protected grapple: PlayerGrapple;
     protected grapple_line: Line;
     protected grapple_last_used: number;
-    protected grapple_cooldown: number = 1000;
+    protected grapple_cooldown: number = 750;
     protected grapple_enabled: boolean = true;
 
     protected mou_shindeiru: boolean = false;
@@ -209,9 +209,11 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.queue("IDLE", false, undefined);
         }
         
-        this.grapple.isSystemRunning() ?
+        /* if (this.grapple.isSystemRunning())  */this.grapple.renderLine(this.owner.position/* , 1 */);
+
+        /* this.grapple.isSystemRunning() ?
             this.grapple.renderLine(this.owner.position, 1) :
-            this.grapple.renderLine(this.owner.position, 0)
+            this.grapple.renderLine(this.owner.position, 0) */
 
         // Handle switching when the switch key is pressed
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
