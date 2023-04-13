@@ -192,7 +192,8 @@ export default class PlayerController extends StateMachineAI {
                 this.grapple_last_used = Date.now();
                 this.grapple.setDir(Input.getGlobalMousePosition());
                 this.grapple.startSystem(500, 0, this.owner.position);
-                this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
+                //this.grapple.render_line(this.owner.position);
+                this.owner.animation.play("GRAPPLE", false, undefined);
                 this.owner.animation.queue("IDLE", false, undefined);
                 /* console.log("GRAPPLE_" + Math.floor(Math.random() * 3)); */
                 /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "GRAPPLE_" + Math.floor(Math.random()*3), loop: false, holdReference: false }); */
