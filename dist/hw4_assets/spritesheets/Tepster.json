@@ -24,7 +24,7 @@
         {
             "name": "GRAPPLE",
             "repeat": true,
-            "frames":[ {"index": 6, "duration": 1} ]
+            "frames":[ {"index": 6, "duration": 75} ]
         },
         {
             "name": "TAKING_DAMAGE",
