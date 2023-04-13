@@ -26,6 +26,7 @@ import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 import HW3FactoryManager from "../Factory/HW3FactoryManager";
 import MainMenu from "./MainMenu";
 import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
+import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 
 /**
  * A const object for the layer names
@@ -53,6 +54,7 @@ export default abstract class HW3Level extends Scene {
     /** The particle system used for the player's weapon */
     protected playerWeaponSystem: PlayerWeapon
     protected playerGrappleSystem: PlayerGrapple;
+    protected grappleLine: Line
     /** The key for the player's animated sprite */
     protected playerSpriteKey: string;
     /** The animated sprite that is the player */
@@ -502,8 +504,10 @@ export default abstract class HW3Level extends Scene {
      * Initializes the particles system used by the player's weapon.
      */
     protected initializeGrappleSystem(): void {
-        this.playerGrappleSystem = new PlayerGrapple(80, Vec2.ZERO, 1000, 2, 0, 50);
+        this.playerGrappleSystem = new PlayerGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
         this.playerGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+        /* this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO}) */
+        this.playerGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
     }
     /**
      * Initializes the player, setting the player's initial position to the given position.

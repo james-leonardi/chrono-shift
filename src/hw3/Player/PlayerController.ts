@@ -21,6 +21,7 @@ import MathUtils from "../../Wolfie2D/Utils/MathUtils";
 import { HW3Events } from "../HW3Events";
 import Dead from "./PlayerStates/Dead";
 import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
+import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 
 // TODO play your heros animations
 
@@ -80,8 +81,9 @@ export default class PlayerController extends StateMachineAI {
     // protected cannon: Sprite;
     protected weapon: PlayerWeapon;
     protected grapple: PlayerGrapple;
+    protected grapple_line: Line;
     protected grapple_last_used: number;
-    protected grapple_cooldown: number = 1000;
+    protected grapple_cooldown: number = 750;
     protected grapple_enabled: boolean = true;
 
     protected mou_shindeiru: boolean = false;
@@ -206,6 +208,12 @@ export default class PlayerController extends StateMachineAI {
             this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
         }
+        
+        /* if (this.grapple.isSystemRunning())  */this.grapple.renderLine(this.owner.position/* , 1 */);
+
+        /* this.grapple.isSystemRunning() ?
+            this.grapple.renderLine(this.owner.position, 1) :
+            this.grapple.renderLine(this.owner.position, 0) */
 
         // Handle switching when the switch key is pressed
         if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
