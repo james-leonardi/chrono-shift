@@ -1358,18 +1358,52 @@
          "width":172,
          "x":0,
          "y":0
+        }, 
+        {
+         "draworder":"topdown",
+         "id":9,
+         "name":"Text",
+         "objects":[
+                {
+                 "height":17.875,
+                 "id":6,
+                 "name":"",
+                 "rotation":0,
+                 "text":
+                    {
+                     "fontfamily":"Arial",
+                     "text":"Hello World",
+                     "wrap":true
+                    },
+                 "type":"",
+                 "visible":true,
+                 "width":80,
+                 "x":42.38,
+                 "y":275.44
+                }],
+         "opacity":1,
+         "properties":[
+                {
+                 "name":"Group",
+                 "type":"string",
+                 "value":"TEXT"
+                }],
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
         }],
- "nextlayerid":9,
- "nextobjectid":1,
+ "nextlayerid":10,
+ "nextobjectid":7,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.10.0",
+ "tiledversion":"1.10.1",
  "tileheight":8,
  "tilesets":[
         {
          "columns":4,
          "firstgid":1,
-         "image":"map.png",
+         "image":"tilemap_desert.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
