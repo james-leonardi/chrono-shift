@@ -9,6 +9,7 @@ import PlayerState from "./PlayerState";
 export default class Dash extends PlayerState {
 
 	public onEnter(options: Record<string, any>): void {
+        // console.log("DASH ENTER");
         if(Input.isPressed(HW3Controls.MOVE_RIGHT)) {
             this.parent.velocity.x = 1000;
             this.parent.velocity.y = 0;
@@ -47,6 +48,7 @@ export default class Dash extends PlayerState {
 	}
 
 	public onExit(): Record<string, any> {
+        // console.log("DASH EXIT");
 		this.owner.animation.stop();
 		return {};
 	}

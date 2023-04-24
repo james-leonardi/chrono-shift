@@ -239,8 +239,6 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Handle peeking
-        // TODO: remove 'pan' effect, make it instant
-        // TODO: game freezes when you peek into a wall
         if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             
             const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
