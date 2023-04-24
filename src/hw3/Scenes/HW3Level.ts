@@ -256,6 +256,76 @@ export default abstract class HW3Level extends Scene {
                 /* }, 3000); */
                 break;
             }
+            case "TUTORIAL_JUMP": {
+                this.tutorialText.text = "Press W or Space to jump";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_DASH": {
+                this.tutorialText.text = "Dash in mid-air with SHIFT+A or SHIFT+D";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_SWITCH": {
+                this.tutorialText.text = "Press S to SWITCH between past & present";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_PEEK": {
+                this.tutorialText.text = "Hold E to PEEK into the other dimension";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_FALL": {
+                this.tutorialText.text = "There's no fall damage, jump on down!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_GRAPPLE": {
+                this.tutorialText.text = "RIGHT CLICK to GRAPPLE!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
+            case "TUTORIAL_PUZZLE": {
+                this.tutorialText.text = "GRAPPLE then SWITCH quickly!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+                break;
+            }
             case HW3Events.LEVEL_CHANGE: {
                 break;
             }
@@ -447,6 +517,10 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("DYING");
         this.receiver.subscribe("SWITCH");
         this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe("TUTORIAL_JUMP");
+        this.receiver.subscribe("TUTORIAL_DASH");
+        this.receiver.subscribe("TUTORIAL_SWITCH");
+
         this.receiver.subscribe(HW3Events.INVINCIBILITY);
     }
     /**
@@ -529,10 +603,25 @@ export default abstract class HW3Level extends Scene {
 
         /* this.tutorialText.tweens.play("fadeOut"); */
 
-        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(150, 600), size: new Vec2(200, 100) });
+        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(100, 600), size: new Vec2(200, 100) });
         tutorialMoveTrigger.addPhysics(undefined, undefined, false, true);
         tutorialMoveTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_MOVE", null);
         tutorialMoveTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
+
+        const tutorialJumpTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(450, 600), size: new Vec2(200, 100) });
+        tutorialJumpTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialJumpTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_JUMP", null);
+        tutorialJumpTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
+
+        const tutorialDashTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 600), size: new Vec2(200, 100) });
+        tutorialDashTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialDashTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_DASH", null);
+        tutorialDashTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
+
+        const tutorialSwitchTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 600), size: new Vec2(200, 100) });
+        tutorialSwitchTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialSwitchTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH", null);
+        tutorialSwitchTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
