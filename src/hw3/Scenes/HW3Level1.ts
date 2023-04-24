@@ -18,9 +18,6 @@ import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 import Color from "../../Wolfie2D/Utils/Color";
 import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 
-/**
- * The first level for HW4 - should be the one with the grass and the clouds.
- */
 export default class Level1 extends HW3Level {
 
     public static readonly PLAYER_SPAWN = new Vec2(32, 608);
@@ -54,40 +51,29 @@ export default class Level1 extends HW3Level {
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, options);
 
-        // Set the keys for the different layers of the tilemap
         this.tilemapKey = Level1.TILEMAP_KEY;
         this.tilemapScale = Level1.TILEMAP_SCALE;
         this.destructibleLayerKey = Level1.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level1.WALLS_LAYER_KEY;
         this.deathLayerKey = Level1.DEATH_LAYER_KEY;
 
-        // Set the key for the player's sprite
         this.playerSpriteKey = Level1.PLAYER_SPRITE_KEY;
-        // Set the player's spawn
         this.playerSpawn = Level1.PLAYER_SPAWN;
 
-        // Music and sound
         this.levelMusicKey = Level1.LEVEL_MUSIC_KEY
         this.jumpAudioKey = Level1.JUMP_AUDIO_KEY;
         this.tileDestroyedAudioKey = Level1.TILE_DESTROYED_KEY;
         this.damagedAudioKey = Level1.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level1.DEADGE_AUDIO_KEY;
 
-        // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
 
-    /**
-     * Load in our resources for level 1
-     */
     public loadScene(): void {
-        // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level1.TILEMAP_PATH);
-        // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level1.PLAYER_SPRITE_PATH);
-        // Audio and music
         this.load.audio(this.levelMusicKey, Level1.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level1.JUMP_AUDIO_PATH);
         this.load.audio(this.tileDestroyedAudioKey, Level1.TILE_DESTROYED_PATH);
@@ -161,11 +147,7 @@ export default class Level1 extends HW3Level {
         this.receiver.subscribe("TUTORIAL_PUZZLE");
     }
 
-    /**
-     * Unload resources for level 1
-     */
     public unloadScene(): void {
-        // TODO decide which resources to keep/cull 
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level1.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
         this.load.keepAudio(this.tileDestroyedAudioKey);
@@ -181,18 +163,11 @@ export default class Level1 extends HW3Level {
 
     public startScene(): void {
         super.startScene();
-        // Set the next level to be Level2
         this.nextLevel = HW4Level2;
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
     }
 
-    /**
-     * I had to override this method to adjust the viewport for the first level. I screwed up 
-     * when I was making the tilemap for the first level is what it boils down to.
-     * 
-     * - Peter
-     */
     protected initializeViewport(): void {
         super.initializeViewport();
         this.viewport.setBounds(0, 0, 2752, 4096);
@@ -233,21 +208,12 @@ export default class Level1 extends HW3Level {
             }
             case "TUTORIAL_MOVE": {
                 this.tutorialText.text = "Press A and D to move left and right";
-                /* this.tutorialText.tweens.play("fadeIn");
-                setTimeout(() => { */
-                /* if (!this.tutorialTimer.hasRun() && this.tutorialTimer.isStopped()) {
-                    this.tutorialTimer.start(); */
-                /* console.log("Playing Tween"); */
-                if (this.tutorialText.backgroundColor.a == 0) { /* Only fade in when you first enter the region */
+                if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
-                }, 500)
-                /*                 } */
-                /* console.log("Playing Tween");
-                    this.tutorialText.tweens.play("fadeOut"); */
-                /* }, 3000); */
+                }, 100)
                 break;
             }
             case "TUTORIAL_JUMP": {
@@ -255,7 +221,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -265,7 +231,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -275,7 +241,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -285,7 +251,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -295,7 +261,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -305,7 +271,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
@@ -315,7 +281,7 @@ export default class Level1 extends HW3Level {
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
-                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                setTimeout(() => {
                     this.tutorialText?.tweens?.play("fadeOut");
                 }, 100)
                 break;
