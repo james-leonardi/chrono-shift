@@ -92,6 +92,7 @@ export default abstract class HW3Level extends Scene {
     protected wallsLayerKey: string;
     protected deathLayerKey: string;
     protected grappleOnlyLayerKey: string;
+    protected iceLayerKey: string;
     /** The scale for the tilemap */
     protected tilemapScale: Vec2;
     /** The destrubtable layer of the tilemap */
@@ -102,6 +103,8 @@ export default abstract class HW3Level extends Scene {
     protected death: OrthogonalTilemap;
 
     protected grappleOnly: OrthogonalTilemap;
+
+    protected ice: OrthogonalTilemap;
 
     /** Sound and music */
     protected levelMusicKey: string;
@@ -117,14 +120,15 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY"],
+            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
             collisions: [
-            /* GROUND   */  [0,1,1,0,0,0],
-            /* PLAYER   */  [1,0,0,1,1,0],
-            /* WEAPON   */  [1,0,0,1,0,1],
-            /* DESTRUCT */  [0,1,1,0,0,0],
-            /* DEATH    */  [0,1,0,0,0,0],
-            /* GRAPPLE  */  [0,0,1,0,0,0]]
+            /* GROUND   */  [0,1,1,0,0,0,0],
+            /* PLAYER   */  [1,0,0,1,1,0,0],
+            /* WEAPON   */  [1,0,0,1,0,1,0],
+            /* DESTRUCT */  [0,1,1,0,0,0,0],
+            /* DEATH    */  [0,1,0,0,0,0,0],
+            /* GRAPPLE  */  [0,0,1,0,0,0,0],
+            /* ICE      */  [0,1,1,0,0,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -409,7 +413,7 @@ export default abstract class HW3Level extends Scene {
         this.destructable = this.getTilemap(this.destructibleLayerKey) as OrthogonalTilemap;
         this.death = this.getTilemap(this.deathLayerKey) as OrthogonalTilemap;
         if (this.grappleOnlyLayerKey) this.grappleOnly = this.getTilemap(this.grappleOnlyLayerKey) as OrthogonalTilemap;
-
+        if (this.iceLayerKey) this.ice = this.getTilemap(this.iceLayerKey) as OrthogonalTilemap;
         // Add physicss to the wall layer
         this.walls.addPhysics();
         // Add physics to the destructible layer of the tilemap
@@ -426,6 +430,12 @@ export default abstract class HW3Level extends Scene {
             this.grappleOnly.addPhysics();
             this.grappleOnly.setGroup("GRAPPLE_ONLY");
             this.grappleOnly.setTrigger("WEAPON", "PARTICLE", undefined);
+        }
+        if (this.iceLayerKey) {
+            console.log("Adding physics to ice layer")
+            this.ice.addPhysics();
+            this.ice.setGroup("ICE");
+            this.ice.setTrigger("WEAPON", "PARTICLE", undefined);
         }
     }
     /**

@@ -28,6 +28,7 @@ export default class Level5 extends HW3Level {
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
+    public static readonly ICE_LAYER_KEY = "Ice";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
     public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/ice.mp3";
@@ -55,6 +56,7 @@ export default class Level5 extends HW3Level {
         this.destructibleLayerKey = Level5.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level5.WALLS_LAYER_KEY;
         this.deathLayerKey = Level5.DEATH_LAYER_KEY;
+        this.iceLayerKey = Level5.ICE_LAYER_KEY;
 
         // Set the key for the player's sprite
         this.playerSpriteKey = Level5.PLAYER_SPRITE_KEY;
