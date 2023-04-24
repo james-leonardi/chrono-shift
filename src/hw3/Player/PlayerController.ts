@@ -128,9 +128,6 @@ export default class PlayerController extends StateMachineAI {
                 if(!this.invincible) this.changeState(PlayerStates.DEAD);
                 break;
             }
-            default: {
-                console.log("DEFAULT");
-            }
         }
     }
 

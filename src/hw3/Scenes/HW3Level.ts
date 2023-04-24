@@ -181,7 +181,11 @@ export default abstract class HW3Level extends Scene {
                 if(!this.playerInvincible) {
                     this.player.animation.play("DYING", true, undefined);
                     setTimeout(() => {
-                        this.player.animation.play("DEAD", false, undefined);}, 300);
+                        this.player.animation.play("DEAD", false, undefined);
+                    }, 300);
+                    setTimeout(() => {
+                        this.emitter.fireEvent(HW3Events.PLAYER_DEAD);
+                    }, 1000);
                 }
                 break;
             }
@@ -192,6 +196,7 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case HW3Events.PLAYER_DEAD: {
+                console.log("Player dead event");
                 this.sceneManager.changeToScene(MainMenu);
                 break;
             }
