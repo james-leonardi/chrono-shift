@@ -1,10 +1,10 @@
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import { PlayerStates } from "../PlayerController";
+import { PlayerStates } from "../EnemyController";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 
-import PlayerState from "./PlayerState";
+import PlayerState from "./EnemyState";
 
 export default class Dash extends PlayerState {
 

@@ -1,5 +1,5 @@
-import { PlayerStates, PlayerAnimations } from "../PlayerController";
-import PlayerState from "./PlayerState";
+import { PlayerStates, PlayerAnimations } from "../EnemyController";
+import PlayerState from "./EnemyState";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 

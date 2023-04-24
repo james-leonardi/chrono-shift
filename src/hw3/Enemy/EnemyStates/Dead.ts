@@ -1,6 +1,6 @@
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import PlayerState from "./PlayerState";
+import PlayerState from "./EnemyState";
 import { HW3Events } from "../../HW3Events";
 
 /**

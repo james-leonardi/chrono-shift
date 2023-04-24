@@ -24,6 +24,8 @@ export const HW3Events = {
     GRAPPLE_HIT: "GRAPPLE_HIT",
 
     // Event fired when user inputs level change cheat code. Data = { level }
-    LEVEL_CHANGE: "LEVEL_CHANGE"
+    LEVEL_CHANGE: "LEVEL_CHANGE",
+
+    INVINCIBILITY: "INVINCIBILITY"
     
 } as const;

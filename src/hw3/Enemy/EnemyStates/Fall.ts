@@ -1,7 +1,7 @@
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
-import { PlayerStates } from "../PlayerController";
+import { PlayerStates } from "../EnemyController";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import PlayerState from "./PlayerState";
+import PlayerState from "./EnemyState";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 

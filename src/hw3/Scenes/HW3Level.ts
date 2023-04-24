@@ -17,7 +17,7 @@ import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import PlayerController, { PlayerTweens } from "../Player/PlayerController";
+import PlayerController from "../Player/PlayerController";
 import PlayerWeapon from "../Player/PlayerWeapon";
 import PlayerGrapple from "../Player/PlayerGrapple";
 
@@ -109,6 +109,8 @@ export default abstract class HW3Level extends Scene {
 
     protected tutorialText: Label;
     protected tutorialTimer: Timer;
+
+    protected playerInvincible: boolean = false;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
@@ -216,10 +218,13 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case "DYING": {
-                this.player.animation.play("DYING", true, undefined);
-                setTimeout(() => {
-                    this.player.animation.play("DEAD", false, undefined);}, 300);
-                /* this.player.animation.queue("DEATH", false, undefined); */
+                console.log("invince: " + this.playerInvincible);
+                if(!this.playerInvincible) {
+                    this.player.animation.play("DYING", true, undefined);
+                    setTimeout(() => {
+                        this.player.animation.play("DEAD", false, undefined);}, 300);
+                    /* this.player.animation.queue("DEATH", false, undefined); */
+                }
                 break;
             }
             case HW3Events.HEALTH_CHANGE: {
@@ -244,14 +249,88 @@ export default abstract class HW3Level extends Scene {
                     }
                     setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
                         this.tutorialText.tweens.play("fadeOut");
-                    }, 2000)
+                    }, 100)
 /*                 } */
                 /* console.log("Playing Tween");
                     this.tutorialText.tweens.play("fadeOut"); */
                 /* }, 3000); */
                 break;
             }
+            case "TUTORIAL_JUMP": {
+                this.tutorialText.text = "Press W or Space to jump";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_DASH": {
+                this.tutorialText.text = "Dash in mid-air with SHIFT+A or SHIFT+D";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_SWITCH": {
+                this.tutorialText.text = "Press S to SWITCH between past & present";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_PEEK": {
+                this.tutorialText.text = "Hold E to PEEK into the other dimension";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_FALL": {
+                this.tutorialText.text = "There's no fall damage, jump on down!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_GRAPPLE": {
+                this.tutorialText.text = "RIGHT CLICK to GRAPPLE!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
+            case "TUTORIAL_PUZZLE": {
+                this.tutorialText.text = "GRAPPLE then SWITCH quickly!";
+                    if (this.tutorialText.backgroundColor.a == 0) { 
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { 
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 100)
+                break;
+            }
             case HW3Events.LEVEL_CHANGE: {
+                break;
+            }
+            case HW3Events.INVINCIBILITY: {
+                this.playerInvincible = event.data.get("value");
                 break;
             }
             // Default: Throw an error! No unhandled events allowed.
@@ -438,6 +517,14 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("DYING");
         this.receiver.subscribe("SWITCH");
         this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe("TUTORIAL_JUMP");
+        this.receiver.subscribe("TUTORIAL_DASH");
+        this.receiver.subscribe("TUTORIAL_SWITCH");
+        this.receiver.subscribe("TUTORIAL_PEEK");
+        this.receiver.subscribe("TUTORIAL_FALL");
+        this.receiver.subscribe("TUTORIAL_GRAPPLE");
+        this.receiver.subscribe("TUTORIAL_PUZZLE");
+        this.receiver.subscribe(HW3Events.INVINCIBILITY);
     }
     /**
      * Adds in any necessary UI to the game
@@ -519,10 +606,45 @@ export default abstract class HW3Level extends Scene {
 
         /* this.tutorialText.tweens.play("fadeOut"); */
 
-        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(150, 600), size: new Vec2(200, 100) });
+        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(100, 620), size: new Vec2(200, 100) });
         tutorialMoveTrigger.addPhysics(undefined, undefined, false, true);
         tutorialMoveTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_MOVE", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
+        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialJumpTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(420, 620), size: new Vec2(150, 100) });
+        tutorialJumpTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialJumpTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_JUMP", null);
+        tutorialJumpTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialDashTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 620), size: new Vec2(200, 100) });
+        tutorialDashTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialDashTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_DASH", null);
+        tutorialDashTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialSwitchTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1050, 620), size: new Vec2(200, 100) });
+        tutorialSwitchTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialSwitchTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH", null);
+        tutorialSwitchTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPeekTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1250, 2860), size: new Vec2(200, 100) });
+        tutorialPeekTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPeekTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PEEK", null);
+        tutorialPeekTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialFallTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1600, 620), size: new Vec2(200, 100) });
+        tutorialFallTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialFallTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_FALL", null);
+        tutorialFallTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialGrappleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1650, 1350), size: new Vec2(200, 100) });
+        tutorialGrappleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialGrappleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_GRAPPLE", null);
+        tutorialGrappleTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPuzzleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(450, 1260), size: new Vec2(200, 100) });
+        tutorialPuzzleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPuzzleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PUZZLE", null);
+        tutorialPuzzleTrigger.color = new Color(255, 0, 255, 0);
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
@@ -611,7 +733,7 @@ export default abstract class HW3Level extends Scene {
         this.player.addPhysics(new AABB(this.player.position.clone(), this.player.boundary.getHalfSize().clone()));
 
         // TODO - give the player their flip tween
-        this.player.tweens.add(PlayerTweens.FLIPL, {
+        /* this.player.tweens.add(PlayerTweens.FLIPL, {
             startDelay: 0,
             duration: 300,
             effects: [
@@ -640,12 +762,12 @@ export default abstract class HW3Level extends Scene {
             startDelay: 0,
             duration: 800,
             effects: [
-                /* {
+                {
                     property: "rotation",
                     start: 0,
                     end: Math.PI,
                     ease: EaseFunctionType.IN_OUT_QUAD
-                }, */
+                },
                 {
                     property: "alpha",
                     start: 1,
@@ -654,7 +776,7 @@ export default abstract class HW3Level extends Scene {
                 }
             ],
             onEnd: HW3Events.PLAYER_DEAD
-        });
+        }); */
 
         // Give the player it's AI
         this.player.addAI(PlayerController, { 

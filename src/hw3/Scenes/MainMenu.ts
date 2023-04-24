@@ -8,6 +8,11 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Color from "../../Wolfie2D/Utils/Color";
 import Layer from "../../Wolfie2D/Scene/Layer";
 import Level1 from "./HW3Level1";
+import Level2 from "./HW3Level2";
+import Level3 from "./HW3Level3";
+import Level4 from "./HW3Level4";
+import Level5 from "./HW3Level5";
+import Level6 from "./HW3Level6";
 
 
 // Layers for the main menu scene
@@ -209,7 +214,12 @@ export default class MainMenu extends Scene {
             let lvl2 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 35), text: "" });
             lvl2.backgroundColor = Color.TRANSPARENT;
             lvl2.size = new Vec2(280, 155);
-            lvl2.onClick = changeToLvl1;
+            const changeToLvl2 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level2);
+            }
+            lvl2.onClick = changeToLvl2;
 
             let preview3 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
             preview3.position.set(size.x + 325, size.y + 35);
@@ -217,7 +227,12 @@ export default class MainMenu extends Scene {
             let lvl3 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 35), text: "" });
             lvl3.backgroundColor = Color.TRANSPARENT;
             lvl3.size = new Vec2(280, 155);
-            lvl3.onClick = changeToLvl1;
+            const changeToLvl3 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level3);
+            }
+            lvl3.onClick = changeToLvl3;
 
             let preview4 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
             preview4.position.set(size.x - 325, size.y + 220);
@@ -225,7 +240,12 @@ export default class MainMenu extends Scene {
             let lvl4 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 325, size.y + 220), text: "" });
             lvl4.backgroundColor = Color.TRANSPARENT;
             lvl4.size = new Vec2(280, 155);
-            lvl4.onClick = changeToLvl1;
+            const changeToLvl4 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level4);
+            }
+            lvl4.onClick = changeToLvl4;
 
             let preview5 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
             preview5.position.set(size.x, size.y + 220);
@@ -233,6 +253,11 @@ export default class MainMenu extends Scene {
             let lvl5 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 220), text: "" });
             lvl5.backgroundColor = Color.TRANSPARENT;
             lvl5.size = new Vec2(280, 155);
+            const changeToLvl5 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level5);
+            }
             lvl5.onClick = changeToLvl1;
 
             let preview6 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
@@ -241,7 +266,12 @@ export default class MainMenu extends Scene {
             let lvl6 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 220), text: "" });
             lvl6.backgroundColor = Color.TRANSPARENT;
             lvl6.size = new Vec2(280, 155);
-            lvl6.onClick = changeToLvl1;
+            const changeToLvl6 = () => {
+                if (Date.now() - this.lastClick.getTime() < 100) return;
+                this.lastClick = new Date();
+                this.sceneManager.changeToScene(Level6);
+            }
+            lvl6.onClick = changeToLvl6;
 
 
             bacc.onClick = () => {

@@ -4,14 +4,14 @@ import OrthogonalTilemap from "../../Wolfie2D/Nodes/Tilemaps/OrthogonalTilemap";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 
-import Fall from "./PlayerStates/Fall";
-import Idle from "./PlayerStates/Idle";
-import Jump from "./PlayerStates/Jump";
-import Walk from "./PlayerStates/Walk";
-import Dash from "./PlayerStates/Dash";
+import Fall from "./EnemyStates/Fall";
+import Idle from "./EnemyStates/Idle";
+import Jump from "./EnemyStates/Jump";
+import Walk from "./EnemyStates/Walk";
+import Dash from "./EnemyStates/Dash";
 
-import PlayerWeapon from "./PlayerWeapon";
-import PlayerGrapple from "./PlayerGrapple";
+import PlayerWeapon from "./EnemyWeapon";
+import PlayerGrapple from "./EnemyGrapple";
 import Input from "../../Wolfie2D/Input/Input";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 
@@ -19,7 +19,7 @@ import { HW3Controls } from "../HW3Controls";
 import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 import MathUtils from "../../Wolfie2D/Utils/MathUtils";
 import { HW3Events } from "../HW3Events";
-import Dead from "./PlayerStates/Dead";
+import Dead from "./EnemyStates/Dead";
 import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 
