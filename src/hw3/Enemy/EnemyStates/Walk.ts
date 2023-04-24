@@ -1,7 +1,7 @@
-import { PlayerStates, PlayerAnimations } from "../PlayerController";
+import { PlayerStates, PlayerAnimations } from "../EnemyController";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
-import PlayerState from "./PlayerState";
+import PlayerState from "./EnemyState";
 
 export default class Walk extends PlayerState {
 
@@ -38,7 +38,6 @@ export default class Walk extends PlayerState {
             this.owner.move(this.parent.velocity.scaled(deltaT));
         }
         if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
-        if (this.owner.onGround && this.parent.velocity.y > 0) this.parent.velocity.y = 0;
 	}
 
 	onExit(): Record<string, any> {
