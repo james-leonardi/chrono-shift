@@ -155,18 +155,22 @@ export default class Level3 extends HW3Level {
                 case "3": {
                     console.log("CHEAT: Changing to Level 3");
                     this.sceneManager.changeToScene(Level3);
+                    break;
                 }
                 case "4": {
                     console.log("CHEAT: Changing to Level 4");
                     this.sceneManager.changeToScene(Level4);
+                    break;
                 }
                 case "5": {
                     console.log("CHEAT: Changing to Level 5");
                     this.sceneManager.changeToScene(Level5);
+                    break;
                 }
                 case "6": {
                     console.log("CHEAT: Changing to Level 6");
                     this.sceneManager.changeToScene(Level6);
+                    break;
                 }
             }
         }
