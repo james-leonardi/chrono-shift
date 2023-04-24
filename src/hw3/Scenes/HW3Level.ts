@@ -27,6 +27,7 @@ import HW3FactoryManager from "../Factory/HW3FactoryManager";
 import MainMenu from "./MainMenu";
 import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import EnemyController from "../Enemy/EnemyController";
 
 /**
  * A const object for the layer names
@@ -61,6 +62,9 @@ export default abstract class HW3Level extends Scene {
     protected player: AnimatedSprite;
     /** The player's spawn position */
     protected playerSpawn: Vec2;
+    /** Enemy sprite */
+    protected enemySpriteKey: string;
+    protected enemy: AnimatedSprite;
 
     private healthLabel: Label;
 	private healthBar: Label;
@@ -140,6 +144,8 @@ export default abstract class HW3Level extends Scene {
 
         // Initialize the player 
         this.initializePlayer(this.playerSpriteKey);
+
+        this.initializeEnemy(this.enemySpriteKey);
 
         // Initialize the viewport - this must come after the player has been initialized
         this.initializeViewport();
@@ -760,6 +766,31 @@ export default abstract class HW3Level extends Scene {
             weaponSystem: this.playerWeaponSystem, 
             grappleSystem: this.playerGrappleSystem,
             tilemap: "Destructable" 
+        });
+    }
+    protected enemyWeaponSystem: PlayerWeapon;
+    protected enemyGrappleSystem: PlayerGrapple;
+    protected initializeEnemy(key: string): void {
+        this.enemyGrappleSystem = new PlayerGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
+        this.enemyGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+        /* this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO}) */
+        this.enemyGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
+
+        this.enemyWeaponSystem = new PlayerWeapon(50, Vec2.ZERO, 1000, 3, 0, 50);
+        this.enemyGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+
+        // Add the player to the scene
+        this.enemy = this.add.animatedSprite(key, HW3Layers.PRIMARY);
+        this.enemy.scale.set(0.5, 0.5);
+        this.enemy.position.copy(this.playerSpawn).add(new Vec2(100, 0));
+        
+        // Give the player physics
+        this.enemy.addPhysics(new AABB(this.enemy.position.clone(), this.enemy.boundary.getHalfSize().clone()));
+
+        this.enemy.addAI(EnemyController, {
+            weaponSystem: this.enemyWeaponSystem,
+            grappleSystem: this.enemyGrappleSystem,
+            tilemap: "Destructable"
         });
     }
     /**

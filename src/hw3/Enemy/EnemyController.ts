@@ -63,7 +63,7 @@ export const PlayerStates = {
 /**
  * The controller that controls the player.
  */
-export default class PlayerController extends StateMachineAI {
+export default class EnemyController extends StateMachineAI {
     public readonly MAX_SPEED: number = 200;
     public readonly MIN_SPEED: number = 100;
 
