@@ -23,7 +23,7 @@ export default class Level5 extends HW3Level {
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly TILEMAP_KEY = "LEVEL5";
-    public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L2.json";
+    public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L5.json";
     public static readonly TILEMAP_SCALE = new Vec2(2, 2);
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
