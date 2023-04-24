@@ -5,6 +5,7 @@ import EaseFunctions from "../../Utils/EaseFunctions";
 import MathUtils from "../../Utils/MathUtils";
 import TweenManager from "./TweenManager";
 import Emitter from "../../Events/Emitter";
+import Label from "../../Nodes/UIElements/Label";
 
 /**
  * A manager for the tweens of a GameNode.
@@ -204,7 +205,13 @@ export default class TweenController {
                         let value = MathUtils.lerp(effect.start, effect.end, ease);
 
                         // Assign the value of the property
-                        this.owner[effect.property] = value;
+                        if ((effect.property as string) == "backgroundColor.alpha") {
+                            (this.owner as Label).backgroundColor.a = value;
+                        } else if ((effect.property as string) == "textColor.alpha") {
+                            (this.owner as Label).textColor.a = value;
+                        } else {
+                            this.owner[effect.property] = value;
+                        }
                     }
                 }
             }

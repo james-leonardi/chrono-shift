@@ -17,7 +17,7 @@ import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import PlayerController, { PlayerTweens } from "../Player/PlayerController";
+import PlayerController from "../Player/PlayerController";
 import PlayerWeapon from "../Player/PlayerWeapon";
 import PlayerGrapple from "../Player/PlayerGrapple";
 
@@ -107,6 +107,11 @@ export default abstract class HW3Level extends Scene {
     protected tileDestroyedAudioKey: string;
     protected deadgeAudioKey: string;
 
+    protected tutorialText: Label;
+    protected tutorialTimer: Timer;
+
+    protected playerInvincible: boolean = false;
+
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
             groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH"],
@@ -150,6 +155,10 @@ export default abstract class HW3Level extends Scene {
         this.levelEndTimer = new Timer(3000, () => {
             // After the level end timer ends, fade to black and then go to the next scene
             this.levelTransitionScreen.tweens.play("fadeIn");
+        });
+
+        this.tutorialTimer = new Timer(100, () => {
+            this.tutorialText.tweens.play("fadeIn");
         });
 
         // Initially disable player movement
@@ -209,16 +218,15 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case "DYING": {
-                this.player.animation.play("DYING", true, undefined);
-                setTimeout(() => {
-                    this.player.animation.play("DEAD", false, undefined);}, 300);
-                /* this.player.animation.queue("DEATH", false, undefined); */
+                console.log("invince: " + this.playerInvincible);
+                if(!this.playerInvincible) {
+                    this.player.animation.play("DYING", true, undefined);
+                    setTimeout(() => {
+                        this.player.animation.play("DEAD", false, undefined);}, 300);
+                    /* this.player.animation.queue("DEATH", false, undefined); */
+                }
                 break;
             }
-            /* case "DAMAGED": {
-                this.owner.animation.play("TAKING_DAMAGE");
-                this.owner.animation.queue("IDLE", false, undefined);
-            } */
             case HW3Events.HEALTH_CHANGE: {
                 this.player.animation.play("TAKING_DAMAGE", false, undefined);
                 this.player.animation.queue("IDLE", false, undefined);
@@ -227,6 +235,32 @@ export default abstract class HW3Level extends Scene {
             }
             case HW3Events.PLAYER_DEAD: {
                 this.sceneManager.changeToScene(MainMenu);
+                break;
+            }
+            case "TUTORIAL_MOVE": {
+                this.tutorialText.text = "Press A and D to move left and right";
+                /* this.tutorialText.tweens.play("fadeIn");
+                setTimeout(() => { */
+                /* if (!this.tutorialTimer.hasRun() && this.tutorialTimer.isStopped()) {
+                    this.tutorialTimer.start(); */
+                    /* console.log("Playing Tween"); */
+                    if (this.tutorialText.backgroundColor.a == 0) { /* Only fade in when you first enter the region */
+                        this.tutorialText.tweens.play("fadeIn");
+                    }
+                    setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                        this.tutorialText.tweens.play("fadeOut");
+                    }, 2000)
+/*                 } */
+                /* console.log("Playing Tween");
+                    this.tutorialText.tweens.play("fadeOut"); */
+                /* }, 3000); */
+                break;
+            }
+            case HW3Events.LEVEL_CHANGE: {
+                break;
+            }
+            case HW3Events.INVINCIBILITY: {
+                this.playerInvincible = event.data.get("value");
                 break;
             }
             // Default: Throw an error! No unhandled events allowed.
@@ -412,6 +446,8 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PARTICLE");
         this.receiver.subscribe("DYING");
         this.receiver.subscribe("SWITCH");
+        this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe(HW3Events.INVINCIBILITY);
     }
     /**
      * Adds in any necessary UI to the game
@@ -442,6 +478,61 @@ export default abstract class HW3Level extends Scene {
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
         this.levelEndLabel.font = "PixelSimple";
+
+        // Tutorial Textbox
+        this.tutorialText = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(220, 30), text: "Use A and D to move left and right." });
+        this.tutorialText.size.set(550, 180);
+        this.tutorialText.borderRadius = 25;
+        this.tutorialText.backgroundColor = new Color(34, 32, 52, 0);
+        this.tutorialText.textColor = Color.WHITE;
+        this.tutorialText.textColor.a = 0;
+        this.tutorialText.fontSize = 24;
+        this.tutorialText.font = "MyFont";
+
+        this.tutorialText.tweens.add("fadeIn", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "backgroundColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }, 
+                {
+                    property: "textColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+
+        this.tutorialText.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "backgroundColor.alpha",
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                },
+                {
+                    property: "textColor.alpha",
+                    start: 1,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+
+        /* this.tutorialText.tweens.play("fadeOut"); */
+
+        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(150, 600), size: new Vec2(200, 100) });
+        tutorialMoveTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialMoveTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_MOVE", null);
+        tutorialMoveTrigger.color = new Color(255, 0, 255, .20); /* Decrease opacity after testing is done */
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
@@ -530,7 +621,7 @@ export default abstract class HW3Level extends Scene {
         this.player.addPhysics(new AABB(this.player.position.clone(), this.player.boundary.getHalfSize().clone()));
 
         // TODO - give the player their flip tween
-        this.player.tweens.add(PlayerTweens.FLIPL, {
+        /* this.player.tweens.add(PlayerTweens.FLIPL, {
             startDelay: 0,
             duration: 300,
             effects: [
@@ -559,12 +650,12 @@ export default abstract class HW3Level extends Scene {
             startDelay: 0,
             duration: 800,
             effects: [
-                /* {
+                {
                     property: "rotation",
                     start: 0,
                     end: Math.PI,
                     ease: EaseFunctionType.IN_OUT_QUAD
-                }, */
+                },
                 {
                     property: "alpha",
                     start: 1,
@@ -573,7 +664,7 @@ export default abstract class HW3Level extends Scene {
                 }
             ],
             onEnd: HW3Events.PLAYER_DEAD
-        });
+        }); */
 
         // Give the player it's AI
         this.player.addAI(PlayerController, { 

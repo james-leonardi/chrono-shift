@@ -6,6 +6,13 @@ import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
 import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import HW4Level2 from "./HW3Level2";
+import { HW3Events } from "../HW3Events";
+import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import Level2 from "./HW3Level2";
+import Level3 from "./HW3Level3";
+import Level4 from "./HW3Level4";
+import Level5 from "./HW3Level5";
+import Level6 from "./HW3Level6";
 
 /**
  * The first level for HW4 - should be the one with the grass and the clouds.
@@ -111,6 +118,8 @@ export default class Level1 extends HW3Level {
         super.startScene();
         // Set the next level to be Level2
         this.nextLevel = HW4Level2;
+
+        this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
     }
 
     /**
@@ -122,6 +131,34 @@ export default class Level1 extends HW3Level {
     protected initializeViewport(): void {
         super.initializeViewport();
         this.viewport.setBounds(0, 0, 2752, 4096);
+    }
+
+    protected handleEvent(event: GameEvent): void {
+        super.handleEvent(event);
+        if(event.type == HW3Events.LEVEL_CHANGE) {
+            switch(event.data.get("level")) {
+                case "2": {
+                    console.log("CHEAT: Changing to Level 2");
+                    this.sceneManager.changeToScene(Level2);
+                }
+                case "3": {
+                    console.log("CHEAT: Changing to Level 3");
+                    this.sceneManager.changeToScene(Level3);
+                }
+                case "4": {
+                    console.log("CHEAT: Changing to Level 4");
+                    this.sceneManager.changeToScene(Level4);
+                }
+                case "5": {
+                    console.log("CHEAT: Changing to Level 5");
+                    this.sceneManager.changeToScene(Level5);
+                }
+                case "6": {
+                    console.log("CHEAT: Changing to Level 6");
+                    this.sceneManager.changeToScene(Level6);
+                }
+            }
+        }
     }
 
 }
