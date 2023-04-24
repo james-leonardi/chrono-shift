@@ -6,29 +6,11 @@ import RandUtils from "../../Wolfie2D/Utils/RandUtils";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../Wolfie2D/Input/Input";
 
- 
-
-/**
- * // TODO get the particles to move towards the mouse when the player attacks
- * 
- * The particle system used for the player's attack. Particles in the particle system should
- * be spawned at the player's position and fired in the direction of the mouse's position.
- */
 export default class PlayerWeapon extends ParticleSystem {
 
-    public getPool(): Readonly<Array<Particle>> {
-        return this.particlePool;
-    }
-
-    /**
-     * @returns true if the particle system is running; false otherwise.
-     */
+    public getPool(): Readonly<Array<Particle>> { return this.particlePool; }
     public isSystemRunning(): boolean { return this.systemRunning; }
 
-    /**
-     * Sets the animations for a particle in the player's weapon
-     * @param particle the particle to give the animation to
-     */
     public setParticleAnimation(particle: Particle) {
         // Give the particle a random velocity.
         let mpos: Vec2 = Input.getGlobalMousePosition();
@@ -60,5 +42,4 @@ export default class PlayerWeapon extends ParticleSystem {
             ]
         });
     }
-
 }
