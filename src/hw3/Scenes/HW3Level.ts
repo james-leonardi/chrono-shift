@@ -17,7 +17,7 @@ import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import Timer from "../../Wolfie2D/Timing/Timer";
 import Color from "../../Wolfie2D/Utils/Color";
 import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
-import PlayerController, { PlayerTweens } from "../Player/PlayerController";
+import PlayerController from "../Player/PlayerController";
 import PlayerWeapon from "../Player/PlayerWeapon";
 import PlayerGrapple from "../Player/PlayerGrapple";
 
@@ -611,7 +611,7 @@ export default abstract class HW3Level extends Scene {
         this.player.addPhysics(new AABB(this.player.position.clone(), this.player.boundary.getHalfSize().clone()));
 
         // TODO - give the player their flip tween
-        this.player.tweens.add(PlayerTweens.FLIPL, {
+        /* this.player.tweens.add(PlayerTweens.FLIPL, {
             startDelay: 0,
             duration: 300,
             effects: [
@@ -640,12 +640,12 @@ export default abstract class HW3Level extends Scene {
             startDelay: 0,
             duration: 800,
             effects: [
-                /* {
+                {
                     property: "rotation",
                     start: 0,
                     end: Math.PI,
                     ease: EaseFunctionType.IN_OUT_QUAD
-                }, */
+                },
                 {
                     property: "alpha",
                     start: 1,
@@ -654,7 +654,7 @@ export default abstract class HW3Level extends Scene {
                 }
             ],
             onEnd: HW3Events.PLAYER_DEAD
-        });
+        }); */
 
         // Give the player it's AI
         this.player.addAI(PlayerController, { 

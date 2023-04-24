@@ -41,12 +41,12 @@ export const PlayerAnimations = {
 /**
  * Tween animations the player can player.
  */
-export const PlayerTweens = {
+/* export const PlayerTweens = {
     FLIP: "FLIP",
     FLIPL: "FLIPL",
     FLIPR: "FLIPR",
     DEATH: "DEATH"
-} as const
+} as const */
 
 /**
  * Keys for the states the PlayerController can be in.
