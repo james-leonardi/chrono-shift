@@ -1,6 +1,6 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import HW3Level from "./HW3Level";
+import HW3Level, { HW3Layers } from "./HW3Level";
 import RenderingManager from "../../Wolfie2D/Rendering/RenderingManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
@@ -13,6 +13,10 @@ import Level3 from "./HW3Level3";
 import Level4 from "./HW3Level4";
 import Level5 from "./HW3Level5";
 import Level6 from "./HW3Level6";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
+import Color from "../../Wolfie2D/Utils/Color";
+import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 
 /**
  * The first level for HW4 - should be the one with the grass and the clouds.
@@ -101,6 +105,62 @@ export default class Level1 extends HW3Level {
         //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
+    public initializeTilemap(): void {
+        super.initializeTilemap();
+
+        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(100, 620), size: new Vec2(200, 100) });
+        tutorialMoveTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialMoveTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_MOVE", null);
+        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialJumpTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(420, 620), size: new Vec2(150, 100) });
+        tutorialJumpTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialJumpTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_JUMP", null);
+        tutorialJumpTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialDashTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 620), size: new Vec2(200, 100) });
+        tutorialDashTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialDashTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_DASH", null);
+        tutorialDashTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialSwitchTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1050, 620), size: new Vec2(200, 100) });
+        tutorialSwitchTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialSwitchTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH", null);
+        tutorialSwitchTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPeekTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1250, 2860), size: new Vec2(200, 100) });
+        tutorialPeekTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPeekTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PEEK", null);
+        tutorialPeekTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialFallTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1600, 620), size: new Vec2(200, 100) });
+        tutorialFallTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialFallTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_FALL", null);
+        tutorialFallTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialGrappleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1650, 1350), size: new Vec2(200, 100) });
+        tutorialGrappleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialGrappleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_GRAPPLE", null);
+        tutorialGrappleTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPuzzleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(450, 1260), size: new Vec2(200, 100) });
+        tutorialPuzzleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPuzzleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PUZZLE", null);
+        tutorialPuzzleTrigger.color = new Color(255, 0, 255, 0);
+    }
+
+    protected subscribeToEvents(): void {
+        super.subscribeToEvents();
+        this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe("TUTORIAL_JUMP");
+        this.receiver.subscribe("TUTORIAL_DASH");
+        this.receiver.subscribe("TUTORIAL_SWITCH");
+        this.receiver.subscribe("TUTORIAL_PEEK");
+        this.receiver.subscribe("TUTORIAL_FALL");
+        this.receiver.subscribe("TUTORIAL_GRAPPLE");
+        this.receiver.subscribe("TUTORIAL_PUZZLE");
+    }
+
     /**
      * Unload resources for level 1
      */
@@ -140,33 +200,125 @@ export default class Level1 extends HW3Level {
 
     protected handleEvent(event: GameEvent): void {
         super.handleEvent(event);
-        if(event.type == HW3Events.LEVEL_CHANGE) {
-            switch(event.data.get("level")) {
-                case "2": {
-                    console.log("CHEAT: Changing to Level 2");
-                    this.sceneManager.changeToScene(Level2);
-                    break;
+        switch(event.type) {
+            case HW3Events.LEVEL_CHANGE: {
+                switch (event.data.get("level")) {
+                    case "2": {
+                        console.log("CHEAT: Changing to Level 2");
+                        this.sceneManager.changeToScene(Level2);
+                        break;
+                    }
+                    case "3": {
+                        console.log("CHEAT: Changing to Level 3");
+                        this.sceneManager.changeToScene(Level3);
+                        break;
+                    }
+                    case "4": {
+                        console.log("CHEAT: Changing to Level 4");
+                        this.sceneManager.changeToScene(Level4);
+                        break;
+                    }
+                    case "5": {
+                        console.log("CHEAT: Changing to Level 5");
+                        this.sceneManager.changeToScene(Level5);
+                        break;
+                    }
+                    case "6": {
+                        console.log("CHEAT: Changing to Level 6");
+                        this.sceneManager.changeToScene(Level6);
+                        break;
+                    }
                 }
-                case "3": {
-                    console.log("CHEAT: Changing to Level 3");
-                    this.sceneManager.changeToScene(Level3);
-                    break;
+                break;
+            }
+            case "TUTORIAL_MOVE": {
+                this.tutorialText.text = "Press A and D to move left and right";
+                /* this.tutorialText.tweens.play("fadeIn");
+                setTimeout(() => { */
+                /* if (!this.tutorialTimer.hasRun() && this.tutorialTimer.isStopped()) {
+                    this.tutorialTimer.start(); */
+                /* console.log("Playing Tween"); */
+                if (this.tutorialText.backgroundColor.a == 0) { /* Only fade in when you first enter the region */
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "4": {
-                    console.log("CHEAT: Changing to Level 4");
-                    this.sceneManager.changeToScene(Level4);
-                    break;
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 500)
+                /*                 } */
+                /* console.log("Playing Tween");
+                    this.tutorialText.tweens.play("fadeOut"); */
+                /* }, 3000); */
+                break;
+            }
+            case "TUTORIAL_JUMP": {
+                this.tutorialText.text = "Press W or Space to jump";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "5": {
-                    console.log("CHEAT: Changing to Level 5");
-                    this.sceneManager.changeToScene(Level5);
-                    break;
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_DASH": {
+                this.tutorialText.text = "Dash in mid-air with SHIFT+A or SHIFT+D";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "6": {
-                    console.log("CHEAT: Changing to Level 6");
-                    this.sceneManager.changeToScene(Level6);
-                    break;
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_SWITCH": {
+                this.tutorialText.text = "Press S to SWITCH between past & present";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_PEEK": {
+                this.tutorialText.text = "Hold E to PEEK into the other dimension";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_FALL": {
+                this.tutorialText.text = "There's no fall damage, jump on down!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_GRAPPLE": {
+                this.tutorialText.text = "RIGHT CLICK to GRAPPLE!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_PUZZLE": {
+                this.tutorialText.text = "GRAPPLE then SWITCH quickly!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => { /* Fade out 2 seconds after you exit the region. */
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
             }
         }
     }
