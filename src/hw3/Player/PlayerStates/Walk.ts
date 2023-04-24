@@ -6,6 +6,7 @@ import PlayerState from "./PlayerState";
 export default class Walk extends PlayerState {
 
 	onEnter(options: Record<string, any>): void {
+        // console.log("WALK ENTER");
 		this.parent.speed = this.parent.MIN_SPEED;
         this.owner.animation.playIfNotAlready(PlayerAnimations.WALK);
 	}
@@ -37,10 +38,10 @@ export default class Walk extends PlayerState {
             this.owner.move(this.parent.velocity.scaled(deltaT));
         }
         if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
-
 	}
 
 	onExit(): Record<string, any> {
+        // console.log("WALK EXIT");
 		this.owner.animation.stop();
 		return {};
 	}

@@ -8,8 +8,9 @@ import { HW3Controls } from "../../HW3Controls";
 export default class Fall extends PlayerState {
 
     onEnter(options: Record<string, any>): void {
+        // console.log("FALL ENTER");
         // If we're falling, the vertical velocity should be >= 0
-        this.parent.velocity.y = 0;
+        // this.parent.velocity.y = 0;
     }
 
     update(deltaT: number): void {
@@ -51,6 +52,7 @@ export default class Fall extends PlayerState {
     }
 
     onExit(): Record<string, any> {
+        // console.log("FALL EXIT");
         return {};
     }
 }

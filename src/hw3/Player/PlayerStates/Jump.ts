@@ -9,6 +9,7 @@ import PlayerState from "./PlayerState";
 export default class Jump extends PlayerState {
 
 	public onEnter(options: Record<string, any>): void {
+        // console.log("JUMP ENTER");
         // Get the jump audio key for the player
         let jumpAudio = this.owner.getScene().getJumpAudioKey();
         /* console.log(this.parent.velocity.x); */
@@ -52,6 +53,7 @@ export default class Jump extends PlayerState {
 	}
 
 	public onExit(): Record<string, any> {
+        // console.log("JUMP EXIT");
 		//this.owner.animation.stop();
 		return {};
 	}

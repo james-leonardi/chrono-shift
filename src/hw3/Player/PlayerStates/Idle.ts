@@ -6,6 +6,7 @@ import { HW3Controls } from "../../HW3Controls";
 export default class Idle extends PlayerState {
 
 	public onEnter(options: Record<string, any>): void {
+        // console.log("IDLE ENTER");
         this.owner.animation.play(PlayerAnimations.IDLE);
 		this.parent.speed = this.parent.MIN_SPEED;
         /* this.parent.velocity.x = 0; */
@@ -49,6 +50,7 @@ export default class Idle extends PlayerState {
 	}
 
 	public onExit(): Record<string, any> {
+        // console.log("IDLE EXIT");
 		this.owner.animation.stop();
 		return {};
 	}
