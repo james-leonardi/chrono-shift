@@ -113,8 +113,8 @@ export default abstract class HW3Level extends Scene {
             groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
             collisions: [
             /* GROUND   */  [0,1,1,0,0,0,0],
-            /* PLAYER   */  [1,0,0,1,1,0,0],
-            /* WEAPON   */  [1,0,0,1,0,1,0],
+            /* PLAYER   */  [1,0,0,1,1,0,1],
+            /* WEAPON   */  [1,0,0,1,0,1,1],
             /* DESTRUCT */  [0,1,1,0,0,0,0],
             /* DEATH    */  [0,1,0,0,0,0,0],
             /* GRAPPLE  */  [0,0,1,0,0,0,0],
@@ -301,7 +301,6 @@ export default abstract class HW3Level extends Scene {
             console.log("Adding physics to ice layer")
             this.ice.addPhysics();
             this.ice.setGroup("ICE");
-            this.ice.setTrigger("WEAPON", "PARTICLE", undefined);
         }
     }
 
