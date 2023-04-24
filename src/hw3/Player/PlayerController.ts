@@ -260,7 +260,7 @@ export default class PlayerController extends StateMachineAI {
 
         // Invincibility Cheat
         if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
-            this.invincible = !this.invincible;
+            this.is_invincible = !this.is_invincible;
             console.log("Invincibility: " + this.invincible);
         }
 
@@ -316,5 +316,8 @@ export default class PlayerController extends StateMachineAI {
     public set has_dash(dash: boolean) { this.dash = dash; } 
 
     public get is_invincible(): boolean { return this.invincible; }
-    public set is_invincible(invincible: boolean) { this.invincible = invincible; } 
+    public set is_invincible(invincible: boolean) {
+        this.invincible = invincible;
+        this.emitter.fireEvent(HW3Events.INVINCIBILITY, { "value": invincible });
+    } 
 }

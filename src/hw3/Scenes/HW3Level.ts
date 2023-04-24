@@ -110,6 +110,8 @@ export default abstract class HW3Level extends Scene {
     protected tutorialText: Label;
     protected tutorialTimer: Timer;
 
+    protected playerInvincible: boolean = false;
+
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
             groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH"],
@@ -216,10 +218,13 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case "DYING": {
-                this.player.animation.play("DYING", true, undefined);
-                setTimeout(() => {
-                    this.player.animation.play("DEAD", false, undefined);}, 300);
-                /* this.player.animation.queue("DEATH", false, undefined); */
+                console.log("invince: " + this.playerInvincible);
+                if(!this.playerInvincible) {
+                    this.player.animation.play("DYING", true, undefined);
+                    setTimeout(() => {
+                        this.player.animation.play("DEAD", false, undefined);}, 300);
+                    /* this.player.animation.queue("DEATH", false, undefined); */
+                }
                 break;
             }
             case HW3Events.HEALTH_CHANGE: {
@@ -252,6 +257,10 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case HW3Events.LEVEL_CHANGE: {
+                break;
+            }
+            case HW3Events.INVINCIBILITY: {
+                this.playerInvincible = event.data.get("value");
                 break;
             }
             // Default: Throw an error! No unhandled events allowed.
@@ -438,6 +447,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("DYING");
         this.receiver.subscribe("SWITCH");
         this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe(HW3Events.INVINCIBILITY);
     }
     /**
      * Adds in any necessary UI to the game
