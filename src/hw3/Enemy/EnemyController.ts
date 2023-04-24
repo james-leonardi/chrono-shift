@@ -94,18 +94,16 @@ export default class EnemyController extends StateMachineAI {
     protected switch_dist_y: number = 2240;
 
     protected peek_offset: number = 0;
-
     protected peeking: boolean = false;
-
     protected dash: boolean = true;
-
     protected invincible: boolean = false;
-
     protected receiver: Receiver;
+    protected player: HW3AnimatedSprite;  // todo: how to get the player?
 
     
-    public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
+    public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
+        this.player = options.player;
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
@@ -167,16 +165,17 @@ export default class EnemyController extends StateMachineAI {
 	 */
     public get inputDir(): Vec2 {
         let direction = Vec2.ZERO;
-		direction.x = (Input.isPressed(HW3Controls.MOVE_LEFT) ? -1 : 0) + (Input.isPressed(HW3Controls.MOVE_RIGHT) ? 1 : 0);
-		direction.y = (Input.isJustPressed(HW3Controls.JUMP) ? -1 : 0);
+		// direction.x = (Input.isPressed(HW3Controls.MOVE_LEFT) ? -1 : 0) + (Input.isPressed(HW3Controls.MOVE_RIGHT) ? 1 : 0);
+		// direction.y = (Input.isJustPressed(HW3Controls.JUMP) ? -1 : 0);
 		return direction;
     }
     /** 
      * Gets the direction of the mouse from the enemy's position as a Vec2
      */
-    public get faceDir(): Vec2 { return this.owner.position.dirTo(Input.getGlobalMousePosition()); }
+    public get faceDir(): Vec2 { console.log(this.player.position.x); return this.owner.position.dirTo(this.player.position); }
 
     public update(deltaT: number): void {
+        const d = this.faceDir;
         if (this.mou_shindeiru) return;
 		super.update(deltaT);
         while (this.receiver.hasNextEvent()) {

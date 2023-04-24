@@ -28,6 +28,7 @@ import MainMenu from "./MainMenu";
 import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 import EnemyController from "../Enemy/EnemyController";
+import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 
 /**
  * A const object for the layer names
@@ -790,7 +791,8 @@ export default abstract class HW3Level extends Scene {
         this.enemy.addAI(EnemyController, {
             weaponSystem: this.enemyWeaponSystem,
             grappleSystem: this.enemyGrappleSystem,
-            tilemap: "Destructable"
+            tilemap: "Destructable",
+            player: this.player
         });
     }
     /**
