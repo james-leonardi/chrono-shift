@@ -86,6 +86,7 @@ export default class Level6 extends HW3Level {
         this.load.tilemap(this.tilemapKey, Level6.TILEMAP_PATH);
         // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level6.PLAYER_SPRITE_PATH);
+        this.load.spritesheet(this.enemySpriteKey, Level6.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level6.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level6.JUMP_AUDIO_PATH);
