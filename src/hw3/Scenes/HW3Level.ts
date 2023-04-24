@@ -91,6 +91,7 @@ export default abstract class HW3Level extends Scene {
     protected destructibleLayerKey: string;
     protected wallsLayerKey: string;
     protected deathLayerKey: string;
+    protected grappleOnlyLayerKey: string;
     /** The scale for the tilemap */
     protected tilemapScale: Vec2;
     /** The destrubtable layer of the tilemap */
@@ -99,6 +100,8 @@ export default abstract class HW3Level extends Scene {
     protected walls: OrthogonalTilemap;
 
     protected death: OrthogonalTilemap;
+
+    protected grappleOnly: OrthogonalTilemap;
 
     /** Sound and music */
     protected levelMusicKey: string;
@@ -114,13 +117,14 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH"],
+            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY"],
             collisions: [
-            /* GROUND   */  [0,1,1,0,0],
-            /* PLAYER   */  [1,0,0,1,1],
-            /* WEAPON   */  [1,0,0,1,0],
-            /* DESTRUCT */  [0,1,1,0,0],
-            /* DEATH    */  [0,1,0,0,0]]
+            /* GROUND   */  [0,1,1,0,0,0],
+            /* PLAYER   */  [1,0,0,1,1,0],
+            /* WEAPON   */  [1,0,0,1,0,1],
+            /* DESTRUCT */  [0,1,1,0,0,0],
+            /* DEATH    */  [0,1,0,0,0,0],
+            /* GRAPPLE  */  [0,0,1,0,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -381,6 +385,7 @@ export default abstract class HW3Level extends Scene {
         if (particle !== undefined) {
             // Get the destructable tilemap
             const tilemap = this.destructable;
+            const tilemap2 = this.grappleOnly;
 
             const min = new Vec2(particle.sweptRect.left, particle.sweptRect.top);
             const max = new Vec2(particle.sweptRect.right, particle.sweptRect.bottom);
@@ -388,12 +393,14 @@ export default abstract class HW3Level extends Scene {
             // Convert the min/max x/y to the min and max row/col in the tilemap array
             const minIndex = tilemap.getColRowAt(min);
             const maxIndex = tilemap.getColRowAt(max);
+            /* const minIndex2 = tilemap2.getColRowAt(min);
+            const maxIndex2 = tilemap2.getColRowAt(max); */
 
             // Loop over all possible tiles the particle could be colliding with 
             for (let col = minIndex.x; col <= maxIndex.x; col++) {
                 for (let row = minIndex.y; row <= maxIndex.y; row++) {
                     // If the tile is collideable -> check if this particle is colliding with the tile
-                    if (tilemap.isTileCollidable(col, row) && this.particleHitTile(tilemap, particle, col, row)) {
+                    if (tilemap.isTileCollidable(col, row) || tilemap2.isTileCollidable(col, row)) {
                         particle.visible = false;
                         const dir = this.player.position.dirTo(particle.position).scale(250, 350).scale(1.2);
                         /* console.log(`(${dir.x}, ${dir.y})`); */
@@ -490,6 +497,7 @@ export default abstract class HW3Level extends Scene {
         this.walls = this.getTilemap(this.wallsLayerKey) as OrthogonalTilemap;
         this.destructable = this.getTilemap(this.destructibleLayerKey) as OrthogonalTilemap;
         this.death = this.getTilemap(this.deathLayerKey) as OrthogonalTilemap;
+        if (this.grappleOnlyLayerKey) this.grappleOnly = this.getTilemap(this.grappleOnlyLayerKey) as OrthogonalTilemap;
 
         // Add physicss to the wall layer
         this.walls.addPhysics();
@@ -502,7 +510,12 @@ export default abstract class HW3Level extends Scene {
         this.death.addPhysics();
         this.death.setGroup("DEATH");
         this.death.setTrigger("PLAYER", "DYING", undefined);
-
+        if (this.grappleOnlyLayerKey) {
+            console.log("Adding physics to grapple only layer")
+            this.grappleOnly.addPhysics();
+            this.grappleOnly.setGroup("GRAPPLE_ONLY");
+            this.grappleOnly.setTrigger("WEAPON", "PARTICLE", undefined);
+        }
     }
     /**
      * Handles all subscriptions to events

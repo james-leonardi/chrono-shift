@@ -26,6 +26,7 @@ export default class Level3 extends HW3Level {
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
+    public static readonly GRAPPLE_ONLY_LAYER_KEY = "OnlyGrapple";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
     public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/jungle.mp3";
@@ -53,6 +54,7 @@ export default class Level3 extends HW3Level {
         this.destructibleLayerKey = Level3.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level3.WALLS_LAYER_KEY;
         this.deathLayerKey = Level3.DEATH_LAYER_KEY;
+        this.grappleOnlyLayerKey = Level3.GRAPPLE_ONLY_LAYER_KEY;
 
         // Set the key for the player's sprite
         this.playerSpriteKey = Level3.PLAYER_SPRITE_KEY;
