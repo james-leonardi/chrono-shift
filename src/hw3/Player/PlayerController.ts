@@ -99,6 +99,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected dash: boolean = true;
 
+    protected invincible: boolean = false;
+
     protected receiver: Receiver;
 
     
@@ -152,7 +154,7 @@ export default class PlayerController extends StateMachineAI {
                 break;
             }
             case "DYING": {
-                this.changeState(PlayerStates.DEAD);
+                if(!this.invincible) this.changeState(PlayerStates.DEAD);
                 break;
             }
             default: {
@@ -182,7 +184,7 @@ export default class PlayerController extends StateMachineAI {
             this.handleEvent(this.receiver.getNextEvent());
         }
         const tile = this.tilemap.getColRowAt(this.owner.position);
-        if (!this.peeking && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+        if (!this.peeking && !this.invincible && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
             this.emitter.fireEvent("DYING"); this.changeState(PlayerStates.DEAD); this.mou_shindeiru = true; return;
         }
 
@@ -256,6 +258,33 @@ export default class PlayerController extends StateMachineAI {
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
+
+        // Invincibility Cheat
+        if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
+            this.invincible = !this.invincible;
+            console.log("Invincibility: " + this.invincible);
+        }
+
+        // Level Change Cheats
+        if (Input.isJustPressed(HW3Controls.LEVEL1)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "1"});
+        }
+        else if(Input.isJustPressed(HW3Controls.LEVEL2)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "2"});
+        }
+        // TODO Uncomment when more levels
+        /* else if(Input.isJustPressed(HW3Controls.LEVEL3)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "3"});
+        }
+        else if(Input.isJustPressed(HW3Controls.LEVEL4)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "4"});
+        }
+        else if(Input.isJustPressed(HW3Controls.LEVEL5)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "5"});
+        }
+        else if(Input.isJustPressed(HW3Controls.LEVEL6)) {
+            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "6"});
+        } */
 	}
 
     public get velocity(): Vec2 { return this._velocity; }
@@ -279,7 +308,7 @@ export default class PlayerController extends StateMachineAI {
         /* this.owner.animation.play("TAKING_DAMAGE");
         this.owner.animation.queue("IDLE", false, undefined); */
         // If the health hit 0, change the state of the player
-        if (this.health === 0) { 
+        if (this.health === 0 && !this.invincible) { 
             this.changeState(PlayerStates.DEAD); 
             this.emitter.fireEvent("DYING");
         }
@@ -287,4 +316,7 @@ export default class PlayerController extends StateMachineAI {
 
     public get has_dash(): boolean { return this.dash; }
     public set has_dash(dash: boolean) { this.dash = dash; } 
+
+    public get is_invincible(): boolean { return this.invincible; }
+    public set is_invincible(invincible: boolean) { this.invincible = invincible; } 
 }

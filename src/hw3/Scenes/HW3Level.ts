@@ -27,6 +27,13 @@ import HW3FactoryManager from "../Factory/HW3FactoryManager";
 import MainMenu from "./MainMenu";
 import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import Level1 from "./HW3Level1";
+import Level2 from "./HW3Level2";
+// TODO Uncomment when have more levels :3
+/* import Level3 from "./HW3Level3";
+import Level4 from "./HW3Level4";
+import Level5 from "./HW3Level5";
+import Level6 from "./HW3Level6"; */
 
 /**
  * A const object for the layer names
@@ -229,6 +236,23 @@ export default abstract class HW3Level extends Scene {
                 this.sceneManager.changeToScene(MainMenu);
                 break;
             }
+            case HW3Events.LEVEL_CHANGE: {
+                switch (event.data.get("level")) {
+                    case "1":
+                        this.sceneManager.changeToScene(Level1);
+                    case "2":
+                        this.sceneManager.changeToScene(Level2);
+                    // TODO Uncomment when more levels are added.
+                    /* case "3":
+                        this.sceneManager.changeToScene(Level3);
+                    case "4":
+                        this.sceneManager.changeToScene(Level4);
+                    case "5":
+                        this.sceneManager.changeToScene(Level5);
+                    case "6":
+                        this.sceneManager.changeToScene(Level6); */
+                }
+            }
             // Default: Throw an error! No unhandled events allowed.
             default: {
                 throw new Error(`Unhandled event caught in scene with type ${event.type}`)
@@ -412,6 +436,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PARTICLE");
         this.receiver.subscribe("DYING");
         this.receiver.subscribe("SWITCH");
+        this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
     }
     /**
      * Adds in any necessary UI to the game
