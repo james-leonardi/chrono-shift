@@ -614,37 +614,37 @@ export default abstract class HW3Level extends Scene {
         const tutorialJumpTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(420, 620), size: new Vec2(150, 100) });
         tutorialJumpTrigger.addPhysics(undefined, undefined, false, true);
         tutorialJumpTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_JUMP", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialJumpTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialDashTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 620), size: new Vec2(200, 100) });
         tutorialDashTrigger.addPhysics(undefined, undefined, false, true);
         tutorialDashTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_DASH", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialDashTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialSwitchTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1050, 620), size: new Vec2(200, 100) });
         tutorialSwitchTrigger.addPhysics(undefined, undefined, false, true);
         tutorialSwitchTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialSwitchTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialPeekTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1250, 2860), size: new Vec2(200, 100) });
         tutorialPeekTrigger.addPhysics(undefined, undefined, false, true);
         tutorialPeekTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PEEK", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialPeekTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialFallTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1600, 620), size: new Vec2(200, 100) });
         tutorialFallTrigger.addPhysics(undefined, undefined, false, true);
         tutorialFallTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_FALL", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialFallTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialGrappleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1650, 1350), size: new Vec2(200, 100) });
         tutorialGrappleTrigger.addPhysics(undefined, undefined, false, true);
         tutorialGrappleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_GRAPPLE", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialGrappleTrigger.color = new Color(255, 0, 255, 0);
 
         const tutorialPuzzleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(450, 1260), size: new Vec2(200, 100) });
         tutorialPuzzleTrigger.addPhysics(undefined, undefined, false, true);
         tutorialPuzzleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PUZZLE", null);
-        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+        tutorialPuzzleTrigger.color = new Color(255, 0, 255, 0);
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
