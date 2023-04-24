@@ -17,7 +17,14 @@ import { HW3Controls } from "./hw3/HW3Controls";
             //{name: HW3Controls.ATTACK, keys: ["x"]},
             {name: HW3Controls.GRAPPLE, keys: ["right_click"]},
             {name: HW3Controls.PEEK, keys: ["e"]},
-            {name: HW3Controls.DASH, keys: ["shift"]}
+            {name: HW3Controls.DASH, keys: ["shift"]},
+            {name: HW3Controls.INVINCIBLE, keys: ["i"]},
+            {name: HW3Controls.LEVEL1, keys: ["1"]},
+            {name: HW3Controls.LEVEL2, keys: ["2"]},
+            {name: HW3Controls.LEVEL3, keys: ["3"]},
+            {name: HW3Controls.LEVEL4, keys: ["4"]},
+            {name: HW3Controls.LEVEL5, keys: ["5"]},
+            {name: HW3Controls.LEVEL6, keys: ["6"]},
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                       // Whether to show debug messages. You can change this to true if you want

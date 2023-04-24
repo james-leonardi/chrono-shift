@@ -10,5 +10,12 @@ export const HW3Controls = {
     GRAPPLE: "GRAPPLE",
     PEEK: "PEEK",
     PAUSE: "PAUSE",
-    DASH: "DASH"
+    DASH: "DASH",
+    INVINCIBLE: "INVINCIBLE",
+    LEVEL1: "LEVEL1",
+    LEVEL2: "LEVEL2",
+    LEVEL3: "LEVEL3",
+    LEVEL4: "LEVEL4",
+    LEVEL5: "LEVEL5",
+    LEVEL6: "LEVEL6",
 } as const;
