@@ -116,7 +116,6 @@ export default class PlayerController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         this.receiver.subscribe("DYING");
-
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
         this.velocity = Vec2.ZERO;
@@ -272,8 +271,7 @@ export default class PlayerController extends StateMachineAI {
         else if(Input.isJustPressed(HW3Controls.LEVEL2)) {
             this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "2"});
         }
-        // TODO Uncomment when more levels
-        /* else if(Input.isJustPressed(HW3Controls.LEVEL3)) {
+        else if(Input.isJustPressed(HW3Controls.LEVEL3)) {
             this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "3"});
         }
         else if(Input.isJustPressed(HW3Controls.LEVEL4)) {
@@ -284,7 +282,7 @@ export default class PlayerController extends StateMachineAI {
         }
         else if(Input.isJustPressed(HW3Controls.LEVEL6)) {
             this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "6"});
-        } */
+        }
 	}
 
     public get velocity(): Vec2 { return this._velocity; }
