@@ -251,6 +251,9 @@ export default abstract class HW3Level extends Scene {
                 /* }, 3000); */
                 break;
             }
+            case HW3Events.LEVEL_CHANGE: {
+                break;
+            }
             // Default: Throw an error! No unhandled events allowed.
             default: {
                 throw new Error(`Unhandled event caught in scene with type ${event.type}`)

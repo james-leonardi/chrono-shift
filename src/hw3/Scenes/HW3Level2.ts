@@ -1,26 +1,29 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import HW3Level from "./HW3Level";
-import MainMenu from "./MainMenu";
-import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
-
-import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
 import RenderingManager from "../../Wolfie2D/Rendering/RenderingManager";
+import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
+import Viewport from "../../Wolfie2D/SceneGraph/Viewport";
+import { HW3Events } from "../HW3Events";
+import GameEvent from "../../Wolfie2D/Events/GameEvent";
+import Level1 from "./HW3Level1";
+//import HW4Level3 from "./HW3Level3"; TODO Import when have more levels
 
 /**
- * The second level for HW4. It should be the goose dungeon / cave.
+ * The second level
  */
 export default class Level2 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 32);
+    public static readonly PLAYER_SPAWN = new Vec2(32, 608);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly TILEMAP_KEY = "LEVEL2";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L2.json";
     public static readonly TILEMAP_SCALE = new Vec2(2, 2);
-    public static readonly DESTRUCTIBLE_LAYER_KEY = "Destructable";
+    public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
+    public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
@@ -38,7 +41,7 @@ export default class Level2 extends HW3Level {
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
-    public static readonly LEVEL_END = new AABB(new Vec2(224, 232), new Vec2(24, 16));
+    public static readonly LEVEL_END = new AABB(new Vec2(928, 3632), new Vec2(24, 16));
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, options);
@@ -48,6 +51,7 @@ export default class Level2 extends HW3Level {
         this.tilemapScale = Level2.TILEMAP_SCALE;
         this.destructibleLayerKey = Level2.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level2.WALLS_LAYER_KEY;
+        this.deathLayerKey = Level2.DEATH_LAYER_KEY;
 
         // Set the key for the player's sprite
         this.playerSpriteKey = Level2.PLAYER_SPRITE_KEY;
@@ -62,34 +66,95 @@ export default class Level2 extends HW3Level {
         this.deadgeAudioKey = Level2.DEADGE_AUDIO_KEY;
 
         // Level end size and position
-        this.levelEndPosition = new Vec2(32, 216).mult(this.tilemapScale);
+        this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
-
+        this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
+
     /**
-     * Load in resources for level 2.
+     * Load in our resources for level 1
      */
     public loadScene(): void {
         // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level2.TILEMAP_PATH);
         // Load in the player's sprite
-        /* this.load.spritesheet(this.playerSpriteKey, Level2.PLAYER_SPRITE_PATH); */
+        this.load.spritesheet(this.playerSpriteKey, Level2.PLAYER_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level2.LEVEL_MUSIC_PATH);
-        /* this.load.audio(this.jumpAudioKey, Level2.JUMP_AUDIO_PATH);
+        this.load.audio(this.jumpAudioKey, Level2.JUMP_AUDIO_PATH);
         this.load.audio(this.tileDestroyedAudioKey, Level2.TILE_DESTROYED_PATH);
         this.load.audio(this.damagedAudioKey, Level2.DAMAGED_AUDIO_PATH);
-        this.load.audio(this.deadgeAudioKey, Level2.DEADGE_AUDIO_PATH); */
+        this.load.audio(this.deadgeAudioKey, Level2.DEADGE_AUDIO_PATH);
+
+        //this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
+        //this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
+        //this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
+        this.load.audio("ZIP_0", "hw4_assets/sounds/zip1.mp3");
+        this.load.audio("ZIP_1", "hw4_assets/sounds/zip2.mp3");
+        this.load.audio("PSHH", "hw4_assets/sounds/pshh.mp3");
+        this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
+        this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
+        //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
+    /**
+     * Unload resources for level 2
+     */
     public unloadScene(): void {
-        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level2.LEVEL_MUSIC_KEY});
         // TODO decide which resources to keep/cull 
+        this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level2.LEVEL_MUSIC_KEY});
+        this.load.keepAudio(this.jumpAudioKey);
+        this.load.keepAudio(this.tileDestroyedAudioKey);
+        this.load.keepAudio(this.damagedAudioKey);
+        this.load.keepAudio(this.deadgeAudioKey);
+        this.load.keepSpritesheet(this.playerSpriteKey);
     }
 
     public startScene(): void {
         super.startScene();
-        this.nextLevel = MainMenu;
+        // Set the next level to be Level2
+        //this.nextLevel = HW4Level3;   TODO Uncomment when 3rd level is added
+        
+        this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
+    }
+
+    /**
+     * I had to override this method to adjust the viewport for the first level. I screwed up 
+     * when I was making the tilemap for the first level is what it boils down to.
+     * 
+     * - Peter
+     */
+    protected initializeViewport(): void {
+        super.initializeViewport();
+        this.viewport.setBounds(0, 0, 2752, 4096);
+    }
+
+    protected handleEvent(event: GameEvent): void {
+        super.handleEvent(event);
+        if(event.type == HW3Events.LEVEL_CHANGE) {
+            switch(event.data.get("level")) {
+                case "1": {
+                    console.log("CHEAT: Changing to Level 1");
+                    this.sceneManager.changeToScene(Level1);
+                }/* TODO Uncomment when have more levels
+                case "3": {
+                    console.log("CHEAT: Changing to Level 3");
+                    this.sceneManager.changeToScene(Level3);
+                }
+                case "4": {
+                    console.log("CHEAT: Changing to Level 4");
+                    this.sceneManager.changeToScene(Level4);
+                }
+                case "5": {
+                    console.log("CHEAT: Changing to Level 5");
+                    this.sceneManager.changeToScene(Level5);
+                }
+                case "6": {
+                    console.log("CHEAT: Changing to Level 6");
+                    this.sceneManager.changeToScene(Level6);
+                } */
+            }
+        }
     }
 
 }
