@@ -9,6 +9,7 @@ import HW4Level2 from "./HW3Level2";
 import { HW3Events } from "../HW3Events";
 import GameEvent from "../../Wolfie2D/Events/GameEvent";
 import Level2 from "./HW3Level2";
+import Level3 from "./HW3Level3";
 
 /**
  * The first level for HW4 - should be the one with the grass and the clouds.
@@ -108,6 +109,11 @@ export default class Level1 extends HW3Level {
         this.load.keepAudio(this.damagedAudioKey);
         this.load.keepAudio(this.deadgeAudioKey);
         this.load.keepSpritesheet(this.playerSpriteKey);
+        this.load.keepAudio("ZIP_0");
+        this.load.keepAudio("ZIP_1");
+        this.load.keepAudio("PSHH");
+        this.load.keepAudio("SWITCH_1");
+        this.load.keepAudio("SWITCH_2");
     }
 
     public startScene(): void {
@@ -136,11 +142,13 @@ export default class Level1 extends HW3Level {
                 case "2": {
                     console.log("CHEAT: Changing to Level 2");
                     this.sceneManager.changeToScene(Level2);
-                }/* TODO Uncomment when have more levels
+                    break;
+                }
                 case "3": {
                     console.log("CHEAT: Changing to Level 3");
                     this.sceneManager.changeToScene(Level3);
-                }
+                    break;
+                }/* TODO Uncomment when have more levels
                 case "4": {
                     console.log("CHEAT: Changing to Level 4");
                     this.sceneManager.changeToScene(Level4);
