@@ -10,8 +10,8 @@ import Jump from "./EnemyStates/Jump";
 import Walk from "./EnemyStates/Walk";
 import Dash from "./EnemyStates/Dash";
 
-import PlayerWeapon from "./EnemyWeapon";
-import PlayerGrapple from "./EnemyGrapple";
+import EnemyWeapon from "./EnemyWeapon";
+import EnemyGrapple from "./EnemyGrapple";
 import Input from "../../Wolfie2D/Input/Input";
 import Receiver from "../../Wolfie2D/Events/Receiver";
 
@@ -26,9 +26,9 @@ import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 // TODO play your heros animations
 
 /**
- * Animation keys for the player spritesheet
+ * Animation keys for the enemy spritesheet
  */
-export const PlayerAnimations = {
+export const EnemyAnimations = {
     IDLE: "IDLE",
     WALK: "WALK",
     JUMP: "JUMP",
@@ -39,9 +39,9 @@ export const PlayerAnimations = {
 } as const
 
 /**
- * Tween animations the player can player.
+ * Tween animations the enemy can play.
  */
-/* export const PlayerTweens = {
+/* export const EnemyTweens = {
     FLIP: "FLIP",
     FLIPL: "FLIPL",
     FLIPR: "FLIPR",
@@ -49,9 +49,9 @@ export const PlayerAnimations = {
 } as const */
 
 /**
- * Keys for the states the PlayerController can be in.
+ * Keys for the states the EnemyController can be in.
  */
-export const PlayerStates = {
+export const EnemyStates = {
     IDLE: "IDLE",
     WALK: "WALK",
 	JUMP: "JUMP",
@@ -61,17 +61,17 @@ export const PlayerStates = {
 } as const
 
 /**
- * The controller that controls the player.
+ * The controller that controls the enemy.
  */
 export default class EnemyController extends StateMachineAI {
     public readonly MAX_SPEED: number = 200;
     public readonly MIN_SPEED: number = 100;
 
-    /** Health and max health for the player */
+    /** Health and max health for the enemy */
     protected _health: number;
     protected _maxHealth: number;
 
-    /** The players game node */
+    /** The enemy's game node */
     protected owner: HW3AnimatedSprite;
 
     protected _velocity: Vec2;
@@ -79,8 +79,8 @@ export default class EnemyController extends StateMachineAI {
 
     protected tilemap: OrthogonalTilemap;
     // protected cannon: Sprite;
-    protected weapon: PlayerWeapon;
-    protected grapple: PlayerGrapple;
+    protected weapon: EnemyWeapon;
+    protected grapple: EnemyGrapple;
     protected grapple_line: Line;
     protected grapple_last_used: number;
     protected grapple_cooldown: number = 750;
@@ -111,7 +111,7 @@ export default class EnemyController extends StateMachineAI {
         this.grapple = options.grappleSystem;
         this.grapple_last_used = 0;
         this.switch_last_used = 0;
-        this.owner.setGroup(HW3PhysicsGroups.PLAYER);
+        this.owner.setGroup(HW3PhysicsGroups.PLAYER);  // Todo: Change??
 
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
@@ -123,16 +123,16 @@ export default class EnemyController extends StateMachineAI {
         this.health = 5
         this.maxHealth = 5;
 
-        // Add the different states the player can be in to the PlayerController 
-		this.addState(PlayerStates.IDLE, new Idle(this, this.owner));
-		this.addState(PlayerStates.WALK, new Walk(this, this.owner));
-        this.addState(PlayerStates.JUMP, new Jump(this, this.owner));
-        this.addState(PlayerStates.FALL, new Fall(this, this.owner));
-        this.addState(PlayerStates.DEAD, new Dead(this, this.owner));
-        this.addState(PlayerStates.DASH, new Dash(this, this.owner))
+        // Add the different states the enemy can be in to the EnemyController 
+		this.addState(EnemyStates.IDLE, new Idle(this, this.owner));
+		this.addState(EnemyStates.WALK, new Walk(this, this.owner));
+        this.addState(EnemyStates.JUMP, new Jump(this, this.owner));
+        this.addState(EnemyStates.FALL, new Fall(this, this.owner));
+        this.addState(EnemyStates.DEAD, new Dead(this, this.owner));
+        this.addState(EnemyStates.DASH, new Dash(this, this.owner))
         
-        // Start the player in the Idle state
-        this.initialize(PlayerStates.IDLE);
+        // Start the enemy in the Idle state
+        this.initialize(EnemyStates.IDLE);
     }
 
     handleEvent(event: GameEvent): void {
@@ -148,12 +148,12 @@ export default class EnemyController extends StateMachineAI {
                     this.velocity.x += event.data.get('velocity').x;
                     this.velocity.y += event.data.get('velocity').y*2;
                 } */
-                /* this.changeState(PlayerStates.IDLE); */
+                /* this.changeState(EnemyStates.IDLE); */
                 /* this.owner.move(event.data.get('velocity')); */
                 break;
             }
             case "DYING": {
-                if(!this.invincible) this.changeState(PlayerStates.DEAD);
+                if(!this.invincible) this.changeState(EnemyStates.DEAD);
                 break;
             }
             default: {
@@ -172,7 +172,7 @@ export default class EnemyController extends StateMachineAI {
 		return direction;
     }
     /** 
-     * Gets the direction of the mouse from the player's position as a Vec2
+     * Gets the direction of the mouse from the enemy's position as a Vec2
      */
     public get faceDir(): Vec2 { return this.owner.position.dirTo(Input.getGlobalMousePosition()); }
 
@@ -184,10 +184,10 @@ export default class EnemyController extends StateMachineAI {
         }
         const tile = this.tilemap.getColRowAt(this.owner.position);
         if (!this.peeking && !this.invincible && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
-            this.emitter.fireEvent("DYING"); this.changeState(PlayerStates.DEAD); this.mou_shindeiru = true; return;
+            this.emitter.fireEvent("DYING"); this.changeState(EnemyStates.DEAD); this.mou_shindeiru = true; return;
         }
 
-        // If the player hits the attack button and the weapon system isn't running, restart the system and fire!
+        // If the enemy hits the attack button and the weapon system isn't running, restart the system and fire!
 
         // Detect right-click and handle with grapple firing
         if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
@@ -204,7 +204,7 @@ export default class EnemyController extends StateMachineAI {
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
         } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
-            // Start the particle system at the player's current position
+            // Start the particle system at the enemy's current position
             this.weapon.startSystem(500, 0, this.owner.position);
             this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
@@ -303,9 +303,9 @@ export default class EnemyController extends StateMachineAI {
         this.emitter.fireEvent(HW3Events.HEALTH_CHANGE, {curhp: this.health, maxhp: this.maxHealth});
         /* this.owner.animation.play("TAKING_DAMAGE");
         this.owner.animation.queue("IDLE", false, undefined); */
-        // If the health hit 0, change the state of the player
+        // If the health hit 0, change the state of the enemy
         if (this.health === 0 && !this.invincible) { 
-            this.changeState(PlayerStates.DEAD); 
+            this.changeState(EnemyStates.DEAD); 
             this.emitter.fireEvent("DYING");
         }
     }

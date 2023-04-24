@@ -12,12 +12,12 @@ import Scene from "../../Wolfie2D/Scene/Scene";
  
 
 /**
- * // TODO get the particles to move towards the mouse when the player attacks
+ * // TODO get the particles to move towards the mouse when the enemy attacks
  * 
- * The particle system used for the player's attack. Particles in the particle system should
- * be spawned at the player's position and fired in the direction of the mouse's position.
+ * The particle system used for the enemy's attack. Particles in the particle system should
+ * be spawned at the enemy's position and fired in the direction of the mouse's position.
  */
-export default class PlayerGrapple extends ParticleSystem {
+export default class EnemyGrapple extends ParticleSystem {
 
     private grapple_length: number = 225;
 
@@ -39,7 +39,7 @@ export default class PlayerGrapple extends ParticleSystem {
     }
 
     /**
-     * Sets the animations for a particle in the player's weapon
+     * Sets the animations for a particle in the enemy's weapon
      * @param particle the particle to give the animation to
      */
     public setParticleAnimation(particle: Particle) {
