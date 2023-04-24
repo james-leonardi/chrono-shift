@@ -220,7 +220,7 @@ export default abstract class HW3Level extends Scene {
             for (let col = minIndex.x; col <= maxIndex.x; col++) {
                 for (let row = minIndex.y; row <= maxIndex.y; row++) {
                     // If the tile is collideable -> check if this particle is colliding with the tile
-                    if (tilemap.isTileCollidable(col, row) || tilemap2.isTileCollidable(col, row)) {
+                    if (tilemap.isTileCollidable(col, row) || tilemap2?.isTileCollidable(col, row)) {
                         particle.visible = false;
                         const dir = this.player.position.dirTo(particle.position).scale(250, 350).scale(1.2);
                         if (this.playerGrappleSystem.isSystemRunning()) {
