@@ -25,7 +25,8 @@ import { HW3Controls } from "./hw3/HW3Controls";
             {name: HW3Controls.LEVEL4, keys: ["4"]},
             {name: HW3Controls.LEVEL5, keys: ["5"]},
             {name: HW3Controls.LEVEL6, keys: ["6"]},
-            {name: HW3Controls.GETPOS, keys: ["p"]}
+            {name: HW3Controls.GETPOS, keys: ["p"]},
+            {name: HW3Controls.TELEPORT, keys: ["o"]}
         ],
         useWebGL: false,                        // Tell the game we want to use webgl
         showDebug: false                       // Whether to show debug messages. You can change this to true if you want

@@ -231,6 +231,12 @@ export default class PlayerController extends StateMachineAI {
         } else if (Input.isJustPressed(HW3Controls.LEVEL6)) {
             this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "6"});
         }
+
+        // Teleport to Cursor Cheat (press 'o')
+        if(Input.isJustPressed(HW3Controls.TELEPORT)) {
+            //this.owner.move(Input.getGlobalMousePosition());
+            this.owner.position = Input.getGlobalMousePosition();
+        }
 	}
 
     public get velocity(): Vec2 { return this._velocity; }
