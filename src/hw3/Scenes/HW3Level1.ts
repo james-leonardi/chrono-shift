@@ -119,6 +119,11 @@ export default class Level1 extends HW3Level {
         tutorialPeekTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PEEK", null);
         tutorialPeekTrigger.color = new Color(255, 0, 255, 0);
 
+        const tutorialSwitch2 = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1550, 2860), size: new Vec2(200, 100) });
+        tutorialSwitch2.addPhysics(undefined, undefined, false, true);
+        tutorialSwitch2.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH2", null);
+        tutorialSwitch2.color = new Color(255, 0, 255, 0);
+
         const tutorialFallTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1600, 620), size: new Vec2(200, 100) });
         tutorialFallTrigger.addPhysics(undefined, undefined, false, true);
         tutorialFallTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_FALL", null);
@@ -142,6 +147,7 @@ export default class Level1 extends HW3Level {
         this.receiver.subscribe("TUTORIAL_DASH");
         this.receiver.subscribe("TUTORIAL_SWITCH");
         this.receiver.subscribe("TUTORIAL_PEEK");
+        this.receiver.subscribe("TUTORIAL_SWITCH2");
         this.receiver.subscribe("TUTORIAL_FALL");
         this.receiver.subscribe("TUTORIAL_GRAPPLE");
         this.receiver.subscribe("TUTORIAL_PUZZLE");
@@ -248,6 +254,16 @@ export default class Level1 extends HW3Level {
             }
             case "TUTORIAL_PEEK": {
                 this.tutorialText.text = "Hold E to PEEK into the other dimension";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_SWITCH2": {
+                this.tutorialText.text = "Press S to go back to the present";
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }

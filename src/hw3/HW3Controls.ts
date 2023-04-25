@@ -18,4 +18,5 @@ export const HW3Controls = {
     LEVEL4: "LEVEL4",
     LEVEL5: "LEVEL5",
     LEVEL6: "LEVEL6",
+    GETPOS: "GETPOS"
 } as const;

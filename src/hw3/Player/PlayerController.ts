@@ -206,6 +206,11 @@ export default class PlayerController extends StateMachineAI {
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
         }
 
+        if(Input.isJustPressed(HW3Controls.GETPOS)) {
+            console.log("Player Position: " + this.owner.position.toString() + "\n" + 
+                "Mouse Position: " + Input.getGlobalMousePosition().toString());
+        }
+
         // Invincibility Cheat
         if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
             this.is_invincible = !this.is_invincible;
