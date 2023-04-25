@@ -5,6 +5,7 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import RandUtils from "../../Wolfie2D/Utils/RandUtils";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../Wolfie2D/Input/Input";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 
  
 
@@ -37,8 +38,9 @@ export default class EnemyWeapon extends ParticleSystem {
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
         particle.color = Color.MAGENTA;
-        particle.setGroup("WEAPON");
-        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
+        // todo: change to enemy weapon eventually
+        // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
+        // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

@@ -25,6 +25,7 @@ export default class Level1 extends HW3Level {
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly ENEMY_SPAWN = new Vec2(100, 3480);
+    // public static readonly ENEMY_SPAWN = new Vec2(132, 2870);  // for testing
     public static readonly ENEMY_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 

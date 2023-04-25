@@ -29,6 +29,9 @@ export const HW3Events = {
     INVINCIBILITY: "INVINCIBILITY",
 
     // Event fired every time there is a perspective change (switching/peeking)
-    PERSPECTIVE: "PERSPECTIVE"
+    PERSPECTIVE: "PERSPECTIVE",
+
+    // Event fired when the player kills an enemy
+    KILL_BOSS: "KILL_BOSS"
     
 } as const;

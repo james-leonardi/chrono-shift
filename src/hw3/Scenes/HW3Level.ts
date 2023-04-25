@@ -208,6 +208,15 @@ export default abstract class HW3Level extends Scene {
                 }
                 break;
             }
+            case HW3Events.KILL_BOSS: {
+                console.log("ENEMY HIT");
+                this.enemy.animation.play("DYING", true, undefined);
+                setTimeout(() => {
+                    this.enemy.animation.play("DEAD", false, undefined);
+                }, 300);
+                this.emitter.fireEvent(HW3Events.PLAYER_ENTERED_LEVEL_END);
+                break;
+            }
             case HW3Events.HEALTH_CHANGE: {
                 this.player.animation.play("TAKING_DAMAGE", false, undefined);
                 this.player.animation.queue("IDLE", false, undefined);
@@ -328,6 +337,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PARTICLE");
         this.receiver.subscribe("DYING");
         this.receiver.subscribe(HW3Events.INVINCIBILITY);
+        this.receiver.subscribe(HW3Events.KILL_BOSS);
     }
 
     protected initializeUI(): void {
@@ -493,12 +503,12 @@ export default abstract class HW3Level extends Scene {
         this.enemyWeaponSystem = new PlayerWeapon(50, Vec2.ZERO, 1000, 3, 0, 50);
         this.enemyGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
 
-        // Add the player to the scene
+        // Add the enemy to the scene
         this.enemy = this.add.animatedSprite(key, HW3Layers.PRIMARY);
         this.enemy.scale.set(0.5, 0.5);
         this.enemy.position.copy(this.enemySpawn);
         
-        // Give the player physics
+        // Give the enemy physics
         this.enemy.addPhysics(new AABB(this.enemy.position.clone(), this.enemy.boundary.getHalfSize().clone()));
 
         this.enemy.addAI(EnemyController, {
