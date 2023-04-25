@@ -9,6 +9,7 @@ import EnemyState from "./EnemyState";
 export default class Dash extends EnemyState {
 
 	public onEnter(options: Record<string, any>): void {
+        return;
         // console.log("DASH ENTER");
         if(Input.isPressed(HW3Controls.MOVE_RIGHT)) {
             this.parent.velocity.x = 1000;

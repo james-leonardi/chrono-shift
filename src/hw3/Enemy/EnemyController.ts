@@ -100,12 +100,13 @@ export default class EnemyController extends StateMachineAI {
     protected receiver: Receiver;
     protected player: HW3AnimatedSprite;
 
-    protected enable: boolean = true;
+    protected enable: boolean;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
         this.owner = owner;
         this.player = options.player;
+        this.enable = options.enemy_in_present;
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
@@ -200,7 +201,7 @@ export default class EnemyController extends StateMachineAI {
 
         // DO AI STUFF HERE
         if (this.enable) {
-            this.velocity.x = 1;
+            // console.log(this.owner.position.x + " " + this.owner.position.y);
         }
 
         // const tile = this.tilemap.getColRowAt(this.owner.position);

@@ -24,7 +24,7 @@ export default class Level1 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
-    public static readonly ENEMY_SPAWN = new Vec2(132, 608);
+    public static readonly ENEMY_SPAWN = new Vec2(100, 3480);
     public static readonly ENEMY_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -66,6 +66,7 @@ export default class Level1 extends HW3Level {
 
         this.enemySpriteKey = Level1.ENEMY_SPRITE_KEY;
         this.enemySpawn = Level1.ENEMY_SPAWN;
+        this.enemy_in_present = false;
 
         // Music and sound
         this.levelMusicKey = Level1.LEVEL_MUSIC_KEY

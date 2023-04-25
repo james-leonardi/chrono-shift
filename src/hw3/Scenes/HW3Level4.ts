@@ -65,6 +65,7 @@ export default class Level4 extends HW3Level {
 
         this.enemySpriteKey = Level4.ENEMY_SPRITE_KEY;
         this.enemySpawn = Level4.ENEMY_SPAWN;
+        this.enemy_in_present = true;
 
         // Music and sound
         this.levelMusicKey = Level4.LEVEL_MUSIC_KEY

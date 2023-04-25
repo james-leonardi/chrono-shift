@@ -116,6 +116,7 @@ export default abstract class HW3Level extends Scene {
     
     protected enemyWeaponSystem: PlayerWeapon;
     protected enemyGrappleSystem: PlayerGrapple;
+    protected enemy_in_present: boolean;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
@@ -504,7 +505,8 @@ export default abstract class HW3Level extends Scene {
             weaponSystem: this.enemyWeaponSystem,
             grappleSystem: this.enemyGrappleSystem,
             tilemap: "Destructable",
-            player: this.player
+            player: this.player,
+            enemy_in_present: this.enemy_in_present
         });
     }
     /**
