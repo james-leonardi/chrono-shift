@@ -26,6 +26,12 @@ export const HW3Events = {
     // Event fired when user inputs level change cheat code. Data = { level }
     LEVEL_CHANGE: "LEVEL_CHANGE",
 
-    INVINCIBILITY: "INVINCIBILITY"
+    INVINCIBILITY: "INVINCIBILITY",
+
+    // Event fired every time there is a perspective change (switching/peeking)
+    PERSPECTIVE: "PERSPECTIVE",
+
+    // Event fired when the player kills an enemy
+    KILL_BOSS: "KILL_BOSS"
     
 } as const;
