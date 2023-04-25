@@ -23,7 +23,7 @@ export default class PlayerWeapon extends ParticleSystem {
         particle.color = Color.MAGENTA;
         particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
         particle.setTrigger(HW3PhysicsGroups.ENEMY, HW3Events.KILL_BOSS, undefined);
-        // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
+        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

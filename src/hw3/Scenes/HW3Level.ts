@@ -122,14 +122,14 @@ export default abstract class HW3Level extends Scene {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
             groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
             collisions: [
-            /* GROUND   */  [0,1,1,0,0,0,0],
-            /* PLAYER   */  [1,1,1,1,1,0,1],
-            /* ENEMY    */  [1,1,1,1,1,0,1],
-            /* WEAPON   */  [1,0,0,1,0,1,1],
-            /* DESTRUCT */  [0,1,1,0,0,0,0],
-            /* DEATH    */  [0,1,0,0,0,0,0],
-            /* GRAPPLE  */  [0,0,1,0,0,0,0],
-            /* ICE      */  [0,1,1,0,0,0,0]]
+            /* GROUND   */  [0,1,1,1,0,0,0,0],
+            /* PLAYER   */  [1,0,1,0,1,1,0,1],
+            /* ENEMY    */  [1,1,0,0,1,1,0,1], // eventually add grapple to enemy
+            /* WEAPON   */  [1,0,0,0,1,0,1,1], // decouple grapple and weapon
+            /* DESTRUCT */  [0,1,1,1,0,0,0,0],
+            /* DEATH    */  [0,1,1,0,0,0,0,0],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0], // eventually add grapple to enemy
+            /* ICE      */  [0,1,1,1,0,0,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
