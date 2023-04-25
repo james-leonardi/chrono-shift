@@ -34,7 +34,7 @@ export default class Idle extends EnemyState {
         } 
         // Otherwise, do nothing (keep idling)
         else {
-            // Update the horizontal velocity of the plaenemyyer
+            // Update the horizontal velocity of the enemy
             const friction = this.owner.onGround ? 7 : 3;
             this.parent.velocity.x = (this.parent.velocity.x > 0) ? Math.max(this.parent.velocity.x - friction, 0) : Math.min(this.parent.velocity.x + friction, 0);
             // Update the vertical velocity of the enemy

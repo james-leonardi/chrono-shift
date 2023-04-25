@@ -98,7 +98,9 @@ export default class EnemyController extends StateMachineAI {
     protected dash: boolean = true;
     protected invincible: boolean = false;
     protected receiver: Receiver;
-    protected player: HW3AnimatedSprite;  // todo: how to get the player?
+    protected player: HW3AnimatedSprite;
+
+    protected enable: boolean = true;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
@@ -112,8 +114,10 @@ export default class EnemyController extends StateMachineAI {
         this.owner.setGroup(HW3PhysicsGroups.PLAYER);  // Todo: Change??
 
         this.receiver = new Receiver();
-        this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
-        this.receiver.subscribe("DYING");
+        this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
+        this.receiver.subscribe(HW3Events.PERSPECTIVE);
+        // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
+        // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
         this.velocity = Vec2.ZERO;
@@ -135,27 +139,40 @@ export default class EnemyController extends StateMachineAI {
 
     handleEvent(event: GameEvent): void {
         switch (event.type) {
-            case HW3Events.GRAPPLE_HIT: {
-                console.log("Grapple!");
-                //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
-                this.velocity.mult(Vec2.ZERO);
-                this.velocity.add(event.data.get('velocity'));
-                /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
-                else {
-                    this.velocity.x += event.data.get('velocity').x;
-                    this.velocity.y += event.data.get('velocity').y*2;
-                } */
-                /* this.changeState(EnemyStates.IDLE); */
-                /* this.owner.move(event.data.get('velocity')); */
-                break;
+            case HW3Events.PERSPECTIVE: {  // Todo: potentially differentiate peeking and switching
+                if (this.enable) {
+                    this.enable = false;
+                    this.owner.freeze();
+                    this.owner.disablePhysics();
+                    this.owner.visible = false;
+                } else {
+                    this.enable = true;
+                    this.owner.unfreeze();
+                    this.owner.enablePhysics();
+                    this.owner.visible = true;
+                }
             }
-            case "DYING": {
-                if(!this.invincible) this.changeState(EnemyStates.DEAD);
-                break;
-            }
+            // case HW3Events.GRAPPLE_HIT: {
+            //     console.log("Grapple!");
+            //     //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
+            //     this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
+            //     this.velocity.mult(Vec2.ZERO);
+            //     this.velocity.add(event.data.get('velocity'));
+            //     /* if (this.owner.onGround || this.velocity.y < 0) this.velocity = event.data.get('velocity');
+            //     else {
+            //         this.velocity.x += event.data.get('velocity').x;
+            //         this.velocity.y += event.data.get('velocity').y*2;
+            //     } */
+            //     /* this.changeState(EnemyStates.IDLE); */
+            //     /* this.owner.move(event.data.get('velocity')); */
+            //     break;
+            // }
+            // case "DYING": {
+            //     if(!this.invincible) this.changeState(EnemyStates.DEAD);
+            //     break;
+            // }
             default: {
-                console.log("DEFAULT");
+                // console.log("DEFAULT");
             }
         }
     }
@@ -172,114 +189,119 @@ export default class EnemyController extends StateMachineAI {
     /** 
      * Gets the direction of the mouse from the enemy's position as a Vec2
      */
-    public get faceDir(): Vec2 { console.log(this.player.position.x); return this.owner.position.dirTo(this.player.position); }
+    public get faceDir(): Vec2 { return this.owner.position.dirTo(this.player.position); }
 
     public update(deltaT: number): void {
-        const d = this.faceDir;
         if (this.mou_shindeiru) return;
 		super.update(deltaT);
         while (this.receiver.hasNextEvent()) {
             this.handleEvent(this.receiver.getNextEvent());
         }
-        const tile = this.tilemap.getColRowAt(this.owner.position);
-        if (!this.peeking && !this.invincible && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
-            this.emitter.fireEvent("DYING"); this.changeState(EnemyStates.DEAD); this.mou_shindeiru = true; return;
+
+        // DO AI STUFF HERE
+        if (this.enable) {
+            this.velocity.x = 1;
         }
 
-        // If the enemy hits the attack button and the weapon system isn't running, restart the system and fire!
+        // const tile = this.tilemap.getColRowAt(this.owner.position);
+        // if (!this.peeking && !this.invincible && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+        //     this.emitter.fireEvent("DYING"); this.changeState(EnemyStates.DEAD); this.mou_shindeiru = true; return;
+        // }
 
-        // Detect right-click and handle with grapple firing
-        if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
-            if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
-                this.grapple_last_used = Date.now();
-                this.grapple.setDir(Input.getGlobalMousePosition());
-                this.grapple.startSystem(500, 0, this.owner.position);
-                //this.grapple.render_line(this.owner.position);
-                this.owner.animation.play("GRAPPLE", false, undefined);
-                this.owner.animation.queue("IDLE", false, undefined);
-                /* console.log("GRAPPLE_" + Math.floor(Math.random() * 3)); */
-                /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "GRAPPLE_" + Math.floor(Math.random()*3), loop: false, holdReference: false }); */
+        // // If the enemy hits the attack button and the weapon system isn't running, restart the system and fire!
 
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
-            } else console.log("CD!");
-        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
-            // Start the particle system at the enemy's current position
-            this.weapon.startSystem(500, 0, this.owner.position);
-            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
-            this.owner.animation.queue("IDLE", false, undefined);
-        }
+        // // Detect right-click and handle with grapple firing
+        // if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
+        //     if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
+        //         this.grapple_last_used = Date.now();
+        //         this.grapple.setDir(Input.getGlobalMousePosition());
+        //         this.grapple.startSystem(500, 0, this.owner.position);
+        //         //this.grapple.render_line(this.owner.position);
+        //         this.owner.animation.play("GRAPPLE", false, undefined);
+        //         this.owner.animation.queue("IDLE", false, undefined);
+        //         /* console.log("GRAPPLE_" + Math.floor(Math.random() * 3)); */
+        //         /* this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "GRAPPLE_" + Math.floor(Math.random()*3), loop: false, holdReference: false }); */
+
+        //         this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
+        //     } else console.log("CD!");
+        // } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
+        //     // Start the particle system at the enemy's current position
+        //     this.weapon.startSystem(500, 0, this.owner.position);
+        //     this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
+        //     this.owner.animation.queue("IDLE", false, undefined);
+        // }
         
-        /* if (this.grapple.isSystemRunning())  */this.grapple.renderLine(this.owner.position/* , 1 */);
+        // /* if (this.grapple.isSystemRunning())  */this.grapple.renderLine(this.owner.position/* , 1 */);
 
-        /* this.grapple.isSystemRunning() ?
-            this.grapple.renderLine(this.owner.position, 1) :
-            this.grapple.renderLine(this.owner.position, 0) */
+        // /* this.grapple.isSystemRunning() ?
+        //     this.grapple.renderLine(this.owner.position, 1) :
+        //     this.grapple.renderLine(this.owner.position, 0) */
 
-        // Handle switching when the switch key is pressed
-        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
-            if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
-                if (!this.switchedQ) { this.switchedQ = true; return }
-                this.switchedQ = false;
-                this.switch_last_used = Date.now();
-                this.emitter.fireEvent("SWITCH");
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
-                const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
-                console.log(`New pos: ${newPos}`);
-                const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
-                if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
-                    console.log("COLLIDABLE!");
-                } else {
-                    console.log("Switch!");
-                    console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
-                    this.owner.position.y += newPos;
-                    console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
-                }
-                /* this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x; */
-            } else console.log("CD!");
-        }
+        // // Handle switching when the switch key is pressed
+        // if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
+        //     if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
+        //         if (!this.switchedQ) { this.switchedQ = true; return }
+        //         this.switchedQ = false;
+        //         this.switch_last_used = Date.now();
+        //         this.emitter.fireEvent("SWITCH");
+        //         this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
+        //         const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
+        //         console.log(`New pos: ${newPos}`);
+        //         const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
+        //         if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
+        //             console.log("COLLIDABLE!");
+        //         } else {
+        //             console.log("Switch!");
+        //             console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
+        //             this.owner.position.y += newPos;
+        //             console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
+        //         }
+        //         /* this.owner.position.x += (this.owner.position.x < this.switch_dist_x) ? this.switch_dist_x : -this.switch_dist_x; */
+        //     } else console.log("CD!");
+        // }
 
-        // Handle peeking
-        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
+        // // Handle peeking
+        // if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
             
-            const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
-            const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
-            /* if (!(this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) { */
-                this.peeking = true
-                this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
-                this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
-            /* } */
-        } 
-        if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
-            this.peeking = false;
-            this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
-            this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
-        }
+        //     const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
+        //     const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
+        //     /* if (!(this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) { */
+        //         this.peeking = true
+        //         this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
+        //         this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
+        //     /* } */
+        // } 
+        // if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
+        //     this.peeking = false;
+        //     this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
+        //     this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
+        // }
 
-        // Invincibility Cheat
-        if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
-            this.is_invincible = !this.is_invincible;
-            console.log("Invincibility: " + this.invincible);
-        }
+        // // Invincibility Cheat
+        // if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
+        //     this.is_invincible = !this.is_invincible;
+        //     console.log("Invincibility: " + this.invincible);
+        // }
 
-        // Level Change Cheats
-        if (Input.isJustPressed(HW3Controls.LEVEL1)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "1"});
-        }
-        else if(Input.isJustPressed(HW3Controls.LEVEL2)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "2"});
-        }
-        else if(Input.isJustPressed(HW3Controls.LEVEL3)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "3"});
-        }
-        else if(Input.isJustPressed(HW3Controls.LEVEL4)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "4"});
-        }
-        else if(Input.isJustPressed(HW3Controls.LEVEL5)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "5"});
-        }
-        else if(Input.isJustPressed(HW3Controls.LEVEL6)) {
-            this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "6"});
-        }
+        // // Level Change Cheats
+        // if (Input.isJustPressed(HW3Controls.LEVEL1)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "1"});
+        // }
+        // else if(Input.isJustPressed(HW3Controls.LEVEL2)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "2"});
+        // }
+        // else if(Input.isJustPressed(HW3Controls.LEVEL3)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "3"});
+        // }
+        // else if(Input.isJustPressed(HW3Controls.LEVEL4)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "4"});
+        // }
+        // else if(Input.isJustPressed(HW3Controls.LEVEL5)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "5"});
+        // }
+        // else if(Input.isJustPressed(HW3Controls.LEVEL6)) {
+        //     this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "6"});
+        // }
 	}
 
     public get velocity(): Vec2 { return this._velocity; }
