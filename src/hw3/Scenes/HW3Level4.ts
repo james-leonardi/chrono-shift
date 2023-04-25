@@ -22,6 +22,9 @@ export default class Level4 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
+
     public static readonly TILEMAP_KEY = "LEVEL4";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L4.json";
     public static readonly TILEMAP_SCALE = new Vec2(2, 2);
@@ -82,6 +85,7 @@ export default class Level4 extends HW3Level {
         this.load.tilemap(this.tilemapKey, Level4.TILEMAP_PATH);
         // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level4.PLAYER_SPRITE_PATH);
+        this.load.spritesheet(this.enemySpriteKey, Level4.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level4.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level4.JUMP_AUDIO_PATH);

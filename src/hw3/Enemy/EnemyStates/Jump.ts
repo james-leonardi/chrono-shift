@@ -1,53 +1,53 @@
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import { GameEventType } from "../../../Wolfie2D/Events/GameEventType";
-import { PlayerAnimations, PlayerStates } from "../EnemyController";
+import { EnemyAnimations, EnemyStates } from "../EnemyController";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 
-import PlayerState from "./EnemyState";
+import EnemyState from "./EnemyState";
 
-export default class Jump extends PlayerState {
+export default class Jump extends EnemyState {
 
 	public onEnter(options: Record<string, any>): void {
         // console.log("JUMP ENTER");
-        // Get the jump audio key for the player
+        // Get the jump audio key for the enemy
         let jumpAudio = this.owner.getScene().getJumpAudioKey();
         /* console.log(this.parent.velocity.x); */
-        /* if (this.parent.velocity.x > 0) this.owner.tweens.play(PlayerTweens.FLIPL);
-        else */ //this.owner.tweens.play(PlayerTweens.FLIPR);
-        this.owner.animation.play(PlayerAnimations.JUMP);
-        // Give the player a burst of upward momentum
+        /* if (this.parent.velocity.x > 0) this.owner.tweens.play(EnemyTweens.FLIPL);
+        else */ //this.owner.tweens.play(EnemyTweens.FLIPR);
+        this.owner.animation.play(EnemyAnimations.JUMP);
+        // Give the enemy a burst of upward momentum
         this.parent.velocity.y = -200;
-        // Play the jump sound for the player
+        // Play the jump sound for the enemy
 		this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: jumpAudio, loop: false, holdReference: false});
 	}
 
 	public update(deltaT: number): void {
-        // Update the direction the player is facing
+        // Update the direction the enemy is facing
         super.update(deltaT);
 
-        // If the player hit the ground, start idling
+        // If the enemy hit the ground, start idling
         if (this.owner.onGround) {
-			this.finished(PlayerStates.IDLE);
+			this.finished(EnemyStates.IDLE);
 		} 
-        // If the player hit the ceiling or their velocity is >= to zero, 
+        // If the enemy hit the ceiling or their velocity is >= to zero, 
         else if(this.owner.onCeiling || this.parent.velocity.y >= 0){
-            this.finished(PlayerStates.FALL);
+            this.finished(EnemyStates.FALL);
 		}
         else if(Input.isJustPressed(HW3Controls.DASH) && (Input.isPressed(HW3Controls.MOVE_LEFT) || Input.isPressed(HW3Controls.MOVE_RIGHT)) && this.parent.has_dash) {
             this.parent.has_dash = false;
-            this.finished(PlayerStates.DASH);
+            this.finished(EnemyStates.DASH);
         }
-        // Otherwise move the player
+        // Otherwise move the enemy
         else {
-            // Get the input direction from the player
+            // Get the input direction from the enemy
             let dir = this.parent.inputDir;
-            // Update the horizontal velocity of the player
+            // Update the horizontal velocity of the enemy
             if (dir.x !== 0) this.parent.velocity.x += dir.x * this.parent.speed/3.5 - 0.3*this.parent.velocity.x;
-            // Update the vertical velocity of the player
+            // Update the vertical velocity of the enemy
             if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
             this.parent.velocity.y += this.gravity*deltaT;
-            // Move the player
+            // Move the enemy
             this.owner.move(this.parent.velocity.scaled(deltaT));
         }
 	}

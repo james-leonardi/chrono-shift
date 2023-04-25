@@ -2,21 +2,21 @@ import State from "../../../Wolfie2D/DataTypes/State/State";
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
 import HW3AnimatedSprite from "../../Nodes/HW3AnimatedSprite";
-import PlayerController from "../EnemyController";
+import EnemyController from "../EnemyController";
 
 /**
- * An abstract state for the PlayerController 
+ * An abstract state for the EnemyController 
  */
-export default abstract class PlayerState extends State {
+export default abstract class EnemyState extends State {
 
-    protected parent: PlayerController;
+    protected parent: EnemyController;
 	protected owner: HW3AnimatedSprite;
 	protected gravity: number;
 
-	public constructor(parent: PlayerController, owner: HW3AnimatedSprite){
+	public constructor(parent: EnemyController, owner: HW3AnimatedSprite){
 		super(parent);
 		this.owner = owner;
-        this.owner.setGroup("PLAYER");
+        this.owner.setGroup("PLAYER");  // todo: change??
         this.gravity = 500;
 	}
 
@@ -30,13 +30,13 @@ export default abstract class PlayerState extends State {
         switch(event.type) {
             // Default - throw an error
             default: {
-                throw new Error(`Unhandled event in PlayerState of type ${event.type}`);
+                throw new Error(`Unhandled event in EnemyState of type ${event.type}`);
             }
         }
 	}
 
 	public update(deltaT: number): void {
-        // This updates the direction the player sprite is facing (left or right)
+        // This updates the direction the enemy sprite is facing (left or right)
         let direction = this.parent.inputDir;
 		if(direction.x !== 0){
 			this.owner.invertX = MathUtils.sign(direction.x) < 0;

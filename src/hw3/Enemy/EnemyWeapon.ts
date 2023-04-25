@@ -9,12 +9,12 @@ import Input from "../../Wolfie2D/Input/Input";
  
 
 /**
- * // TODO get the particles to move towards the mouse when the player attacks
+ * // TODO get the particles to move towards the mouse when the enemy attacks
  * 
- * The particle system used for the player's attack. Particles in the particle system should
- * be spawned at the player's position and fired in the direction of the mouse's position.
+ * The particle system used for the enemy's attack. Particles in the particle system should
+ * be spawned at the enemy's position and fired in the direction of the mouse's position.
  */
-export default class PlayerWeapon extends ParticleSystem {
+export default class EnemyWeapon extends ParticleSystem {
 
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
@@ -26,7 +26,7 @@ export default class PlayerWeapon extends ParticleSystem {
     public isSystemRunning(): boolean { return this.systemRunning; }
 
     /**
-     * Sets the animations for a particle in the player's weapon
+     * Sets the animations for a particle in the enemy's weapon
      * @param particle the particle to give the animation to
      */
     public setParticleAnimation(particle: Particle) {
