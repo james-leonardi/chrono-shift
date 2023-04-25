@@ -68,6 +68,9 @@ export default abstract class HW3Level extends Scene {
     protected levelEndPosition: Vec2;
     protected levelEndHalfSize: Vec2;
     protected levelEndArea: Rect;
+    protected levelEnd2Position: Vec2;
+    protected levelEnd2HalfSize: Vec2;
+    protected levelEnd2Area: Rect;
     protected nextLevel: new (...args: any) => Scene;
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
@@ -488,6 +491,11 @@ export default abstract class HW3Level extends Scene {
         this.levelEndArea.addPhysics(undefined, undefined, false, true);
         this.levelEndArea.setTrigger(HW3PhysicsGroups.PLAYER, HW3Events.PLAYER_ENTERED_LEVEL_END, null);
         this.levelEndArea.color = new Color(255, 0, 255, .20);
+
+        this.levelEnd2Area = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: this.levelEnd2Position, size: this.levelEnd2HalfSize });
+        this.levelEnd2Area.addPhysics(undefined, undefined, false, true);
+        this.levelEnd2Area.setTrigger(HW3PhysicsGroups.PLAYER, HW3Events.PLAYER_ENTERED_LEVEL_END, null);
+        this.levelEnd2Area.color = new Color(255, 0, 255, .20);
         
     }
 

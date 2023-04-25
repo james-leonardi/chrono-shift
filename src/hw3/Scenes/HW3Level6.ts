@@ -72,6 +72,8 @@ export default class Level6 extends HW3Level {
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
+        this.levelEnd2Position = new Vec2(54, 132).mult(this.tilemapScale);
+        this.levelEnd2HalfSize = new Vec2(32, 32).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
 
