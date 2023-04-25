@@ -22,6 +22,7 @@ export default class Level5 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPAWN = new Vec2(132, 608);
     public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -61,10 +62,11 @@ export default class Level5 extends HW3Level {
         this.deathLayerKey = Level5.DEATH_LAYER_KEY;
         this.iceLayerKey = Level5.ICE_LAYER_KEY;
 
-        // Set the key for the player's sprite
         this.playerSpriteKey = Level5.PLAYER_SPRITE_KEY;
-        // Set the player's spawn
         this.playerSpawn = Level5.PLAYER_SPAWN;
+
+        this.enemySpriteKey = Level5.ENEMY_SPRITE_KEY;
+        this.enemySpawn = Level5.ENEMY_SPAWN;
 
         // Music and sound
         this.levelMusicKey = Level5.LEVEL_MUSIC_KEY

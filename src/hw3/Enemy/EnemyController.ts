@@ -111,7 +111,7 @@ export default class EnemyController extends StateMachineAI {
         this.grapple = options.grappleSystem;
         this.grapple_last_used = 0;
         this.switch_last_used = 0;
-        this.owner.setGroup(HW3PhysicsGroups.PLAYER);  // Todo: Change??
+        this.owner.setGroup(HW3PhysicsGroups.ENEMY);
 
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?

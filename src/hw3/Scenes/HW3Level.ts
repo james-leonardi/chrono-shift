@@ -62,6 +62,7 @@ export default abstract class HW3Level extends Scene {
     /** Enemy sprite */
     protected enemySpriteKey: string;
     protected enemy: AnimatedSprite;
+    protected enemySpawn: Vec2;
 
     private healthLabel: Label;
 	private healthBar: Label;
@@ -118,10 +119,11 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
             collisions: [
             /* GROUND   */  [0,1,1,0,0,0,0],
-            /* PLAYER   */  [1,0,0,1,1,0,1],
+            /* PLAYER   */  [1,1,1,1,1,0,1],
+            /* ENEMY    */  [1,1,1,1,1,0,1],
             /* WEAPON   */  [1,0,0,1,0,1,1],
             /* DESTRUCT */  [0,1,1,0,0,0,0],
             /* DEATH    */  [0,1,0,0,0,0,0],
@@ -493,7 +495,7 @@ export default abstract class HW3Level extends Scene {
         // Add the player to the scene
         this.enemy = this.add.animatedSprite(key, HW3Layers.PRIMARY);
         this.enemy.scale.set(0.5, 0.5);
-        this.enemy.position.copy(this.playerSpawn).add(new Vec2(100, 0));
+        this.enemy.position.copy(this.enemySpawn);
         
         // Give the player physics
         this.enemy.addPhysics(new AABB(this.enemy.position.clone(), this.enemy.boundary.getHalfSize().clone()));

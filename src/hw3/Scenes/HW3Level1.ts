@@ -24,6 +24,7 @@ export default class Level1 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPAWN = new Vec2(132, 608);
     public static readonly ENEMY_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -64,6 +65,7 @@ export default class Level1 extends HW3Level {
         this.playerSpawn = Level1.PLAYER_SPAWN;
 
         this.enemySpriteKey = Level1.ENEMY_SPRITE_KEY;
+        this.enemySpawn = Level1.ENEMY_SPAWN;
 
         // Music and sound
         this.levelMusicKey = Level1.LEVEL_MUSIC_KEY
@@ -80,7 +82,6 @@ export default class Level1 extends HW3Level {
     public loadScene(): void {
         this.load.tilemap(this.tilemapKey, Level1.TILEMAP_PATH);
         this.load.spritesheet(this.playerSpriteKey, Level1.PLAYER_SPRITE_PATH);
-
         this.load.spritesheet(this.enemySpriteKey, Level1.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level1.LEVEL_MUSIC_PATH);
