@@ -16,6 +16,11 @@
         "source": "/benchmark2",
         "destination": "/benchmark2/dist/index.html",
         "type": 301
+      },
+      {
+        "source": "/benchmark3",
+        "destination": "/benchmark3/dist/index.html",
+        "type": 301
       }
     ]
   }
