@@ -9,34 +9,15 @@ import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 
- 
-
-/**
- * // TODO get the particles to move towards the mouse when the player attacks
- * 
- * The particle system used for the player's attack. Particles in the particle system should
- * be spawned at the player's position and fired in the direction of the mouse's position.
- */
 export default class PlayerGrapple extends ParticleSystem {
 
     private grapple_length: number = 225;
-
     private grapple_line: Line
-
     private direction: Vec2;
 
-    public getPool(): Readonly<Array<Particle>> {
-        return this.particlePool;
-    }
-
-    /**
-     * @returns true if the particle system is running; false otherwise.
-     */
+    public getPool(): Readonly<Array<Particle>> { return this.particlePool; }
     public isSystemRunning(): boolean { return this.systemRunning; }
-
-    public setDir(newDirection: Vec2) {
-        this.direction = newDirection;
-    }
+    public setDir(newDirection: Vec2) { this.direction = newDirection; }
 
     /**
      * Sets the animations for a particle in the player's weapon
@@ -72,7 +53,7 @@ export default class PlayerGrapple extends ParticleSystem {
         this.grapple_line.thickness = 8;
     }
 
-    public renderLine(start: Vec2/* , alpha: number */) {
+    public renderLine(start: Vec2) {
         this.grapple_line.alpha = (this.particlePool[0].visible) ? 1 : 0;
         if (!this.grapple_line.alpha) return;
         this.grapple_line.start = start.clone();

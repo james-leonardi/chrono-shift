@@ -1,6 +1,6 @@
 import AABB from "../../Wolfie2D/DataTypes/Shapes/AABB";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
-import HW3Level from "./HW3Level";
+import HW3Level, { HW3Layers } from "./HW3Level";
 import RenderingManager from "../../Wolfie2D/Rendering/RenderingManager";
 import { GameEventType } from "../../Wolfie2D/Events/GameEventType";
 import SceneManager from "../../Wolfie2D/Scene/SceneManager";
@@ -13,10 +13,11 @@ import Level3 from "./HW3Level3";
 import Level4 from "./HW3Level4";
 import Level5 from "./HW3Level5";
 import Level6 from "./HW3Level6";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
+import Color from "../../Wolfie2D/Utils/Color";
+import Rect from "../../Wolfie2D/Nodes/Graphics/Rect";
 
-/**
- * The first level for HW4 - should be the one with the grass and the clouds.
- */
 export default class Level1 extends HW3Level {
 
     public static readonly PLAYER_SPAWN = new Vec2(32, 608);
@@ -53,16 +54,13 @@ export default class Level1 extends HW3Level {
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, options);
 
-        // Set the keys for the different layers of the tilemap
         this.tilemapKey = Level1.TILEMAP_KEY;
         this.tilemapScale = Level1.TILEMAP_SCALE;
         this.destructibleLayerKey = Level1.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level1.WALLS_LAYER_KEY;
         this.deathLayerKey = Level1.DEATH_LAYER_KEY;
 
-        // Set the key for the player's sprite
         this.playerSpriteKey = Level1.PLAYER_SPRITE_KEY;
-        // Set the player's spawn
         this.playerSpawn = Level1.PLAYER_SPAWN;
 
         this.enemySpriteKey = Level1.ENEMY_SPRITE_KEY;
@@ -74,20 +72,15 @@ export default class Level1 extends HW3Level {
         this.damagedAudioKey = Level1.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level1.DEADGE_AUDIO_KEY;
 
-        // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
 
-    /**
-     * Load in our resources for level 1
-     */
     public loadScene(): void {
-        // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level1.TILEMAP_PATH);
-        // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level1.PLAYER_SPRITE_PATH);
+
         this.load.spritesheet(this.enemySpriteKey, Level1.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level1.LEVEL_MUSIC_PATH);
@@ -107,33 +100,89 @@ export default class Level1 extends HW3Level {
         //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
-    /**
-     * Unload resources for level 1
-     */
+    public initializeTilemap(): void {
+        super.initializeTilemap();
+
+        const tutorialMoveTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(100, 620), size: new Vec2(200, 100) });
+        tutorialMoveTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialMoveTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_MOVE", null);
+        tutorialMoveTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialJumpTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(420, 620), size: new Vec2(150, 100) });
+        tutorialJumpTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialJumpTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_JUMP", null);
+        tutorialJumpTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialDashTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(700, 620), size: new Vec2(200, 100) });
+        tutorialDashTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialDashTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_DASH", null);
+        tutorialDashTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialSwitchTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1050, 620), size: new Vec2(200, 100) });
+        tutorialSwitchTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialSwitchTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH", null);
+        tutorialSwitchTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPeekTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1250, 2860), size: new Vec2(200, 100) });
+        tutorialPeekTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPeekTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PEEK", null);
+        tutorialPeekTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialSwitch2 = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1550, 2860), size: new Vec2(200, 100) });
+        tutorialSwitch2.addPhysics(undefined, undefined, false, true);
+        tutorialSwitch2.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SWITCH2", null);
+        tutorialSwitch2.color = new Color(255, 0, 255, 0);
+
+        const tutorialFallTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1600, 620), size: new Vec2(200, 100) });
+        tutorialFallTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialFallTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_FALL", null);
+        tutorialFallTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialGrappleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(1650, 1350), size: new Vec2(200, 100) });
+        tutorialGrappleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialGrappleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_GRAPPLE", null);
+        tutorialGrappleTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialPuzzleTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(450, 1260), size: new Vec2(200, 100) });
+        tutorialPuzzleTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialPuzzleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PUZZLE", null);
+        tutorialPuzzleTrigger.color = new Color(255, 0, 255, 0);
+    }
+
+    protected subscribeToEvents(): void {
+        super.subscribeToEvents();
+        this.receiver.subscribe("TUTORIAL_MOVE");
+        this.receiver.subscribe("TUTORIAL_JUMP");
+        this.receiver.subscribe("TUTORIAL_DASH");
+        this.receiver.subscribe("TUTORIAL_SWITCH");
+        this.receiver.subscribe("TUTORIAL_PEEK");
+        this.receiver.subscribe("TUTORIAL_SWITCH2");
+        this.receiver.subscribe("TUTORIAL_FALL");
+        this.receiver.subscribe("TUTORIAL_GRAPPLE");
+        this.receiver.subscribe("TUTORIAL_PUZZLE");
+    }
+
     public unloadScene(): void {
-        // TODO decide which resources to keep/cull 
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level1.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
         this.load.keepAudio(this.tileDestroyedAudioKey);
         this.load.keepAudio(this.damagedAudioKey);
         this.load.keepAudio(this.deadgeAudioKey);
         this.load.keepSpritesheet(this.playerSpriteKey);
+        this.load.keepAudio("ZIP_0");
+        this.load.keepAudio("ZIP_1");
+        this.load.keepAudio("PSHH");
+        this.load.keepAudio("SWITCH_1");
+        this.load.keepAudio("SWITCH_2");
     }
 
     public startScene(): void {
         super.startScene();
-        // Set the next level to be Level2
         this.nextLevel = HW4Level2;
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
     }
 
-    /**
-     * I had to override this method to adjust the viewport for the first level. I screwed up 
-     * when I was making the tilemap for the first level is what it boils down to.
-     * 
-     * - Peter
-     */
     protected initializeViewport(): void {
         super.initializeViewport();
         this.viewport.setBounds(0, 0, 2752, 4096);
@@ -141,28 +190,126 @@ export default class Level1 extends HW3Level {
 
     protected handleEvent(event: GameEvent): void {
         super.handleEvent(event);
-        if(event.type == HW3Events.LEVEL_CHANGE) {
-            switch(event.data.get("level")) {
-                case "2": {
-                    console.log("CHEAT: Changing to Level 2");
-                    this.sceneManager.changeToScene(Level2);
+        switch(event.type) {
+            case HW3Events.LEVEL_CHANGE: {
+                switch (event.data.get("level")) {
+                    case "2": {
+                        console.log("CHEAT: Changing to Level 2");
+                        this.sceneManager.changeToScene(Level2);
+                        break;
+                    }
+                    case "3": {
+                        console.log("CHEAT: Changing to Level 3");
+                        this.sceneManager.changeToScene(Level3);
+                        break;
+                    }
+                    case "4": {
+                        console.log("CHEAT: Changing to Level 4");
+                        this.sceneManager.changeToScene(Level4);
+                        break;
+                    }
+                    case "5": {
+                        console.log("CHEAT: Changing to Level 5");
+                        this.sceneManager.changeToScene(Level5);
+                        break;
+                    }
+                    case "6": {
+                        console.log("CHEAT: Changing to Level 6");
+                        this.sceneManager.changeToScene(Level6);
+                        break;
+                    }
                 }
-                case "3": {
-                    console.log("CHEAT: Changing to Level 3");
-                    this.sceneManager.changeToScene(Level3);
+                break;
+            }
+            case "TUTORIAL_MOVE": {
+                this.tutorialText.text = "Press A and D to move left and right";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "4": {
-                    console.log("CHEAT: Changing to Level 4");
-                    this.sceneManager.changeToScene(Level4);
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_JUMP": {
+                this.tutorialText.text = "Press W or Space to jump";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "5": {
-                    console.log("CHEAT: Changing to Level 5");
-                    this.sceneManager.changeToScene(Level5);
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_DASH": {
+                this.tutorialText.text = "Dash in mid-air with SHIFT+A or SHIFT+D";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
-                case "6": {
-                    console.log("CHEAT: Changing to Level 6");
-                    this.sceneManager.changeToScene(Level6);
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_SWITCH": {
+                this.tutorialText.text = "Press S to SWITCH between past & present";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
                 }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_PEEK": {
+                this.tutorialText.text = "Hold E to PEEK into the other dimension";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_SWITCH2": {
+                this.tutorialText.text = "Press S to go back to the present";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_FALL": {
+                this.tutorialText.text = "There's no fall damage, jump on down!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_GRAPPLE": {
+                this.tutorialText.text = "RIGHT CLICK to GRAPPLE!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_PUZZLE": {
+                this.tutorialText.text = "GRAPPLE then SWITCH quickly!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
             }
         }
     }
