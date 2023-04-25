@@ -5,16 +5,17 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import RandUtils from "../../Wolfie2D/Utils/RandUtils";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../Wolfie2D/Input/Input";
+import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 
  
 
 /**
- * // TODO get the particles to move towards the mouse when the player attacks
+ * // TODO get the particles to move towards the mouse when the enemy attacks
  * 
- * The particle system used for the player's attack. Particles in the particle system should
- * be spawned at the player's position and fired in the direction of the mouse's position.
+ * The particle system used for the enemy's attack. Particles in the particle system should
+ * be spawned at the enemy's position and fired in the direction of the mouse's position.
  */
-export default class PlayerWeapon extends ParticleSystem {
+export default class EnemyWeapon extends ParticleSystem {
 
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
@@ -26,7 +27,7 @@ export default class PlayerWeapon extends ParticleSystem {
     public isSystemRunning(): boolean { return this.systemRunning; }
 
     /**
-     * Sets the animations for a particle in the player's weapon
+     * Sets the animations for a particle in the enemy's weapon
      * @param particle the particle to give the animation to
      */
     public setParticleAnimation(particle: Particle) {
@@ -37,8 +38,9 @@ export default class PlayerWeapon extends ParticleSystem {
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
         particle.color = Color.MAGENTA;
-        particle.setGroup("WEAPON");
-        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
+        // todo: change to enemy weapon eventually
+        // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
+        // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

@@ -1,6 +1,7 @@
 import State from "../../../Wolfie2D/DataTypes/State/State";
 import GameEvent from "../../../Wolfie2D/Events/GameEvent";
 import MathUtils from "../../../Wolfie2D/Utils/MathUtils";
+import { HW3PhysicsGroups } from "../../HW3PhysicsGroups";
 import HW3AnimatedSprite from "../../Nodes/HW3AnimatedSprite";
 import PlayerController from "../PlayerController";
 
@@ -16,7 +17,7 @@ export default abstract class PlayerState extends State {
 	public constructor(parent: PlayerController, owner: HW3AnimatedSprite){
 		super(parent);
 		this.owner = owner;
-        this.owner.setGroup("PLAYER");
+        this.owner.setGroup(HW3PhysicsGroups.PLAYER);
         this.gravity = 500;
 	}
 
