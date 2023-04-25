@@ -258,7 +258,7 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level5);
             }
-            lvl5.onClick = changeToLvl1;
+            lvl5.onClick = changeToLvl5;
 
             let preview6 = <Sprite>this.add.sprite(MainMenu.L0PREVIEW_KEY, MenuLayers.LEVELSELECT);
             preview6.position.set(size.x + 325, size.y + 220);
