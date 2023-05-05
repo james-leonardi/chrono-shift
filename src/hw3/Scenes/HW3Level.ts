@@ -121,6 +121,8 @@ export default abstract class HW3Level extends Scene {
     protected enemyGrappleSystem: PlayerGrapple;
     protected enemy_in_present: boolean;
 
+    protected lastZoom: number;
+
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
             groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
@@ -170,9 +172,26 @@ export default abstract class HW3Level extends Scene {
     }
 
     public updateScene(deltaT: number) {
-        while (this.receiver.hasNextEvent()) {
-            this.handleEvent(this.receiver.getNextEvent());
+        while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
+        const zoomLevel: number = 5-this.viewport.getZoomLevel();
+        if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
+        this.lastZoom = zoomLevel;
+
+        /* Calculate the zoom factor */
+        let zoomfactor: number = 1/1.2; // 0.8333 is the default zoom factor
+        for (const condition of [0.98, 1.6, 2.2, 2.6, 3.0, 3.3, 3.6, 3.8]) { // these are the zoom levels at which the UI elements should be scaled
+            if (zoomLevel > condition) zoomfactor *= 1.2; // 1.2^zoomLevel
+            else break;
         }
+        
+        /* Scale the UI elements to their new positions */
+        const scaleFactor = (x: number, y: number) => new Vec2(x, y).scale(zoomfactor);
+        this.healthLabel.position = scaleFactor(15, 20);
+        this.healthBar.position = scaleFactor(60, 20);
+        this.healthBarBg.position = scaleFactor(60, 20);
+        this.levelEndLabel.position = scaleFactor(-300, 100);
+        this.tutorialText.position = scaleFactor(220, 30);
+        this.levelTransitionScreen.position = scaleFactor(300, 200);
     }
 
     protected handleEvent(event: GameEvent): void {
@@ -352,7 +371,7 @@ export default abstract class HW3Level extends Scene {
 		this.healthLabel.font = "Courier";
 
         // HealthBar
-		this.healthBar = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, {position: new Vec2(60, 20), text: ""});
+        this.healthBar = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(60, 20), text: ""});
 		this.healthBar.size = new Vec2(300, 25);
 		this.healthBar.backgroundColor = Color.GREEN;
 
@@ -531,6 +550,7 @@ export default abstract class HW3Level extends Scene {
         }
         this.viewport.follow(this.player);
         this.viewport.setZoomLevel(4);
+        this.viewport.enableZoom();
         this.viewport.setBounds(0, 0, 512, 512);
     }
 

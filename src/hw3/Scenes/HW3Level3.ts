@@ -75,7 +75,7 @@ export default class Level3 extends HW3Level {
         this.damagedAudioKey = Level3.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level3.DEADGE_AUDIO_KEY;
 
-        this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
+        this.levelEndPosition = new Vec2(1006, 685).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
         this.levelEnd2Position = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEnd2HalfSize = new Vec2(32, 32).mult(this.tilemapScale);

@@ -35,6 +35,7 @@ export default class Viewport {
 
     /** The amount that is zoomed in or out. */
     private ZOOM_FACTOR: number = 1.2;
+    private currentZoom: number = 0;
 
     /** The size of the canvas */
     private canvasSize: Vec2;
@@ -269,12 +270,14 @@ export default class Viewport {
         if(this.scrollZoomEnabled){
             if(Input.didJustScroll()){
                 let currentSize = this.view.getHalfSize().clone();
-                if(Input.getScrollDirection() < 0){
-                    // Zoom in
-                    currentSize.scale(1/this.ZOOM_FACTOR);
-                } else {
-                    // Zoom out
+                if(Input.getScrollDirection() < 0 && this.currentZoom > -1){
+                    // Zoom in until limit of -1
+                    currentSize.scale(1 / this.ZOOM_FACTOR);
+                    --this.currentZoom;
+                } else if (Input.getScrollDirection() > 0 && this.currentZoom < 7) {
+                    // Zoom out until limit of 7
                     currentSize.scale(this.ZOOM_FACTOR);
+                    ++this.currentZoom;
                 }
 
                 if(currentSize.x > this.boundary.hw){
