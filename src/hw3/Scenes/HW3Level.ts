@@ -466,7 +466,7 @@ export default abstract class HW3Level extends Scene {
     }
 
     protected initializeWeaponSystem(): void {
-        this.playerWeaponSystem = new PlayerWeapon(50, Vec2.ZERO, 1000, 3, 0, 50);
+        this.playerWeaponSystem = new PlayerWeapon(1, Vec2.ZERO, 1000, 2, 0, 1);
         this.playerWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
     }
 

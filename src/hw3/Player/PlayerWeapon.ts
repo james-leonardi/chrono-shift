@@ -18,9 +18,9 @@ export default class PlayerWeapon extends ParticleSystem {
         let mpos: Vec2 = Input.getGlobalMousePosition();
         let cpos: Vec2 = particle.position;
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
-        vec.normalize().scale(150);
-        particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
-        particle.color = Color.MAGENTA;
+        vec.normalize().scale(350);
+        particle.vel = vec;
+        particle.color = Color.YELLOW;
         particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
         particle.setTrigger(HW3PhysicsGroups.ENEMY, HW3Events.KILL_BOSS, undefined);
         particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
@@ -31,15 +31,9 @@ export default class PlayerWeapon extends ParticleSystem {
             duration: this.lifetime,
             effects: [
                 {
-                    property: "alpha",
-                    start: 1,
-                    end: 0,
-                    ease: EaseFunctionType.IN_OUT_SINE
-                },
-                {
                     property: "rotation",
                     start: 0,
-                    end: 4*Math.PI,
+                    end: 8*Math.PI,
                     ease: EaseFunctionType.IN_OUT_SINE
                 }
             ]
