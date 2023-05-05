@@ -40,6 +40,11 @@
             "name": "DEAD",
             "repeat": true,
             "frames":[ {"index": 11, "duration": 1} ]
+        },
+        {
+            "name": "ATTACKING",
+            "repeat": false,
+            "frames":[ {"index": 12, "duration": 15}, {"index": 13, "duration": 15} ]
         }
     ]
 }
