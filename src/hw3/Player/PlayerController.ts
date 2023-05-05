@@ -33,7 +33,8 @@ export const PlayerAnimations = {
     TAKING_DAMAGE: "TAKING_DAMAGE",
     DYING: "DYING",
     DEATH: "DEAD",
-    GRAPPLE: "GRAPPLE"
+    GRAPPLE: "GRAPPLE",
+    ATTACKING: "ATTACKING"
 } as const
 
 /**
@@ -97,6 +98,7 @@ export default class PlayerController extends StateMachineAI {
 
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
+        this.receiver.subscribe(HW3Events.BULLET);
         this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
@@ -122,6 +124,12 @@ export default class PlayerController extends StateMachineAI {
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
                 this.velocity.mult(Vec2.ZERO);
                 this.velocity.add(event.data.get('velocity'));
+                break;
+            }
+            case HW3Events.BULLET: {
+                console.log("Bullet collision!");
+                // TODO Replace with bullet collision sfx?
+                //this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
                 break;
             }
             case "DYING": {
@@ -162,9 +170,9 @@ export default class PlayerController extends StateMachineAI {
 
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
-        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning()) {
+        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning() && !this.grapple.isSystemRunning()) {
             this.weapon.startSystem(500, 0, this.owner.position);
-            this.owner.animation.play((this.faceDir.x < 0) ? "ATTACKING_LEFT" : "ATTACKING_RIGHT", false, undefined);
+            this.owner.animation.play("ATTACKING", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
         }
         

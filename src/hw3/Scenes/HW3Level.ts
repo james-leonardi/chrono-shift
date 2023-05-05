@@ -258,7 +258,7 @@ export default abstract class HW3Level extends Scene {
     }
 
     protected handleParticleHit(particleId: number): void {
-        const particles = this.playerGrappleSystem.getPool();
+        const particles = this.playerGrappleSystem.isSystemRunning() ? this.playerGrappleSystem.getPool() : this.playerWeaponSystem.getPool();
         const particle = particles.find(particle => particle.id === particleId);
         if (particle !== undefined) {
             const tilemap = this.destructable;
@@ -281,6 +281,9 @@ export default abstract class HW3Level extends Scene {
                         if (this.playerGrappleSystem.isSystemRunning()) {
                             this.emitter.fireEvent(HW3Events.GRAPPLE_HIT, { velocity: dir });
                             this.playerGrappleSystem.stopSystem();
+                        }
+                        else if (this.playerWeaponSystem.isSystemRunning()) {
+                            this.playerWeaponSystem.stopSystem();
                         }
                     }
                 }
@@ -485,7 +488,7 @@ export default abstract class HW3Level extends Scene {
     }
 
     protected initializeWeaponSystem(): void {
-        this.playerWeaponSystem = new PlayerWeapon(50, Vec2.ZERO, 1000, 3, 0, 50);
+        this.playerWeaponSystem = new PlayerWeapon(1, Vec2.ZERO, 1000, 2, 0, 1);
         this.playerWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
     }
 
