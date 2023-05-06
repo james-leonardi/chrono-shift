@@ -83,6 +83,7 @@ export default class PlayerController extends StateMachineAI {
     protected peeking: boolean = false;
     protected dash: boolean = true;
     protected invincible: boolean = false;
+    protected paused: boolean = false;
 
     protected receiver: Receiver;
 
@@ -226,6 +227,19 @@ export default class PlayerController extends StateMachineAI {
         if (Input.isJustPressed(HW3Controls.INVINCIBLE)) {
             this.is_invincible = !this.is_invincible;
             console.log("Invincibility: " + this.invincible);
+        }
+
+        if (Input.isJustPressed(HW3Controls.PAUSE)) {
+            if (this.paused) { 
+                this.owner.unfreeze(); this.owner.enablePhysics(); this.paused = false; 
+                this.grapple.resumeSystem(); this.weapon.resumeSystem();
+                this.emitter.fireEvent("UNPAUSE");
+            } else { 
+                this.owner.freeze(); this.owner.disablePhysics(); this.paused = true;
+                if (this.grapple.isSystemRunning()) this.grapple.pauseSystem(); 
+                if (this.weapon.isSystemRunning()) this.weapon.pauseSystem();
+                this.emitter.fireEvent("PAUSE");
+            }
         }
 
         // Level Change Cheats

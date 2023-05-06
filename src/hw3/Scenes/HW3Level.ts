@@ -29,6 +29,8 @@ import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 import EnemyController from "../Enemy/EnemyController";
 import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
+import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
+import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 
 /**
  * A const object for the layer names
@@ -66,7 +68,10 @@ export default abstract class HW3Level extends Scene {
 
     private healthLabel: Label;
 	private healthBar: Label;
-	private healthBarBg: Label;
+    private healthBarBg: Label;
+    private healthFrame: Sprite;
+    public static readonly healthFrameKey = "HEALTH_FRAME";
+    public static readonly healthFramePath = "hw4_assets/HealthFrame.png";
 
 
     /** The end of level stuff */
@@ -122,6 +127,8 @@ export default abstract class HW3Level extends Scene {
     protected enemy_in_present: boolean;
 
     protected lastZoom: number;
+    protected pauseButton: Button;
+    protected pauseMenu: Rect;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
@@ -186,12 +193,14 @@ export default abstract class HW3Level extends Scene {
         
         /* Scale the UI elements to their new positions */
         const scaleFactor = (x: number, y: number) => new Vec2(x, y).scale(zoomfactor);
-        this.healthLabel.position = scaleFactor(15, 20);
-        this.healthBar.position = scaleFactor(60, 20);
-        this.healthBarBg.position = scaleFactor(60, 20);
+        /* this.healthLabel.position = scaleFactor(15, 15); */
+        this.healthBar.position = scaleFactor(81, 24);
+        this.healthBarBg.position = scaleFactor(81, 24);
         this.levelEndLabel.position = scaleFactor(-300, 100);
         this.tutorialText.position = scaleFactor(220, 30);
         this.levelTransitionScreen.position = scaleFactor(300, 200);
+        this.healthFrame.position = scaleFactor(60, 27);
+        this.healthFrame.scale = scaleFactor(0.12, 0.12);
     }
 
     protected handleEvent(event: GameEvent): void {
@@ -252,6 +261,14 @@ export default abstract class HW3Level extends Scene {
             }
             case HW3Events.INVINCIBILITY: {
                 this.playerInvincible = event.data.get("value");
+                break;
+            }
+            case "PAUSE": {
+                this.pauseMenu.tweens.play("fadeIn");
+                break;
+            }
+            case "UNPAUSE": {
+                this.pauseMenu.tweens.play("fadeOut");
                 break;
             }
         }
@@ -363,25 +380,35 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("DYING");
         this.receiver.subscribe(HW3Events.INVINCIBILITY);
         this.receiver.subscribe(HW3Events.KILL_BOSS);
+        this.receiver.subscribe("PAUSE");
+        this.receiver.subscribe("UNPAUSE");
     }
 
     protected initializeUI(): void {
 
-        // HP Label
-		this.healthLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, {position: new Vec2(15, 20), text: "HP "});
+        /* // HP Label
+		this.healthLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, {position: new Vec2(15, 15), text: "HP "});
 		this.healthLabel.size.set(300, 30);
 		this.healthLabel.fontSize = 24;
-		this.healthLabel.font = "Courier";
+        this.healthLabel.font = "MyFont"; */
 
         // HealthBar
-        this.healthBar = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(60, 20), text: ""});
-		this.healthBar.size = new Vec2(300, 25);
-		this.healthBar.backgroundColor = Color.GREEN;
+        this.healthBar = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(81, 24), text: ""});
+		this.healthBar.size = new Vec2(265, 38);
+		this.healthBar.backgroundColor = Color.CYAN;
+        this.healthBar.borderRadius = 20;
 
         // HealthBar Border
-		this.healthBarBg = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, {position: new Vec2(60, 20), text: ""});
-		this.healthBarBg.size = new Vec2(300, 25);
-		this.healthBarBg.borderColor = Color.BLACK;
+		this.healthBarBg = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, {position: new Vec2(81, 24), text: ""});
+		this.healthBarBg.size = new Vec2(265, 38);
+        this.healthBarBg.borderColor = Color.BLACK;
+        this.healthBarBg.borderRadius = 20;
+        this.healthBarBg.borderWidth = 2;
+
+        // HealthBar Frame
+        this.healthFrame = this.add.sprite(HW3Level.healthFrameKey, HW3Layers.UI);
+        this.healthFrame.position.set(60, 27);
+        this.healthFrame.scale.set(0.12, 0.12);
 
         // End of level label (start off screen)
         this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(-300, 100), text: "Level Complete" });
@@ -390,7 +417,7 @@ export default abstract class HW3Level extends Scene {
         this.levelEndLabel.backgroundColor = new Color(34, 32, 52);
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
-        this.levelEndLabel.font = "PixelSimple";
+        this.levelEndLabel.font = "MyFont";
 
         // Tutorial Textbox
         this.tutorialText = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(220, 30), text: "Use A and D to move left and right." });
@@ -420,7 +447,6 @@ export default abstract class HW3Level extends Scene {
                 }
             ]
         });
-
         this.tutorialText.tweens.add("fadeOut", {
             startDelay: 0,
             duration: 500,
@@ -471,7 +497,6 @@ export default abstract class HW3Level extends Scene {
             ],
             onEnd: HW3Events.LEVEL_END
         });
-
         this.levelTransitionScreen.tweens.add("fadeOut", {
             startDelay: 0,
             duration: 1000,
@@ -484,6 +509,35 @@ export default abstract class HW3Level extends Scene {
                 }
             ],
             onEnd: HW3Events.LEVEL_START
+        });
+
+        this.pauseMenu = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.UI, { position: new Vec2(300, 200), size: new Vec2(600, 400) });
+        this.pauseMenu.color = new Color(34, 32, 52);
+        this.pauseMenu.alpha = 0;
+
+        this.pauseMenu.tweens.add("fadeIn", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 0,
+                    end: 0.5,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+        this.pauseMenu.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: TweenableProperties.alpha,
+                    start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
         });
     }
 

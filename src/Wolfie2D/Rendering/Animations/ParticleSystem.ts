@@ -26,6 +26,8 @@ export default class ParticleSystem implements Updateable {
 
     protected systemRunning: boolean;
 
+    protected pause: boolean;
+
     protected color: Color = new Color(255, 0, 0);
 
     /** Particles that can be rendered per frame */
@@ -105,6 +107,26 @@ export default class ParticleSystem implements Updateable {
         }
     }
 
+    pauseSystem() {
+        this.pause = true;
+        for (let particle of this.particlePool) {
+            particle.freeze();
+            particle.disablePhysics();
+            this.systemRunning = false;
+            this.systemLifetime?.pause();
+        }
+    }
+
+    resumeSystem() {
+        if (!this.pause) return;
+        this.pause = false;
+        for (let particle of this.particlePool) {
+            particle.unfreeze();
+            particle.enablePhysics();
+            this.systemRunning = true;
+            this.systemLifetime?.start();
+        }
+    }
     changeColor(color: Color) {
         this.color = color;
     }
@@ -130,7 +152,7 @@ export default class ParticleSystem implements Updateable {
             return;
         }
         // Stop the system if our timer is up
-        if (this.systemLifetime.isStopped()) {
+        if (this.systemLifetime?.isStopped()) {
             this.stopSystem();
         }
         else {
