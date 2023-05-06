@@ -296,7 +296,7 @@ export default abstract class HW3Level extends Scene {
                         particle.visible = false;
                         const dir = this.player.position.dirTo(particle.position).scale(250, 350).scale(1.2);
                         if (this.playerGrappleSystem.isSystemRunning()) {
-                            this.emitter.fireEvent(HW3Events.GRAPPLE_HIT, { velocity: dir });
+                            this.emitter.fireEvent(HW3Events.GRAPPLE_HIT, { velocity: dir, distance: this.player.position.distanceTo(particle.position) });
                             this.playerGrappleSystem.stopSystem();
                         }
                         else if (this.playerWeaponSystem.isSystemRunning()) {

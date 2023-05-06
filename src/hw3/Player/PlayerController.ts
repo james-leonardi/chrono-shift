@@ -124,7 +124,8 @@ export default class PlayerController extends StateMachineAI {
                 console.log("Grapple!");
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "ZIP_" + Math.floor(Math.random() * 2), loop: false, holdReference: false });
                 this.velocity.mult(Vec2.ZERO);
-                this.velocity.add(event.data.get('velocity'));
+                const scale = event.data.get("distance") / 100 * 0.25 + 0.75;
+                this.velocity.add(event.data.get('velocity').scale(scale));
                 break;
             }
             case HW3Events.BULLET: {
