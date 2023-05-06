@@ -107,6 +107,7 @@ export default class Level5 extends HW3Level {
         this.load.audio("ZIP_0", "hw4_assets/sounds/zip1.mp3");
         this.load.audio("ZIP_1", "hw4_assets/sounds/zip2.mp3");
         this.load.audio("PSHH", "hw4_assets/sounds/pshh.mp3");
+        this.load.audio("SHOOT", "hw4_assets/sounds/gunshot.mp3");
         this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
         this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
         //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");

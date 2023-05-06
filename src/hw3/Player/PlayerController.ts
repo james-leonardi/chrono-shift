@@ -176,6 +176,7 @@ export default class PlayerController extends StateMachineAI {
             this.weapon.startSystem(500, 0, this.owner.position);
             this.owner.animation.play("ATTACKING", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "SHOOT", loop: false, holdReference: false });
         }
         
         this.grapple.renderLine(this.owner.position);
