@@ -94,6 +94,7 @@ export default class Level1 extends HW3Level {
         this.load.audio(this.damagedAudioKey, Level1.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level1.DEADGE_AUDIO_PATH);
 
+        this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         //this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
         //this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
         //this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
@@ -179,6 +180,7 @@ export default class Level1 extends HW3Level {
         this.load.keepAudio("PSHH");
         this.load.keepAudio("SWITCH_1");
         this.load.keepAudio("SWITCH_2");
+        this.load.keepImage(HW3Level.healthFrameKey);
     }
 
     public startScene(): void {

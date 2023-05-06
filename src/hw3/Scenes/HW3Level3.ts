@@ -117,6 +117,7 @@ export default class Level3 extends HW3Level {
         this.load.keepAudio("PSHH");
         this.load.keepAudio("SWITCH_1");
         this.load.keepAudio("SWITCH_2");
+        this.load.keepImage(HW3Level.healthFrameKey);
     }
 
     public startScene(): void {
