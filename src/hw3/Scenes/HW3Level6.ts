@@ -19,7 +19,7 @@ import MainMenu from "./MainMenu";
  */
 export default class Level6 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 608);
+    public static readonly PLAYER_SPAWN = new Vec2(26, 1464);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -33,6 +33,7 @@ export default class Level6 extends HW3Level {
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
+    public static readonly GRAPPLE_ONLY_LAYER_KEY = "OnlyGrapple";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
     public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/ice.mp3";
@@ -60,6 +61,7 @@ export default class Level6 extends HW3Level {
         this.destructibleLayerKey = Level6.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level6.WALLS_LAYER_KEY;
         this.deathLayerKey = Level6.DEATH_LAYER_KEY;
+        this.grappleOnlyLayerKey = Level3.GRAPPLE_ONLY_LAYER_KEY;
 
         this.playerSpriteKey = Level6.PLAYER_SPRITE_KEY;
         this.playerSpawn = Level6.PLAYER_SPAWN;
