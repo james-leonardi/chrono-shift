@@ -162,7 +162,7 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Detect right-click and handle with grapple firing
-        if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning()) {
+        if (this.grapple_enabled && Input.isMouseJustPressed(2) && !this.grapple.isSystemRunning() && !this.paused) {
             if (!this.grapple_last_used || (Date.now() - this.grapple_last_used) > this.grapple_cooldown) {
                 this.grapple_last_used = Date.now();
                 this.grapple.setDir(Input.getGlobalMousePosition());
@@ -172,7 +172,7 @@ export default class PlayerController extends StateMachineAI {
 
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
-        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning() && !this.grapple.isSystemRunning()) {
+        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning() && !this.grapple.isSystemRunning() && !this.paused) {
             this.weapon.startSystem(500, 0, this.owner.position);
             this.owner.animation.play("ATTACKING", false, undefined);
             this.owner.animation.queue("IDLE", false, undefined);
@@ -182,7 +182,7 @@ export default class PlayerController extends StateMachineAI {
         this.grapple.renderLine(this.owner.position);
 
         // Handle switching when the switch key is pressed
-        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning()) {
+        if (Input.isPressed(HW3Controls.SWITCH) && !this.peeking && !this.grapple.isSystemRunning() && !this.paused) {
             if (!this.switch_last_used || (Date.now() - this.switch_last_used) > this.switch_cooldown) {
                 if (!this.switchedQ) { this.switchedQ = true; return }
                 this.switchedQ = false;
@@ -205,7 +205,7 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Handle peeking
-        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning()) {
+        if (Input.isPressed(HW3Controls.PEEK) && !this.peeking && !this.grapple.isSystemRunning() && !this.paused) {
             const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
             this.peeking = true
@@ -213,14 +213,14 @@ export default class PlayerController extends StateMachineAI {
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
             this.emitter.fireEvent(HW3Events.PERSPECTIVE);
         } 
-        if (!Input.isPressed(HW3Controls.PEEK) && this.peeking) {
+        if (!Input.isPressed(HW3Controls.PEEK) && this.peeking && !this.paused) {
             this.peeking = false;
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
             this.emitter.fireEvent(HW3Events.PERSPECTIVE);
         }
 
-        if(Input.isJustPressed(HW3Controls.GETPOS)) {
+        if(Input.isJustPressed(HW3Controls.GETPOS) && !this.paused) {
             console.log("Player Position: " + this.owner.position.toString() + "\n" + 
                 "Mouse Position: " + Input.getGlobalMousePosition().toString());
         }
@@ -260,7 +260,7 @@ export default class PlayerController extends StateMachineAI {
         }
 
         // Teleport to Cursor Cheat (press 'o')
-        if(Input.isJustPressed(HW3Controls.TELEPORT)) {
+        if (Input.isJustPressed(HW3Controls.TELEPORT) && !this.paused) {
             //this.owner.move(Input.getGlobalMousePosition());
             this.owner.position = Input.getGlobalMousePosition();
         }
