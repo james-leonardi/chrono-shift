@@ -66,6 +66,10 @@ export default class Viewport {
         this.scrollZoomEnabled = true;
     }
 
+    disableZoom(): void {
+        this.scrollZoomEnabled = false;
+    }
+
     /**
      * Returns the position of the viewport
      * @returns The center of the viewport as a Vec2
