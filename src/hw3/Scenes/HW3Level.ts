@@ -132,7 +132,7 @@ export default abstract class HW3Level extends Scene {
     protected boss_in_present: boolean;
 
     // create array of enemies
-    protected enemies: Array<Enemy> = new Array<Enemy>();
+    protected enemies: Array<Enemy>;
 
     protected lastZoom: number;
     protected pauseButton: Button;
@@ -166,7 +166,7 @@ export default abstract class HW3Level extends Scene {
 
         this.initializeBoss(this.bossSpriteKey);
 
-        this.initializeEnemies(this.bossSpriteKey);
+        this.clearEnemies();
 
         // Initialize the viewport - this must come after the player has been initialized
         this.initializeViewport();
@@ -613,9 +613,11 @@ export default abstract class HW3Level extends Scene {
             boss_in_present: this.boss_in_present
         });
     }
-    protected initializeEnemies(key: string): void {
-        this.enemies[0] = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(100, 0)), this.player); // todo: set position
-        this.enemies[1] = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(50, 0)), this.player); // todo: set position
+    protected clearEnemies(): void {
+        this.enemies = new Array<Enemy>();
+    }
+    protected addNewEnemy(key: string, position: Vec2) {
+        this.enemies.push(new Enemy(key, this, position, this.player));
     }
     /**
      * Initializes the viewport
