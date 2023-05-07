@@ -23,6 +23,9 @@ export default class Level6 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
+
     public static readonly BOSS_SPAWN = new Vec2(2056, 1400);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
@@ -98,6 +101,7 @@ export default class Level6 extends HW3Level {
         // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level6.PLAYER_SPRITE_PATH);
         this.load.spritesheet(this.bossSpriteKey, Level6.BOSS_SPRITE_PATH);
+        this.load.spritesheet(Level6.ENEMY_SPRITE_KEY, Level6.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level6.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level6.JUMP_AUDIO_PATH);
@@ -140,6 +144,11 @@ export default class Level6 extends HW3Level {
         this.nextLevel = MainMenu;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
+
+        for (const pos of [[711, 1288],[763, 1272],[963, 1208],[718, 920],[683, 920],[726, 504],[889, 504],[936, 520],[1352, 888],[1414, 552]]) {
+            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]));
+        }
+        
     }
 
     /**
