@@ -81,9 +81,9 @@ export default class Level1 extends HW3Level {
         this.deadgeAudioKey = Level1.DEADGE_AUDIO_KEY;
 
         this.levelEndPosition = new Vec2(36, 620).mult(this.tilemapScale);
-        this.levelEndHalfSize = new Vec2(8, 64).mult(this.tilemapScale);
+        this.levelEndHalfSize = new Vec2(0, 0).mult(this.tilemapScale);
         this.levelEnd2Position = new Vec2(36, 1740).mult(this.tilemapScale);
-        this.levelEnd2HalfSize = new Vec2(8, 64).mult(this.tilemapScale);
+        this.levelEnd2HalfSize = new Vec2(0, 0).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
 
@@ -159,6 +159,16 @@ export default class Level1 extends HW3Level {
         tutorialPuzzleTrigger.addPhysics(undefined, undefined, false, true);
         tutorialPuzzleTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_PUZZLE", null);
         tutorialPuzzleTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialZoomTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(820, 1260), size: new Vec2(200, 100) });
+        tutorialZoomTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialZoomTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_ZOOM", null);
+        tutorialZoomTrigger.color = new Color(255, 0, 255, 0);
+
+        const tutorialShootTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(156, 3480), size: new Vec2(200, 100) });
+        tutorialShootTrigger.addPhysics(undefined, undefined, false, true);
+        tutorialShootTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SHOOT", null);
+        tutorialShootTrigger.color = new Color(255, 0, 255, 0);
     }
 
     protected subscribeToEvents(): void {
@@ -172,6 +182,8 @@ export default class Level1 extends HW3Level {
         this.receiver.subscribe("TUTORIAL_FALL");
         this.receiver.subscribe("TUTORIAL_GRAPPLE");
         this.receiver.subscribe("TUTORIAL_PUZZLE");
+        this.receiver.subscribe("TUTORIAL_ZOOM");
+        this.receiver.subscribe("TUTORIAL_SHOOT");
     }
 
     public unloadScene(): void {
@@ -316,6 +328,26 @@ export default class Level1 extends HW3Level {
             }
             case "TUTORIAL_PUZZLE": {
                 this.tutorialText.text = "GRAPPLE then SWITCH quickly!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_ZOOM": {
+                this.tutorialText.text = "Use Scroll Wheel to Zoom In/Out!";
+                if (this.tutorialText.backgroundColor.a == 0) {
+                    this.tutorialText.tweens.play("fadeIn");
+                }
+                setTimeout(() => {
+                    this.tutorialText?.tweens?.play("fadeOut");
+                }, 100)
+                break;
+            }
+            case "TUTORIAL_SHOOT": {
+                this.tutorialText.text = "Left Click to Shoot!";
                 if (this.tutorialText.backgroundColor.a == 0) {
                     this.tutorialText.tweens.play("fadeIn");
                 }
