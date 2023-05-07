@@ -168,8 +168,7 @@ export default class ParticleSystem implements Updateable {
                     if (particle.age <= 0) {
                         particle.setParticleInactive();
                     }
-
-                    particle.move(particle.vel.scaled(deltaT));
+                    if (particle.vel) particle.move(particle.vel.scaled(deltaT));
                 }
                 else {
                     // Set the particle to active
