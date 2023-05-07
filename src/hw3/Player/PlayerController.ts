@@ -254,6 +254,10 @@ export default class PlayerController extends StateMachineAI {
             console.log("Invincibility: " + this.invincible);
         }
 
+        if (Input.isJustPressed("CHANGE_FRAME")) {
+            this.emitter.fireEvent("CHANGE_FRAME");
+        }
+
         if (Input.isJustPressed(HW3Controls.PAUSE)) {
             if (this.paused) { 
                 this.owner.unfreeze(); this.owner.enablePhysics(); this.paused = false; 

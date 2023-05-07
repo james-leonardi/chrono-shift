@@ -74,8 +74,11 @@ export default abstract class HW3Level extends Scene {
 	private healthBar: Label;
     private healthBarBg: Label;
     private healthFrame: Sprite;
+    private healthFrame2: Sprite;
     public static readonly healthFrameKey = "HEALTH_FRAME";
     public static readonly healthFramePath = "hw4_assets/HealthFrame.png";
+    public static readonly healthFrame2Key = "HEALTH_FRAME2";
+    public static readonly healthFrame2Path = "hw4_assets/HealthFrame2.png";
 
 
     /** The end of level stuff */
@@ -216,6 +219,8 @@ export default abstract class HW3Level extends Scene {
         this.levelTransitionScreen.position = scaleFactor(300, 200);
         this.healthFrame.position = scaleFactor(60, 27);
         this.healthFrame.scale = scaleFactor(0.12, 0.12);
+        this.healthFrame2.position = scaleFactor(60, 27);
+        this.healthFrame2.scale = scaleFactor(0.12, 0.12);
     }
 
     protected handleEvent(event: GameEvent): void {
@@ -239,6 +244,17 @@ export default abstract class HW3Level extends Scene {
             }
             case "PARTICLE": {
                 this.handleParticleHit(event.data.get("node"));
+                break;
+            }
+            case "CHANGE_FRAME": {
+                console.log("change frame");
+                if (this.healthFrame.visible) {
+                    this.healthFrame.visible = false;
+                    this.healthFrame2.visible = true;
+                } else {
+                    this.healthFrame.visible = true;
+                    this.healthFrame2.visible = false;
+                }
                 break;
             }
             case "DYING": {
@@ -397,6 +413,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe(HW3Events.KILL_BOSS);
         this.receiver.subscribe("PAUSE");
         this.receiver.subscribe("UNPAUSE");
+        this.receiver.subscribe("CHANGE_FRAME");
     }
 
     protected initializeUI(): void {
@@ -424,6 +441,10 @@ export default abstract class HW3Level extends Scene {
         this.healthFrame = this.add.sprite(HW3Level.healthFrameKey, HW3Layers.UI);
         this.healthFrame.position.set(60, 27);
         this.healthFrame.scale.set(0.12, 0.12);
+        this.healthFrame.visible = false;
+        this.healthFrame2 = this.add.sprite(HW3Level.healthFrame2Key, HW3Layers.UI);
+        this.healthFrame2.position.set(60, 27);
+        this.healthFrame2.scale.set(0.12, 0.12);
 
         // End of level label (start off screen)
         this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(-300, 100), text: "Level Complete" });
