@@ -22,7 +22,7 @@ export default class PlayerWeapon extends ParticleSystem {
         particle.vel = vec;
         particle.color = Color.YELLOW;
         particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
-        particle.setTrigger(HW3PhysicsGroups.ENEMY, HW3Events.KILL_BOSS, undefined);
+        particle.setTrigger(HW3PhysicsGroups.BOSS, HW3Events.KILL_BOSS, undefined);
         particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens

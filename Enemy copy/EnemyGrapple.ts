@@ -5,9 +5,11 @@ import { EaseFunctionType } from "../../Wolfie2D/Utils/EaseFunctions";
 import RandUtils from "../../Wolfie2D/Utils/RandUtils";
 import Vec2 from "../../Wolfie2D/DataTypes/Vec2";
 import Input from "../../Wolfie2D/Input/Input";
-import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
+import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
+import Scene from "../../Wolfie2D/Scene/Scene";
 
- 
+
 
 /**
  * // TODO get the particles to move towards the mouse when the enemy attacks
@@ -15,9 +17,14 @@ import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
  * The particle system used for the enemy's attack. Particles in the particle system should
  * be spawned at the enemy's position and fired in the direction of the mouse's position.
  */
-export default class EnemyWeapon extends ParticleSystem {
+export default class EnemyGrapple extends ParticleSystem {
 
-    protected playerPos: Vec2;
+    private grapple_length: number = 225;
+
+    private grapple_line: Line
+
+    private direction: Vec2;
+
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
     }
@@ -27,8 +34,8 @@ export default class EnemyWeapon extends ParticleSystem {
      */
     public isSystemRunning(): boolean { return this.systemRunning; }
 
-    public setPlayerPos(pos: Vec2) {
-        this.playerPos = pos;
+    public setDir(newDirection: Vec2) {
+        this.direction = newDirection;
     }
 
     /**
@@ -37,38 +44,38 @@ export default class EnemyWeapon extends ParticleSystem {
      */
     public setParticleAnimation(particle: Particle) {
         // Give the particle a random velocity.
-        let mpos: Vec2 = this.playerPos;
-        if (!mpos || !particle) return;
         let cpos: Vec2 = particle.position;
-        let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
-        vec.normalize().scale(150);
-        particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
-        particle.color = Color.MAGENTA;
-        // todo: change to enemy weapon eventually
-        // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
-        // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
-        particle.setGroup("EWEAPON");
-        particle.setTrigger(HW3PhysicsGroups.PLAYER, "HIT_PLAYER", undefined);
+        let vec = new Vec2(this.direction.x - cpos.x, this.direction.y - cpos.y).normalize().scale(this.grapple_length);
+        particle.vel = vec;
+        particle.color = Color.BLACK;
+        particle.setGroup("WEAPON");
+        particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
-        particle.tweens?.add("active", {
+        particle.tweens.add("active", {
             startDelay: 0,
             duration: this.lifetime,
             effects: [
                 {
-                    property: "alpha",
-                    start: 1,
-                    end: 0,
-                    ease: EaseFunctionType.IN_OUT_SINE
-                },
-                {
                     property: "rotation",
                     start: 0,
-                    end: 4*Math.PI,
+                    end: 10*Math.PI,
                     ease: EaseFunctionType.IN_OUT_SINE
                 }
             ]
         });
     }
 
+    public initializeLine(scene: Scene, layer: string) {
+        this.grapple_line = <Line>scene.add.graphic(GraphicType.LINE, layer, { "start": Vec2.ZERO, "end": Vec2.ZERO })
+        this.grapple_line.color = Color.BLACK;
+        this.grapple_line.thickness = 8;
+    }
+
+    public renderLine(start: Vec2/* , alpha: number */) {
+        this.grapple_line.alpha = (this.particlePool[0].visible) ? 1 : 0;
+        if (!this.grapple_line.alpha) return;
+        this.grapple_line.start = start.clone();
+        this.grapple_line.end = this.particlePool[0].position.clone();
+    }
 }

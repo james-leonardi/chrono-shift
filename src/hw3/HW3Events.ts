@@ -31,7 +31,7 @@ export const HW3Events = {
     // Event fired every time there is a perspective change (switching/peeking)
     PERSPECTIVE: "PERSPECTIVE",
 
-    // Event fired when the player kills an enemy
+    // Event fired when the player kills an boss
     KILL_BOSS: "KILL_BOSS",
 
     BULLET: "BULLET"

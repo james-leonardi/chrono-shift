@@ -9,15 +9,15 @@ import Line from "../../Wolfie2D/Nodes/Graphics/Line";
 import { GraphicType } from "../../Wolfie2D/Nodes/Graphics/GraphicTypes";
 import Scene from "../../Wolfie2D/Scene/Scene";
 
- 
+
 
 /**
- * // TODO get the particles to move towards the mouse when the enemy attacks
+ * // TODO get the particles to move towards the mouse when the boss attacks
  * 
- * The particle system used for the enemy's attack. Particles in the particle system should
- * be spawned at the enemy's position and fired in the direction of the mouse's position.
+ * The particle system used for the boss's attack. Particles in the particle system should
+ * be spawned at the boss's position and fired in the direction of the mouse's position.
  */
-export default class EnemyGrapple extends ParticleSystem {
+export default class BossGrapple extends ParticleSystem {
 
     private grapple_length: number = 225;
 
@@ -39,7 +39,7 @@ export default class EnemyGrapple extends ParticleSystem {
     }
 
     /**
-     * Sets the animations for a particle in the enemy's weapon
+     * Sets the animations for a particle in the boss's weapon
      * @param particle the particle to give the animation to
      */
     public setParticleAnimation(particle: Particle) {

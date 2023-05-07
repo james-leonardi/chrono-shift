@@ -27,11 +27,12 @@ import HW3FactoryManager from "../Factory/HW3FactoryManager";
 import MainMenu from "./MainMenu";
 import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
-import EnemyController from "../Enemy/EnemyController";
+import BossController from "../Boss/BossController";
 import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
-import EnemyWeapon from "../Enemy/EnemyWeapon";
+import BossWeapon from "../Boss/BossWeapon";
+import BossGrapple from "../Boss/BossGrapple";
 
 /**
  * A const object for the layer names
@@ -62,10 +63,10 @@ export default abstract class HW3Level extends Scene {
     protected playerSpriteKey: string;
     protected player: AnimatedSprite;
     protected playerSpawn: Vec2;
-    /** Enemy sprite */
-    protected enemySpriteKey: string;
-    protected enemy: AnimatedSprite;
-    protected enemySpawn: Vec2;
+    /** Boss sprite */
+    protected bossSpriteKey: string;
+    protected boss: AnimatedSprite;
+    protected bossSpawn: Vec2;
 
     private healthLabel: Label;
 	private healthBar: Label;
@@ -123,9 +124,9 @@ export default abstract class HW3Level extends Scene {
 
     protected playerInvincible: boolean = false;
     
-    protected enemyWeaponSystem: PlayerWeapon;
-    protected enemyGrappleSystem: PlayerGrapple;
-    protected enemy_in_present: boolean;
+    protected bossWeaponSystem: BossWeapon;
+    protected bossGrappleSystem: BossGrapple;
+    protected boss_in_present: boolean;
 
     protected lastZoom: number;
     protected pauseButton: Button;
@@ -133,17 +134,18 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
+            groupNames: ["GROUND", "PLAYER", "BOSS", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS"],
             collisions: [
-            /* GROUND   */  [0,1,1,1,1,0,0,0,0],
-            /* PLAYER   */  [1,0,1,0,1,1,1,0,1],
-            /* ENEMY    */  [1,1,0,0,0,1,1,0,1], // eventually add grapple to enemy
-            /* WEAPON   */  [1,0,0,0,1,1,0,1,1], // decouple grapple and weapon
-            /* EWEAPON  */  [1,1,0,1,0,1,0,0,1],
-            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0],
-            /* DEATH    */  [0,1,1,0,0,0,0,0,0],
-            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0], // eventually add grapple to enemy
-            /* ICE      */  [0,1,1,1,1,0,0,0,0]]
+            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
+            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
+            /* ENEMY    */  [1,1,0,0,0,1,1,0,1,1], // eventually add grapple to enemy
+            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0], // decouple grapple and weapon
+            /* EWEAPON  */  [1,1,0,1,0,1,0,0,1,0],
+            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1],
+            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0], // eventually add grapple to enemy
+            /* ICE      */  [0,1,1,1,1,0,0,0,0,1],
+            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -156,7 +158,7 @@ export default abstract class HW3Level extends Scene {
         this.initializeUI();
         this.initializePlayer(this.playerSpriteKey);
 
-        this.initializeEnemy(this.enemySpriteKey);
+        this.initializeBoss(this.bossSpriteKey);
 
         // Initialize the viewport - this must come after the player has been initialized
         this.initializeViewport();
@@ -183,7 +185,7 @@ export default abstract class HW3Level extends Scene {
     public updateScene(deltaT: number) {
         while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
 
-        if (this.enemy.position.distanceTo(this.player.position) < 100) {
+        if (this.boss.position.distanceTo(this.player.position) < 100) {
             this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
         }
 
@@ -247,10 +249,10 @@ export default abstract class HW3Level extends Scene {
                 break;
             }
             case HW3Events.KILL_BOSS: {
-                console.log("ENEMY HIT");
-                this.enemy.animation.play("DYING", true, undefined);
+                console.log("BOSS HIT");
+                this.boss.animation.play("DYING", true, undefined);
                 setTimeout(() => {
-                    this.enemy.animation.play("DEAD", false, undefined);
+                    this.boss.animation.play("DEAD", false, undefined);
                 }, 300);
                 this.emitter.fireEvent(HW3Events.PLAYER_ENTERED_LEVEL_END);
                 break;
@@ -580,29 +582,29 @@ export default abstract class HW3Level extends Scene {
             tilemap: "Destructable" 
         });
     }
-    protected initializeEnemy(key: string): void {
-        this.enemyGrappleSystem = new PlayerGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
-        this.enemyGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+    protected initializeBoss(key: string): void {
+        this.bossGrappleSystem = new BossGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
+        this.bossGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
         /* this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO}) */
-        this.enemyGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
+        this.bossGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
 
-        this.enemyWeaponSystem = new EnemyWeapon(10, Vec2.ZERO, 1000, 3, 0, 50);
-        this.enemyWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
+        this.bossWeaponSystem = new BossWeapon(10, Vec2.ZERO, 1000, 3, 0, 50);
+        this.bossWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
 
-        // Add the enemy to the scene
-        this.enemy = this.add.animatedSprite(key, HW3Layers.PRIMARY);
-        this.enemy.scale.set(0.5, 0.5);
-        this.enemy.position.copy(this.enemySpawn);
+        // Add the boss to the scene
+        this.boss = this.add.animatedSprite(key, HW3Layers.PRIMARY);
+        this.boss.scale.set(0.5, 0.5);
+        this.boss.position.copy(this.bossSpawn);
         
-        // Give the enemy physics
-        this.enemy.addPhysics(new AABB(this.enemy.position.clone(), this.enemy.boundary.getHalfSize().clone()));
+        // Give the boss physics
+        this.boss.addPhysics(new AABB(this.boss.position.clone(), this.boss.boundary.getHalfSize().clone()));
 
-        this.enemy.addAI(EnemyController, {
-            weaponSystem: this.enemyWeaponSystem,
-            grappleSystem: this.enemyGrappleSystem,
+        this.boss.addAI(BossController, {
+            weaponSystem: this.bossWeaponSystem,
+            grappleSystem: this.bossGrappleSystem,
             tilemap: "Destructable",
             player: this.player,
-            enemy_in_present: this.enemy_in_present
+            boss_in_present: this.boss_in_present
         });
     }
     /**

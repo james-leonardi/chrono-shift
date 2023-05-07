@@ -23,9 +23,9 @@ export default class Level6 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
-    public static readonly ENEMY_SPAWN = new Vec2(2056, 1400);
-    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
-    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
+    public static readonly BOSS_SPAWN = new Vec2(2056, 1400);
+    public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
+    public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
 
     public static readonly TILEMAP_KEY = "LEVEL6";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L6.json";
@@ -66,9 +66,9 @@ export default class Level6 extends HW3Level {
         this.playerSpriteKey = Level6.PLAYER_SPRITE_KEY;
         this.playerSpawn = Level6.PLAYER_SPAWN;
 
-        this.enemySpriteKey = Level6.ENEMY_SPRITE_KEY;
-        this.enemySpawn = Level6.ENEMY_SPAWN;
-        this.enemy_in_present = true;
+        this.bossSpriteKey = Level6.BOSS_SPRITE_KEY;
+        this.bossSpawn = Level6.BOSS_SPAWN;
+        this.boss_in_present = true;
 
         // Music and sound
         this.levelMusicKey = Level6.LEVEL_MUSIC_KEY
@@ -93,7 +93,7 @@ export default class Level6 extends HW3Level {
         this.load.tilemap(this.tilemapKey, Level6.TILEMAP_PATH);
         // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level6.PLAYER_SPRITE_PATH);
-        this.load.spritesheet(this.enemySpriteKey, Level6.ENEMY_SPRITE_PATH);
+        this.load.spritesheet(this.bossSpriteKey, Level6.BOSS_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level6.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level6.JUMP_AUDIO_PATH);

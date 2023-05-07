@@ -12,6 +12,7 @@ export const HW3PhysicsGroups = {
     */
     GROUND: "GROUND",
     DESTRUCTABLE: "DESTRUCTABLE",
-    ENEMY: "ENEMY"
+    ENEMY: "ENEMY",
+    BOSS: "BOSS"
     
 } as const;
