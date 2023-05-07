@@ -101,6 +101,7 @@ export default class EnemyController extends StateMachineAI {
     protected player: HW3AnimatedSprite;
 
     protected enable: boolean;
+    protected paused: boolean = false;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
@@ -215,6 +216,16 @@ export default class EnemyController extends StateMachineAI {
             // console.log(this.owner.position.x + " " + this.owner.position.y);
         }
 
+        if (Input.isJustPressed(HW3Controls.PAUSE)) {
+            if (this.paused) {
+                this.owner.unfreeze(); this.owner.enablePhysics(); this.paused = false;
+                this.grapple.resumeSystem(); this.weapon.resumeSystem();
+            } else {
+                this.owner.freeze(); this.owner.disablePhysics(); this.paused = true;
+                if (this.grapple.isSystemRunning()) this.grapple.pauseSystem();
+                if (this.weapon.isSystemRunning()) this.weapon.pauseSystem();
+            }
+        }
         // const tile = this.tilemap.getColRowAt(this.owner.position);
         // if (!this.peeking && !this.invincible && (this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
         //     this.emitter.fireEvent("DYING"); this.changeState(EnemyStates.DEAD); this.mou_shindeiru = true; return;

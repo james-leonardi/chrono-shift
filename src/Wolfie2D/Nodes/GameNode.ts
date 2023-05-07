@@ -300,7 +300,7 @@ export default abstract class GameNode implements Positioned, Unique, Updateable
 		this.isTrigger = true;
 
 		// Get the number of the physics layer
-		let layerNumber = this.scene.getPhysicsManager().getGroupNumber(group);
+		let layerNumber = this.scene?.getPhysicsManager()?.getGroupNumber(group);
 
 		if(layerNumber === 0){
 			console.warn(`Trigger for GameNode ${this.id} not set - group "${group}" was not recognized by the physics manager.`);
@@ -314,8 +314,10 @@ export default abstract class GameNode implements Positioned, Unique, Updateable
 		let index = Math.log2(layerNumber);
 
 		// Set the event names
-		this.triggerEnters[index] = onEnter;
-		this.triggerExits[index] = onExit;
+		if (this.triggerEnters) {
+			this.triggerEnters[index] = onEnter;
+			this.triggerExits[index] = onExit;
+		}
 	};
 
 	// @implemented
@@ -323,7 +325,7 @@ export default abstract class GameNode implements Positioned, Unique, Updateable
 	 * @param group The physics group this node should belong to
 	 */
 	setGroup(group: string): void {
-		this.scene.getPhysicsManager().setGroup(this, group);
+		this.scene?.getPhysicsManager()?.setGroup(this, group);
 	}
 
 	// @implemened

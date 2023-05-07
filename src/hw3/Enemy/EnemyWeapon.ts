@@ -38,7 +38,7 @@ export default class EnemyWeapon extends ParticleSystem {
     public setParticleAnimation(particle: Particle) {
         // Give the particle a random velocity.
         let mpos: Vec2 = this.playerPos;
-        if (!mpos) return;
+        if (!mpos || !particle) return;
         let cpos: Vec2 = particle.position;
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
         vec.normalize().scale(150);
@@ -51,7 +51,7 @@ export default class EnemyWeapon extends ParticleSystem {
         particle.setTrigger(HW3PhysicsGroups.PLAYER, "HIT_PLAYER", undefined);
 
         // Give the particle tweens
-        particle.tweens.add("active", {
+        particle.tweens?.add("active", {
             startDelay: 0,
             duration: this.lifetime,
             effects: [

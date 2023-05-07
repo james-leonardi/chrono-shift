@@ -182,7 +182,7 @@ export default class ParticleSystem implements Updateable {
                     // Give particle tween animations
                     this.setParticleAnimation(particle);
 
-                    particle.tweens.play("active");
+                    particle.tweens?.play("active");
                 }
             }
             // Update the amount of particles that can be rendered based on the particles per frame, clamping if we go over the total number
