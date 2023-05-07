@@ -12,7 +12,7 @@ export default class Dead extends EnemyState {
     public onEnter(options: Record<string, any>): void {
         this.owner.freeze();
         this.owner.animation.play("DYING", false, undefined);
-        this.owner.animation.queue("DEATH", false, HW3Events.ENEMY_DEAD);
+        this.owner.animation.queue("DEAD", false, HW3Events.ENEMY_DEAD);
         //let deadgeAudio = this.owner.getScene().getDeadgeAudioKey();
         //this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: deadgeAudio, loop: false, holdReference: false});
     }

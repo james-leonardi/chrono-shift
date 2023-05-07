@@ -192,9 +192,7 @@ export default abstract class HW3Level extends Scene {
     public updateScene(deltaT: number) {
         while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
 
-        if (this.boss.position.distanceTo(this.player.position) < 100) {
-            this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
-        }
+        this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
 
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
