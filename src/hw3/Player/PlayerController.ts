@@ -192,7 +192,7 @@ export default class PlayerController extends StateMachineAI {
 
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
-        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning() && !this.grapple.isSystemRunning() && !this.paused) {
+        } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.grapple.isSystemRunning() && !this.paused) {
             if (!this.weapon_last_used || (Date.now() - this.weapon_last_used) > this.weapon_cooldown) {
                 this.weapon_last_used = Date.now();
                 this.weapon.startSystem(500, 0, this.owner.position);
