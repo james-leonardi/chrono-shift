@@ -36,7 +36,7 @@ export default class Level6 extends HW3Level {
     public static readonly GRAPPLE_ONLY_LAYER_KEY = "OnlyGrapple";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
-    public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/ice.mp3";
+    public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/finallevel.mp3";
 
     public static readonly JUMP_AUDIO_KEY = "PLAYER_JUMP";
     public static readonly JUMP_AUDIO_PATH = "hw4_assets/sounds/jump.wav";
