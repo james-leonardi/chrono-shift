@@ -37,7 +37,7 @@ export default class Queue<T> implements Collection {
      */
     enqueue(item: T): void{
         if((this.tail + 1) % this.MAX_ELEMENTS === this.head){
-            throw new Error("Queue full - cannot add element");
+            /* throw new Error("Queue full - cannot add element"); */ return;
         }
 
         this.size += 1;
