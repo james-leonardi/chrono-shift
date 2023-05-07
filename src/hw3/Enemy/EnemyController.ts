@@ -169,6 +169,7 @@ export default class EnemyController extends StateMachineAI {
                 break;
             }
             case HW3Events.KILL_ENEMY: {
+                if (event.data.get("node") !== this.owner.id) break;
                 console.log("KILL ENEMY RECEIVED");
                 this.changeState(EnemyStates.DEAD);
                 this.owner.setAIActive(false, undefined);
@@ -176,7 +177,7 @@ export default class EnemyController extends StateMachineAI {
             }
             case HW3Events.ENEMY_DEAD: {
                 // this.owner.position.set(-1000, -1000);
-                this.owner.setAIActive(false, undefined);
+                /* this.owner.setAIActive(false, undefined); */
                 break;
             }
             // case HW3Events.GRAPPLE_HIT: {
