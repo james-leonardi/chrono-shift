@@ -278,10 +278,12 @@ export default class Viewport {
                     // Zoom in until limit of -1
                     currentSize.scale(1 / this.ZOOM_FACTOR);
                     --this.currentZoom;
+                    if (this.currentZoom < -1) this.currentZoom = -1;
                 } else if (Input.getScrollDirection() > 0 && this.currentZoom < 7) {
                     // Zoom out until limit of 7
                     currentSize.scale(this.ZOOM_FACTOR);
                     ++this.currentZoom;
+                    if (this.currentZoom > 7) this.currentZoom = 7;
                 }
 
                 if(currentSize.x > this.boundary.hw){

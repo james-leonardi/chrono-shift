@@ -26,7 +26,7 @@ export default class PlayerWeapon extends ParticleSystem {
         particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
 
         // Give the particle tweens
-        particle.tweens.add("active", {
+        particle.tweens?.add("active", {
             startDelay: 0,
             duration: this.lifetime,
             effects: [
