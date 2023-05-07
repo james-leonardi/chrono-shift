@@ -43,7 +43,7 @@ export default class EnemyWeapon extends ParticleSystem {
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
-        particle.color = Color.ORANGE;
+        particle.color = Color.YELLOW;
         // todo: change to enemy weapon eventually
         // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
         // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);

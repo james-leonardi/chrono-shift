@@ -120,6 +120,8 @@ export default class EnemyController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
+        this.receiver.subscribe(HW3Events.KILL_ENEMY);
+        this.receiver.subscribe(HW3Events.ENEMY_DEAD);
         this.receiver.subscribe("ENEMY_CLOSE");
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
@@ -163,6 +165,15 @@ export default class EnemyController extends StateMachineAI {
                     this.weapon.setPlayerPos(playerPos?.clone());
                     this.weapon.startSystem(500, 0, this.owner.position.clone());
                 }
+                break;
+            }
+            case HW3Events.KILL_ENEMY: {
+                console.log("KILL ENEMY RECEIVED");
+                this.changeState(EnemyStates.DEAD);
+                break;
+            }
+            case HW3Events.ENEMY_DEAD: {
+                this.owner.setAIActive(false, undefined);
                 break;
             }
             // case HW3Events.GRAPPLE_HIT: {

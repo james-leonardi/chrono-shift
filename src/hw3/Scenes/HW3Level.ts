@@ -33,6 +33,8 @@ import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
 import BossWeapon from "../Boss/BossWeapon";
 import BossGrapple from "../Boss/BossGrapple";
+import EnemyGrapple from "../Enemy/EnemyGrapple";
+import Enemy from "../Enemy/Enemy";
 
 /**
  * A const object for the layer names
@@ -129,13 +131,15 @@ export default abstract class HW3Level extends Scene {
     protected bossGrappleSystem: BossGrapple;
     protected boss_in_present: boolean;
 
+    protected enemies: Enemy; // will make this an array, just testing for now
+
     protected lastZoom: number;
     protected pauseButton: Button;
     protected pauseMenu: Rect;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "BOSS", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS"],
             collisions: [
             /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
             /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
@@ -160,6 +164,8 @@ export default abstract class HW3Level extends Scene {
         this.initializePlayer(this.playerSpriteKey);
 
         this.initializeBoss(this.bossSpriteKey);
+
+        this.initializeEnemies(this.bossSpriteKey);
 
         // Initialize the viewport - this must come after the player has been initialized
         this.initializeViewport();
@@ -607,6 +613,9 @@ export default abstract class HW3Level extends Scene {
             player: this.player,
             boss_in_present: this.boss_in_present
         });
+    }
+    protected initializeEnemies(key: string): void {
+        this.enemies = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(100, 0)), this.player); // todo: set position
     }
     /**
      * Initializes the viewport
