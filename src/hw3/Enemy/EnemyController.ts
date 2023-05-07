@@ -162,6 +162,7 @@ export default class EnemyController extends StateMachineAI {
             case "ENEMY_CLOSE": {
                 if (this.enable && !this.weapon.isSystemRunning()) {
                     const playerPos: Vec2 = event.data.get("playerPos");
+                    if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) > 100) break;
                     this.weapon.setPlayerPos(playerPos?.clone());
                     this.weapon.startSystem(500, 0, this.owner.position.clone());
                 }
@@ -170,9 +171,11 @@ export default class EnemyController extends StateMachineAI {
             case HW3Events.KILL_ENEMY: {
                 console.log("KILL ENEMY RECEIVED");
                 this.changeState(EnemyStates.DEAD);
+                this.owner.setAIActive(false, undefined);
                 break;
             }
             case HW3Events.ENEMY_DEAD: {
+                // this.owner.position.set(-1000, -1000);
                 this.owner.setAIActive(false, undefined);
                 break;
             }

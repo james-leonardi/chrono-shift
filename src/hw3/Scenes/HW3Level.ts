@@ -131,7 +131,8 @@ export default abstract class HW3Level extends Scene {
     protected bossGrappleSystem: BossGrapple;
     protected boss_in_present: boolean;
 
-    protected enemies: Enemy; // will make this an array, just testing for now
+    // create array of enemies
+    protected enemies: Array<Enemy> = new Array<Enemy>();
 
     protected lastZoom: number;
     protected pauseButton: Button;
@@ -192,9 +193,7 @@ export default abstract class HW3Level extends Scene {
     public updateScene(deltaT: number) {
         while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
 
-        if (this.boss.position.distanceTo(this.player.position) < 100) {
-            this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
-        }
+        this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
 
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
@@ -615,7 +614,8 @@ export default abstract class HW3Level extends Scene {
         });
     }
     protected initializeEnemies(key: string): void {
-        this.enemies = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(100, 0)), this.player); // todo: set position
+        this.enemies[0] = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(100, 0)), this.player); // todo: set position
+        this.enemies[1] = new Enemy(key, this, this.bossSpawn.clone().add(new Vec2(50, 0)), this.player); // todo: set position
     }
     /**
      * Initializes the viewport
