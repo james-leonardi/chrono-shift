@@ -10,6 +10,7 @@ export default class Dash extends PlayerState {
 
 	public onEnter(options: Record<string, any>): void {
         // console.log("DASH ENTER");
+        let dashAudio = this.owner.getScene().getDashAudioKey();
         if(Input.isPressed(HW3Controls.MOVE_RIGHT)) {
             this.parent.velocity.x = 1000;
             this.parent.velocity.y = 0;
@@ -21,6 +22,7 @@ export default class Dash extends PlayerState {
             if (this.parent.velocity.x < 0) this.parent.velocity.x = -1000;
             else this.parent.velocity.x = 1000;
         }
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: dashAudio, loop: false, holdReference: false});
 	}
 
 	public update(deltaT: number): void {

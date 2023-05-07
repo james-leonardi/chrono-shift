@@ -116,6 +116,7 @@ export default abstract class HW3Level extends Scene {
     /** Sound and music */
     protected levelMusicKey: string;
     protected jumpAudioKey: string;
+    protected dashAudioKey: string;
     protected damagedAudioKey: string;
     protected tileDestroyedAudioKey: string;
     protected deadgeAudioKey: string;
@@ -647,6 +648,9 @@ export default abstract class HW3Level extends Scene {
 
     public getJumpAudioKey(): string {
         return this.jumpAudioKey;
+    }
+    public getDashAudioKey(): string {
+        return this.dashAudioKey;
     }
     public getDamagedAudioKey(): string {
         return this.damagedAudioKey;

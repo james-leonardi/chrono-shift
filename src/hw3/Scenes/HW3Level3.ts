@@ -40,6 +40,9 @@ export default class Level3 extends HW3Level {
 
     public static readonly JUMP_AUDIO_KEY = "PLAYER_JUMP";
     public static readonly JUMP_AUDIO_PATH = "hw4_assets/sounds/jump.wav";
+
+    public static readonly DASH_AUDIO_KEY = "PLAYER_DASH";
+    public static readonly DASH_AUDIO_PATH = "hw4_assets/sounds/dash.mp3";
     
     public static readonly DAMAGED_AUDIO_KEY = "PLAYER_DAMAGED";
     public static readonly DAMAGED_AUDIO_PATH = "hw4_assets/sounds/takedamage.mp3";
@@ -71,6 +74,7 @@ export default class Level3 extends HW3Level {
 
         this.levelMusicKey = Level3.LEVEL_MUSIC_KEY
         this.jumpAudioKey = Level3.JUMP_AUDIO_KEY;
+        this.dashAudioKey = Level3.DASH_AUDIO_KEY;
         this.tileDestroyedAudioKey = Level3.TILE_DESTROYED_KEY;
         this.damagedAudioKey = Level3.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level3.DEADGE_AUDIO_KEY;
@@ -89,6 +93,7 @@ export default class Level3 extends HW3Level {
         // Audio and music
         this.load.audio(this.levelMusicKey, Level3.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level3.JUMP_AUDIO_PATH);
+        this.load.audio(this.dashAudioKey, Level1.DASH_AUDIO_PATH);
         this.load.audio(this.tileDestroyedAudioKey, Level3.TILE_DESTROYED_PATH);
         this.load.audio(this.damagedAudioKey, Level3.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level3.DEADGE_AUDIO_PATH);
