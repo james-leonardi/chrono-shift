@@ -41,9 +41,6 @@ export default class MainMenu extends Scene {
     public static readonly CONTROLS_KEY = "CONTROLS";
     public static readonly CONTROLS_PATH = "hw4_assets/Controls.png";
 
-    public static readonly L0PREVIEW_KEY = "L0PREVIEW";
-    public static readonly L0PREVIEW_PATH = "hw4_assets/tilemaps/PreviewL0.png";
-
     public static readonly L1PREVIEW_KEY = "L1PREVIEW";
     public static readonly L1PREVIEW_PATH = "hw4_assets/tilemaps/L1Preview.jpg";
     public static readonly L2PREVIEW_KEY = "L2PREVIEW";
@@ -81,7 +78,6 @@ export default class MainMenu extends Scene {
         this.viewport?.setZoomLevel(4);
         this.viewport?.disableZoom();
 
-        this.load.image(MainMenu.L0PREVIEW_KEY, MainMenu.L0PREVIEW_PATH);
         this.load.image(MainMenu.L1PREVIEW_KEY, MainMenu.L1PREVIEW_PATH);
         this.load.image(MainMenu.L2PREVIEW_KEY, MainMenu.L2PREVIEW_PATH);
         this.load.image(MainMenu.L3PREVIEW_KEY, MainMenu.L3PREVIEW_PATH);
