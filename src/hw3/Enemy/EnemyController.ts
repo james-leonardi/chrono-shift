@@ -159,8 +159,8 @@ export default class EnemyController extends StateMachineAI {
             case "ENEMY_CLOSE": {
                 if (this.enable && !this.weapon.isSystemRunning()) {
                     const playerPos: Vec2 = event.data.get("playerPos");
-                    this.weapon.setPlayerPos(playerPos);
-                    this.weapon.startSystem(500, 0, this.owner.position);
+                    this.weapon.setPlayerPos(playerPos.clone());
+                    this.weapon.startSystem(500, 0, this.owner.position.clone());
                 }
                 break;
             }
