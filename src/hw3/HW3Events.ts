@@ -34,6 +34,9 @@ export const HW3Events = {
     // Event fired when the player kills an boss
     KILL_BOSS: "KILL_BOSS",
 
+    KILL_ENEMY: "KILL_ENEMY",
+    ENEMY_DEAD: "ENEMY_DEAD",
+
     BULLET: "BULLET"
     
 } as const;
