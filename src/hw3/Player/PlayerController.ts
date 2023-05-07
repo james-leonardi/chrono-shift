@@ -85,6 +85,8 @@ export default class PlayerController extends StateMachineAI {
     protected invincible: boolean = false;
     protected paused: boolean = false;
 
+    protected lastHitTime: Date = new Date();
+
     protected receiver: Receiver;
 
     
@@ -100,6 +102,7 @@ export default class PlayerController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         this.receiver.subscribe(HW3Events.BULLET);
+        this.receiver.subscribe("HIT_PLAYER");
         this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
@@ -126,6 +129,20 @@ export default class PlayerController extends StateMachineAI {
                 this.velocity.mult(Vec2.ZERO);
                 const scale = event.data.get("distance") / 100 * 0.25 + 0.75;
                 this.velocity.add(event.data.get('velocity').scale(scale));
+                break;
+            }
+            case "HIT_PLAYER": {
+                if(!this.invincible) {
+                    if (this.lastHitTime.getTime() + 1000 >= Date.now()) break;
+                    console.log("Player hit!");
+                    this.lastHitTime = new Date();
+                    this.health--;
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "player_hit", loop: false, holdReference: false });
+                    if(this.health <= 0) {
+                        this.changeState(PlayerStates.DEAD);
+                    }
+
+                }
                 break;
             }
             case HW3Events.BULLET: {

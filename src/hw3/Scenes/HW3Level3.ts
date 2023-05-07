@@ -28,7 +28,7 @@ export default class Level3 extends HW3Level {
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly TILEMAP_KEY = "LEVEL3";
-    public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/JungleL1.json";
+    public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L3.json";
     public static readonly TILEMAP_SCALE = new Vec2(2, 2);
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
@@ -123,7 +123,7 @@ export default class Level3 extends HW3Level {
 
     public startScene(): void {
         super.startScene();
-        this.nextLevel = HW4Level2;
+        this.nextLevel = Level5; //Change to Level4;
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
     }

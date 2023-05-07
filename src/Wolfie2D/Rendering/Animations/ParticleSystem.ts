@@ -104,6 +104,7 @@ export default class ParticleSystem implements Updateable {
             if (particle.inUse) {
                 particle.setParticleInactive();
             }
+            particle.position.set(this.sourcePoint.x, this.sourcePoint.y);
         }
     }
 
@@ -158,6 +159,7 @@ export default class ParticleSystem implements Updateable {
         else {
             for (let i = 0; i < this.particlesToRender; i++) {
                 let particle = this.particlePool[i];
+                if (!particle) continue;
 
                 // If a particle is in use, decrease it's age and update it's velocity, if it has one
                 if (particle.inUse) {

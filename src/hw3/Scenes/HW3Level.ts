@@ -31,6 +31,7 @@ import EnemyController from "../Enemy/EnemyController";
 import HW3AnimatedSprite from "../Nodes/HW3AnimatedSprite";
 import Sprite from "../../Wolfie2D/Nodes/Sprites/Sprite";
 import Button from "../../Wolfie2D/Nodes/UIElements/Button";
+import EnemyWeapon from "../Enemy/EnemyWeapon";
 
 /**
  * A const object for the layer names
@@ -132,16 +133,17 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE"],
             collisions: [
-            /* GROUND   */  [0,1,1,1,0,0,0,0],
-            /* PLAYER   */  [1,0,1,0,1,1,0,1],
-            /* ENEMY    */  [1,1,0,0,1,1,0,1], // eventually add grapple to enemy
-            /* WEAPON   */  [1,0,0,0,1,0,1,1], // decouple grapple and weapon
-            /* DESTRUCT */  [0,1,1,1,0,0,0,0],
-            /* DEATH    */  [0,1,1,0,0,0,0,0],
-            /* GRAPPLE  */  [0,0,0,1,0,0,0,0], // eventually add grapple to enemy
-            /* ICE      */  [0,1,1,1,0,0,0,0]]
+            /* GROUND   */  [0,1,1,1,1,0,0,0,0],
+            /* PLAYER   */  [1,0,1,0,1,1,1,0,1],
+            /* ENEMY    */  [1,1,0,0,0,1,1,0,1], // eventually add grapple to enemy
+            /* WEAPON   */  [1,0,0,0,1,1,0,1,1], // decouple grapple and weapon
+            /* EWEAPON  */  [1,1,0,1,0,1,0,0,1],
+            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0],
+            /* DEATH    */  [0,1,1,0,0,0,0,0,0],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0], // eventually add grapple to enemy
+            /* ICE      */  [0,1,1,1,1,0,0,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -180,6 +182,11 @@ export default abstract class HW3Level extends Scene {
 
     public updateScene(deltaT: number) {
         while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
+
+        if (this.enemy.position.distanceTo(this.player.position) < 100) {
+            this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
+        }
+
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
         this.lastZoom = zoomLevel;
@@ -579,8 +586,8 @@ export default abstract class HW3Level extends Scene {
         /* this.grappleLine = <Line>this.add.graphic(GraphicType.LINE, HW3Layers.PRIMARY, {"start": Vec2.ZERO, "end": Vec2.ZERO}) */
         this.enemyGrappleSystem.initializeLine(this, HW3Layers.PRIMARY);
 
-        this.enemyWeaponSystem = new PlayerWeapon(50, Vec2.ZERO, 1000, 3, 0, 50);
-        this.enemyGrappleSystem.initializePool(this, HW3Layers.PRIMARY);
+        this.enemyWeaponSystem = new EnemyWeapon(10, Vec2.ZERO, 1000, 3, 0, 50);
+        this.enemyWeaponSystem.initializePool(this, HW3Layers.PRIMARY);
 
         // Add the enemy to the scene
         this.enemy = this.add.animatedSprite(key, HW3Layers.PRIMARY);

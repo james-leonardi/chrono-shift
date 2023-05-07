@@ -17,6 +17,7 @@ import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
  */
 export default class EnemyWeapon extends ParticleSystem {
 
+    protected playerPos: Vec2;
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
     }
@@ -26,13 +27,18 @@ export default class EnemyWeapon extends ParticleSystem {
      */
     public isSystemRunning(): boolean { return this.systemRunning; }
 
+    public setPlayerPos(pos: Vec2) {
+        this.playerPos = pos;
+    }
+
     /**
      * Sets the animations for a particle in the enemy's weapon
      * @param particle the particle to give the animation to
      */
     public setParticleAnimation(particle: Particle) {
         // Give the particle a random velocity.
-        let mpos: Vec2 = Input.getGlobalMousePosition();
+        let mpos: Vec2 = this.playerPos;
+        if (!mpos) return;
         let cpos: Vec2 = particle.position;
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
         vec.normalize().scale(150);
@@ -41,6 +47,8 @@ export default class EnemyWeapon extends ParticleSystem {
         // todo: change to enemy weapon eventually
         // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
         // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
+        particle.setGroup("EWEAPON");
+        particle.setTrigger(HW3PhysicsGroups.PLAYER, "HIT_PLAYER", undefined);
 
         // Give the particle tweens
         particle.tweens.add("active", {

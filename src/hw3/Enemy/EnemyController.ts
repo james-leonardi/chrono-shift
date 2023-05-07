@@ -119,6 +119,7 @@ export default class EnemyController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
+        this.receiver.subscribe("ENEMY_CLOSE");
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -154,6 +155,14 @@ export default class EnemyController extends StateMachineAI {
                     this.owner.enablePhysics();
                     this.owner.visible = true;
                 }
+            }
+            case "ENEMY_CLOSE": {
+                if (this.enable && !this.weapon.isSystemRunning()) {
+                    const playerPos: Vec2 = event.data.get("playerPos");
+                    this.weapon.setPlayerPos(playerPos.clone());
+                    this.weapon.startSystem(500, 0, this.owner.position.clone());
+                }
+                break;
             }
             // case HW3Events.GRAPPLE_HIT: {
             //     console.log("Grapple!");
