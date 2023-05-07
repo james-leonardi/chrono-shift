@@ -66,6 +66,8 @@ export default class PlayerController extends StateMachineAI {
 
     protected tilemap: OrthogonalTilemap;
     protected weapon: PlayerWeapon;
+    protected weapon_last_used: number;
+    protected weapon_cooldown: number = 500;
     protected grapple: PlayerGrapple;
     protected grapple_line: Line;
     protected grapple_last_used: number;
@@ -96,6 +98,7 @@ export default class PlayerController extends StateMachineAI {
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
         this.grapple_last_used = 0;
+        this.weapon_last_used = 0;
         this.switch_last_used = 0;
         this.owner.setGroup(HW3PhysicsGroups.PLAYER);
 
@@ -190,10 +193,13 @@ export default class PlayerController extends StateMachineAI {
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PSHH", loop: false, holdReference: false });
             } else console.log("CD!");
         } else if ((Input.isPressed(HW3Controls.ATTACK) || Input.isMouseJustPressed(0)) && !this.weapon.isSystemRunning() && !this.grapple.isSystemRunning() && !this.paused) {
-            this.weapon.startSystem(500, 0, this.owner.position);
-            this.owner.animation.play("ATTACKING", false, undefined);
-            this.owner.animation.queue("IDLE", false, undefined);
-            this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "SHOOT", loop: false, holdReference: false });
+            if (!this.weapon_last_used || (Date.now() - this.weapon_last_used) > this.weapon_cooldown) {
+                this.weapon_last_used = Date.now();
+                this.weapon.startSystem(500, 0, this.owner.position);
+                this.owner.animation.play("ATTACKING", false, undefined);
+                this.owner.animation.queue("IDLE", false, undefined);
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "SHOOT", loop: false, holdReference: false });
+            } else console.log("CD!");
         }
         
         this.grapple.renderLine(this.owner.position);
