@@ -25,9 +25,9 @@ export default class Idle extends EnemyState {
 			this.finished(EnemyStates.WALK);
 		} 
         // If the enemy is jumping, transition to the jumping state
-        else if (Input.isJustPressed(HW3Controls.JUMP)) {
+        /* else if (Input.isJustPressed(HW3Controls.JUMP)) {
             this.finished(EnemyStates.JUMP);
-        }
+        } */
         // If the enemy is not on the ground, transition to the falling state
         else if (!this.owner.onGround && this.parent.velocity.y > 0) {
             this.finished(EnemyStates.FALL);

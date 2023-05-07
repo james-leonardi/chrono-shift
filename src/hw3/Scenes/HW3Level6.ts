@@ -23,9 +23,9 @@ export default class Level6 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
-    public static readonly ENEMY_SPAWN = new Vec2(2056, 1480);
+    public static readonly ENEMY_SPAWN = new Vec2(2056, 1400);
     public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
-    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/angel.json";
 
     public static readonly TILEMAP_KEY = "LEVEL6";
     public static readonly TILEMAP_PATH = "hw4_assets/tilemaps/L6.json";
