@@ -129,6 +129,7 @@ export default class Level3 extends HW3Level {
     }
 
     public unloadScene(): void {
+        super.unlockLevel(3);
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level3.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
         this.load.keepAudio(this.tileDestroyedAudioKey);
