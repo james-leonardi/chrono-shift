@@ -355,22 +355,26 @@ export default class MainMenu extends Scene {
                 position: new Vec2(size.x, size.y - 15), text: "Tepster Tomsper is a distinguished and capable hitman. One day while out"
             });
             let line2 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 15), text: "running errands at Trader Joe's, he stumbles upon the Chrono-Switch,"
+                position: new Vec2(size.x, size.y + 15), text: "running errands at Trader Joe's, he stumbled upon the Chrono-Switch,"
             });
             let line3 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 45), text: "a device that, when activated, allows him to travel back in time."
+                position: new Vec2(size.x, size.y + 45), text: "a device that, when activated, allows him to travel back in time. However,"
             });
             let line4 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 75), text: "Using his newfound god-like powers, he decided that it is his duty"
+                position: new Vec2(size.x, size.y + 75), text: "when he touched the device, it unleashed several anomalous time clones."
             });
             let line5 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 105), text: "to eliminate the anachronistic fiends that are infesting the past."
+                position: new Vec2(size.x, size.y + 105), text: "Using his newfound god-like powers, he decided that it is his duty"
+            });
+            let line6 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
+                position: new Vec2(size.x, size.y + 135), text: "to eliminate the anachronistic fiends that are now infesting the past."
             });
             line1.font = "MyFont"; line1.fontSize = 20;
             line2.font = "MyFont"; line2.fontSize = 20;
             line3.font = "MyFont"; line3.fontSize = 20;
             line4.font = "MyFont"; line4.fontSize = 20;
             line5.font = "MyFont"; line5.fontSize = 20;
+            line6.font = "MyFont"; line6.fontSize = 20;
 
             let madeBy = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
                 position: new Vec2(size.x, size.y + 210), text: "Made by: Kevin Tao, James Leonardi, and Kyle Yee"
