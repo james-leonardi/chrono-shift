@@ -37,6 +37,8 @@ export const HW3Events = {
     KILL_ENEMY: "KILL_ENEMY",
     ENEMY_DEAD: "ENEMY_DEAD",
 
-    BULLET: "BULLET"
+    BULLET: "BULLET",
+
+    MAIN_MENU: "MAIN_MENU",
     
 } as const;

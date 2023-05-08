@@ -284,6 +284,16 @@ export default class PlayerController extends StateMachineAI {
             }
         }
 
+        if (Input.isJustPressed(HW3Controls.MENU)) {
+            if (this.paused) {
+                // go to main menu
+                console.log("Going to main menu");
+                this.paused = false;
+                this.emitter.fireEvent("UNPAUSE");
+                this.emitter.fireEvent(HW3Events.MAIN_MENU);
+            }
+        }
+
         // Level Change Cheats
         if (Input.isJustPressed(HW3Controls.LEVEL1)) {
             this.emitter.fireEvent(HW3Events.LEVEL_CHANGE, { level: "1"});

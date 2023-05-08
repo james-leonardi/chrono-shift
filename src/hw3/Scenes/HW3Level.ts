@@ -311,6 +311,10 @@ export default abstract class HW3Level extends Scene {
                 this.pauseMenu.tweens.play("fadeOut");
                 break;
             }
+            case HW3Events.MAIN_MENU: {
+                this.sceneManager.changeToScene(MainMenu);
+                break;
+            }
             case HW3Events.PERSPECTIVE: {
                 if (event.data.get("position") !== undefined) this.showCswitch(event.data.get("position"));
                 break;
@@ -435,6 +439,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PAUSE");
         this.receiver.subscribe("UNPAUSE");
         this.receiver.subscribe("CHANGE_FRAME");
+        this.receiver.subscribe(HW3Events.MAIN_MENU);
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
     }
 
@@ -605,7 +610,7 @@ export default abstract class HW3Level extends Scene {
             onEnd: HW3Events.LEVEL_START
         });
 
-        this.pauseMenu = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.UI, { position: new Vec2(300, 200), size: new Vec2(600, 400) });
+        this.pauseMenu = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.UI, { position: new Vec2(300, 200), size: new Vec2(2000, 2000) });
         this.pauseMenu.color = new Color(34, 32, 52);
         this.pauseMenu.alpha = 0;
 
