@@ -149,18 +149,19 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS", "GUN"],
             collisions: [
-            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
-            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
-            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1], // eventually add grapple to enemy
-            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0], // decouple grapple and weapon
-            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0],
-            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1],
-            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1],
-            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0], // eventually add grapple to enemy
-            /* ICE      */  [0,1,1,1,1,0,0,0,0,1],
-            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0]]
+            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1,0],
+            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1,0],
+            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0,0],
+            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0,1],
+            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1,0],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0,0],
+            /* ICE      */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0,0],
+            /* BULLET   */  [1,0,0,0,1,1,0,0,1,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -403,6 +404,7 @@ export default abstract class HW3Level extends Scene {
         this.destructable.addPhysics();
         this.destructable.setGroup("DESTRUCTABLE");
         this.destructable.setTrigger("WEAPON", "PARTICLE", undefined);
+        this.destructable.setTrigger("GUN", "PARTICLE", undefined);
         this.walls.setGroup("GROUND");
         this.death.addPhysics();
         this.death.setGroup("DEATH");
