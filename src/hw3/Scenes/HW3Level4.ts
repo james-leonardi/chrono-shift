@@ -18,7 +18,7 @@ import Level6 from "./HW3Level6";
  */
 export default class Level4 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(32, 608);
+    public static readonly PLAYER_SPAWN = new Vec2(42, 470);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
