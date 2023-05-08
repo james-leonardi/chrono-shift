@@ -257,6 +257,8 @@ export default class EnemyController extends StateMachineAI {
         // Attempt to shoot at player
         if (!this.weapon.isSystemRunning()) {
             if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
+                this.owner.animation.play("ATTACKING");
+                this.owner.animation.queue("IDLE");
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());
             }
