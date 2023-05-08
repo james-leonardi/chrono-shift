@@ -89,6 +89,7 @@ export default class Level3 extends HW3Level {
         this.bossSpriteKey = Level3.BOSS_SPRITE_KEY;
         this.bossSpawn = Level3.BOSS_SPAWN;
         this.boss_in_present = true;
+        this.final_boss = false;
 
         this.levelMusicKey = Level3.LEVEL_MUSIC_KEY
         this.jumpAudioKey = Level3.JUMP_AUDIO_KEY;

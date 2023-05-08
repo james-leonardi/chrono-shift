@@ -18,6 +18,7 @@ import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 export default class BossWeapon extends ParticleSystem {
 
     protected playerPos: Vec2;
+    protected final_boss: boolean;
     public getPool(): Readonly<Array<Particle>> {
         return this.particlePool;
     }
@@ -31,6 +32,10 @@ export default class BossWeapon extends ParticleSystem {
         this.playerPos = pos;
     }
 
+    public setFinalBoss(final: boolean) {
+        this.final_boss = final;
+    }
+
     /**
      * Sets the animations for a particle in the boss's weapon
      * @param particle the particle to give the animation to
@@ -41,7 +46,7 @@ export default class BossWeapon extends ParticleSystem {
         if (!mpos || !particle) return;
         let cpos: Vec2 = particle.position;
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
-        vec.normalize().scale(150);
+        vec.normalize().scale(this.final_boss ? 250 : 150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
         particle.color = Color.ORANGE;
         // todo: change to boss weapon eventually

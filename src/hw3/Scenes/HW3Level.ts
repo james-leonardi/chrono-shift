@@ -144,6 +144,7 @@ export default abstract class HW3Level extends Scene {
     protected bossWeaponSystem: BossWeapon;
     protected bossGrappleSystem: BossGrapple;
     protected boss_in_present: boolean;
+    protected final_boss: boolean;
 
     // create array of enemies
     protected enemies: Array<Enemy>;
@@ -155,20 +156,21 @@ export default abstract class HW3Level extends Scene {
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS", "GUN"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS", "GUN", "FINAL_BOSS"],
             collisions: [
-            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1,1],
-            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1,0],
-            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1,0],
-            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0,0],
-            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0,1],
-            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1,1],
-            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1,0],
-            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0,0],
-            /* ICE      */  [0,1,1,1,1,0,0,0,0,1,1],
-            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0,0],
-            /* BULLET   */  [1,0,0,0,1,1,0,0,1,0,0]]
-         }});
+            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1,1,1],
+            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1,0,1],
+            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1,0,1],
+            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0,0,0],
+            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0,1,0],
+            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1,1,1],
+            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1,0,1],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0,0,0],
+            /* ICE      */  [0,1,1,1,1,0,0,0,0,1,1,1],
+            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0,0,0],
+            /* GUN      */  [1,0,0,0,1,1,0,0,1,0,0,0],
+            /* FINALBOSS*/  [1,1,1,0,0,1,1,0,1,0,0,0]
+        ]}});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
 
@@ -337,11 +339,11 @@ export default abstract class HW3Level extends Scene {
         }
     }
 
-    protected showCswitch(position: Vec2): void {
+    public showCswitch(position: Vec2, big: boolean = false): void {
         console.log("SHOWING PARTICLE");
-        this.cswitch.position = position.add(new Vec2(0, 0));
+        this.cswitch.position = position;
         this.cswitch.visible = true;
-        this.cswitch.tweens.play("fadeOut");
+        this.cswitch.tweens.play(big ? "fadeOutBig" : "fadeOut");
     }
 
     protected handleParticleHit(particleId: number): void {
@@ -505,6 +507,36 @@ export default abstract class HW3Level extends Scene {
                     property: "scaleY",
                     start: 0.05,
                     end: 0.04,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                }/*,
+                {
+                    property: "positionY",
+                    start: this.cswitch.position.y,
+                    end: this.cswitch.position.y-25,
+                    ease: EaseFunctionType.IN_SINE
+                }*/
+            ]
+        });
+        this.cswitch.tweens.add("fadeOutBig", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "alpha",
+                    start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleX",
+                    start: 0.15,
+                    end: 0.1,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleY",
+                    start: 0.15,
+                    end: 0.1,
                     ease: EaseFunctionType.IN_OUT_SINE
                 }/*,
                 {
@@ -745,7 +777,8 @@ export default abstract class HW3Level extends Scene {
             grappleSystem: this.bossGrappleSystem,
             tilemap: "Destructable",
             player: this.player,
-            boss_in_present: this.boss_in_present
+            boss_in_present: this.boss_in_present,
+            final_boss: this.final_boss
         });
     }
     protected clearEnemies(): void {

@@ -93,6 +93,9 @@ export default class BossController extends StateMachineAI {
     protected enable: boolean;
     protected paused: boolean = false;
     protected follow_override: boolean = false;
+    public final_boss: boolean;
+    protected hp: number;
+    public lasthit: Date;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
@@ -102,8 +105,10 @@ export default class BossController extends StateMachineAI {
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
+        this.final_boss = options.final_boss;
         this.grapple_last_used = 0;
         this.switch_last_used = 0;
+        this.weapon.setFinalBoss(this.final_boss);
         // todo: remove
         // this.owner.setGroup(HW3PhysicsGroups.BOSS);
         // this.owner.setTrigger(HW3PhysicsGroups.PLAYER_WEAPON, HW3Events.KILL_BOSS, undefined);
@@ -112,6 +117,7 @@ export default class BossController extends StateMachineAI {
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
         this.receiver.subscribe(HW3Events.KILL_BOSS);
+        this.receiver.subscribe(HW3Events.BOSS_DAMAGE);
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -120,6 +126,8 @@ export default class BossController extends StateMachineAI {
 
         this.health = 5
         this.maxHealth = 5;
+        this.hp = 5;
+        this.lasthit = new Date();
 
         // Add the different states the boss can be in to the BossController 
 		this.addState(BossStates.IDLE, new Idle(this, this.owner));
@@ -161,6 +169,22 @@ export default class BossController extends StateMachineAI {
                 this.owner.setAIActive(false, undefined);
                 break;
             }
+            case HW3Events.BOSS_DAMAGE: {
+                console.log("BOSS DAMAGE RECEIVED");
+                if (Date.now() - this.lasthit.getTime() < 650) break;
+                this.lasthit = new Date();
+                // 50% chance to activate
+                if (Math.random() < 0.5) {
+                    this.enable = false;
+                    this.owner.getScene().showCswitch(this.owner.position.clone(), true);
+                    this.owner.position.y += 2240 * (this.owner.position.y <= 2240 ? 1 : -1);
+                } else if (--this.hp === 0) {
+                    this.emitter.fireEvent(HW3Events.KILL_BOSS, {node: this.owner.id});
+                    break;
+                }
+                this.owner.animation.play("TAKING_DAMAGE");
+                break;
+            }
             // case HW3Events.GRAPPLE_HIT: {
             //     console.log("Grapple!");
             //     //if (this.owner.onGround || this.velocity.y < 0) this.velocity.y = 0;
@@ -191,7 +215,7 @@ export default class BossController extends StateMachineAI {
 	 */
     public get inputDir(): Vec2 {
         if (!this.player.visible) return undefined;
-        if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
+        if (this.follow_override || this.owner.position.distanceTo(this.player.position) < (this.final_boss ? 200 : 100)) {
             this.follow_override = true;
             // (basically it makes the enemy follow the player until 50 units away)
             return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), 0);
@@ -215,9 +239,11 @@ export default class BossController extends StateMachineAI {
 
         // Attempt to shoot at player
         if (!this.weapon.isSystemRunning()) {
-            if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
+            if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < (this.final_boss ? 200 : 100)) {
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());
+                let enemyShootAudio = this.owner.getScene().getEnemyShootAudioKey();
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: enemyShootAudio, loop: false, holdReference: false});
             }
         }
 

@@ -17,8 +17,8 @@ export default abstract class BossState extends State {
 	public constructor(parent: BossController, owner: HW3AnimatedSprite){
 		super(parent);
 		this.owner = owner;
-        this.owner.setGroup(HW3PhysicsGroups.BOSS);
-        this.gravity = 500;
+        this.owner.setGroup(this.parent.final_boss ? HW3PhysicsGroups.FINAL_BOSS : HW3PhysicsGroups.BOSS);
+        this.gravity = this.parent.final_boss ? 0 : 500;
 	}
 
     public abstract onEnter(options: Record<string, any>): void;

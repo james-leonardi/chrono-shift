@@ -15,6 +15,11 @@ export default class Walk extends BossState {
         // Call the update method in the parent class - updates the direction the boss is facing
         super.update(deltaT);
 
+        if (this.parent.final_boss) {
+            // check if last hit was recent
+            if (Date.now() - this.parent.lasthit.getTime() < 400) return;
+        }
+
         // Get the input direction from the boss controller
 		let dir = this.parent.inputDir;
         if (dir === undefined) return;

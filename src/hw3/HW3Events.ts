@@ -40,5 +40,6 @@ export const HW3Events = {
     BULLET: "BULLET",
 
     MAIN_MENU: "MAIN_MENU",
+    BOSS_DAMAGE: "BOSS_DAMAGE",
     
 } as const;
