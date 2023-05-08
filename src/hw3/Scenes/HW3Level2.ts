@@ -135,20 +135,20 @@ export default class Level2 extends HW3Level {
 
         const presentPositions = [
             [450, 590],[700, 550],
-            [1218,1065],[1617,1061],
+            [1218,1065],[1617,1000],
 
         ];
         const pastPositions = [
-            [665, 2800],[1000,2800],
+            [665, 2800],
+            [1000,2800],
             [1826,3298]
         ];
-
 
         for (const pos of presentPositions) {
             super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, 100);
         }
         for (const pos of pastPositions) {
-            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false);
+            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, 100);
         }
     }
 

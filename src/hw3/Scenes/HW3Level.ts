@@ -147,9 +147,9 @@ export default abstract class HW3Level extends Scene {
             collisions: [
             /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
             /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
-            /* ENEMY    */  [1,1,0,0,0,1,1,0,1,1], // eventually add grapple to enemy
+            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1], // eventually add grapple to enemy
             /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0], // decouple grapple and weapon
-            /* EWEAPON  */  [1,1,0,1,0,1,0,0,1,0],
+            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0],
             /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1],
             /* DEATH    */  [0,1,1,0,0,0,0,0,0,1],
             /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0], // eventually add grapple to enemy

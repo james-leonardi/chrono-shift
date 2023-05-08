@@ -153,18 +153,19 @@ export default class EnemyController extends StateMachineAI {
 
     handleEvent(event: GameEvent): void {
         switch (event.type) {
-            case HW3Events.PERSPECTIVE: {  // Todo: potentially differentiate peeking and switching
+            case HW3Events.PERSPECTIVE: {
                 if (this.enable) {
-                    if (Math.abs(this.owner.position.y - event.data.get("y")) < 1000) break;
+                    this.owner.visible = false;
                     this.enable = false;
                     this.owner.freeze();
                     this.owner.disablePhysics();
-                    this.owner.visible = false;
                 } else {
-                    this.enable = true;
-                    this.owner.unfreeze();
-                    this.owner.enablePhysics();
                     this.owner.visible = true;
+                    this.enable = true;
+                    if (!event.data.get("peek")) {
+                        this.owner.unfreeze();
+                        this.owner.enablePhysics();
+                    }
                 }
                 break;
             }
@@ -215,11 +216,13 @@ export default class EnemyController extends StateMachineAI {
         this.stuck++;
     }
     public get inputDir(): Vec2 {
+        if (!this.player.visible) return undefined;
         if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
             this.follow_override = true;
-            return new Vec2(this.owner.position.x < this.player.position.x ? 1 : -1, 0);
+            // (basically it makes the enemy follow the player until 50 units away)
+            return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), 0);
         }
-		if (this.walk_distance === 0) return Vec2.ZERO;
+        if (this.walk_distance === 0) return Vec2.ZERO;
         if (this.going_left) {  // Go left
             if (this.stuck >= 3 || this.owner.position.x < this.i_position.x - this.walk_distance) {  // If we've gone too far, go right
                 this.going_left = false;
@@ -249,7 +252,7 @@ export default class EnemyController extends StateMachineAI {
         }
 
         // DO AI STUFF HERE
-        const playerPos: Vec2 = this.enable ? this.player.position.clone() : undefined;
+        const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
 
         // Attempt to shoot at player
         if (!this.weapon.isSystemRunning()) {
