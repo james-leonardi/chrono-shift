@@ -233,6 +233,8 @@ export default abstract class HW3Level extends Scene {
         this.healthFrame.scale = scaleFactor(0.12, 0.12);
         this.healthFrame2.position = scaleFactor(60, 27);
         this.healthFrame2.scale = scaleFactor(0.12, 0.12);
+        this.pauseText.position = scaleFactor(150, 75);
+        this.pauseText.scale = scaleFactor(0.12, 0.12);
     }
 
     protected completedLevel(level: number): void {
