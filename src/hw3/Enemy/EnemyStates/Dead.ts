@@ -11,6 +11,7 @@ export default class Dead extends EnemyState {
     // Trigger the enemy's death animation when we enter the dead state
     public onEnter(options: Record<string, any>): void {
         this.owner.freeze();
+        this.owner.disablePhysics();
         this.owner.animation.stop();
         this.owner.animation.play("DYING", false, undefined);
         this.owner.animation.queue("DEAD", false, HW3Events.ENEMY_DEAD);
