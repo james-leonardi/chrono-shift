@@ -22,6 +22,7 @@ import { HW3Events } from "../HW3Events";
 import Dead from "./PlayerStates/Dead";
 import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 
 /**
  * Animation keys for the player spritesheet
@@ -91,6 +92,8 @@ export default class PlayerController extends StateMachineAI {
     protected lastHitTime: Date = new Date();
 
     protected receiver: Receiver;
+
+    protected chronoParticle: Particle;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
