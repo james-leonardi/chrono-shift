@@ -9,7 +9,7 @@ import EnemyState from "./EnemyState";
 export default class Jump extends EnemyState {
 
 	public onEnter(options: Record<string, any>): void {
-        // console.log("JUMP ENTER");
+        console.log("JUMP ENTER");
         // Get the jump audio key for the enemy
         let jumpAudio = this.owner.getScene().getJumpAudioKey();
         /* console.log(this.parent.velocity.x); */
@@ -34,10 +34,6 @@ export default class Jump extends EnemyState {
         else if(this.owner.onCeiling || this.parent.velocity.y >= 0){
             this.finished(EnemyStates.FALL);
 		}
-        else if(Input.isJustPressed(HW3Controls.DASH) && (Input.isPressed(HW3Controls.MOVE_LEFT) || Input.isPressed(HW3Controls.MOVE_RIGHT)) && this.parent.has_dash) {
-            this.parent.has_dash = false;
-            this.finished(EnemyStates.DASH);
-        }
         // Otherwise move the enemy
         else {
             // Get the input direction from the enemy

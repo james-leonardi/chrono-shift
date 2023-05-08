@@ -220,11 +220,17 @@ export default class EnemyController extends StateMachineAI {
         if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
             this.follow_override = true;
             // (basically it makes the enemy follow the player until 50 units away)
-            return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), 0);
+            const v = 0; //this.stuck >= 3 ? 1 : 0;
+            // if (v === 1) this.stuck = 0;
+            return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), v);
         }
         if (this.walk_distance === 0) return Vec2.ZERO;
         if (this.going_left) {  // Go left
             if (this.stuck >= 3 || this.owner.position.x < this.i_position.x - this.walk_distance) {  // If we've gone too far, go right
+                /*if (this.stuck >= 3) {
+                    this.stuck = 0;
+                    return new Vec2(-1, 1);
+                }*/
                 this.going_left = false;
                 this.stuck = 0;
                 return new Vec2(1, 0);
@@ -232,6 +238,10 @@ export default class EnemyController extends StateMachineAI {
             return new Vec2(-1, 0);  // Else move left
         } else {
             if (this.stuck >= 3 || this.owner.position.x > this.i_position.x + this.walk_distance) {  // If we've gone too far, go left
+                /*if (this.stuck >= 3) {
+                    this.stuck = 0;
+                    return new Vec2(1, 1);
+                }*/
                 this.going_left = true;
                 this.stuck = 0;
                 return new Vec2(-1, 0);
