@@ -77,6 +77,7 @@ export default class MainMenu extends Scene {
         this.load.image(MainMenu.CONTROLS_KEY, MainMenu.CONTROLS_PATH);
         this.viewport?.setZoomLevel(4);
         this.viewport?.disableZoom();
+        this.viewport?.setCurrentZoom(0);
 
         this.load.image(MainMenu.L1PREVIEW_KEY, MainMenu.L1PREVIEW_PATH);
         this.load.image(MainMenu.L2PREVIEW_KEY, MainMenu.L2PREVIEW_PATH);
