@@ -122,6 +122,7 @@ export default class Level5 extends HW3Level {
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);
+        this.load.image(HW3Level.cswitchKey, HW3Level.cswitchPath);
         //this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
         //this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
         //this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
@@ -147,6 +148,7 @@ export default class Level5 extends HW3Level {
         this.load.keepSpritesheet(this.playerSpriteKey);
         this.load.keepImage(HW3Level.healthFrameKey);
         this.load.keepImage(HW3Level.healthFrame2Key);
+        this.load.keepImage(HW3Level.cswitchKey);
     }
 
     public startScene(): void {
