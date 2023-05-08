@@ -174,6 +174,8 @@ export default class Level6 extends HW3Level {
         this.nextLevel = MainMenu;
         this.currentLevel = Level6;
         this.level = 6;
+
+        this.levelEndLabel.text = "Time Anomalies Eliminated"
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
