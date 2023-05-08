@@ -27,9 +27,9 @@ export default class Walk extends EnemyState {
 			this.finished(EnemyStates.IDLE);
 		} 
         // If the enemy hits the jump key - transition to the Jump state
-        /* else if (Input.isJustPressed(HW3Controls.JUMP)) {
+        /*else if (dir.y > 0) {
             this.finished(EnemyStates.JUMP);
-        }  */
+        }*/
         // If the enemy is not on the ground, transition to the fall state
         else if (!this.owner.onGround && this.parent.velocity.y !== 0) {
             this.finished(EnemyStates.FALL);
