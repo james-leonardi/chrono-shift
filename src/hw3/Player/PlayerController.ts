@@ -141,6 +141,8 @@ export default class PlayerController extends StateMachineAI {
                     this.lastHitTime = new Date();
                     this.health--;
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "player_hit", loop: false, holdReference: false });
+                    this.owner.animation.play(PlayerAnimations.TAKING_DAMAGE);
+                    this.owner.animation.queue("IDLE", false, undefined);
                     if(this.health <= 0) {
                         this.changeState(PlayerStates.DEAD);
                     }

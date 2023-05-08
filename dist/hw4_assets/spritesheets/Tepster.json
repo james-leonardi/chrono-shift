@@ -29,7 +29,7 @@
         {
             "name": "TAKING_DAMAGE",
             "repeat": true,
-            "frames":[ {"index": 7, "duration": 1} ]
+            "frames":[ {"index": 7, "duration": 15} ]
         },
         {
             "name": "DYING",
