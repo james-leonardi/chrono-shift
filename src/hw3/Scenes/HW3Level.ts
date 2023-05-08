@@ -96,6 +96,7 @@ export default abstract class HW3Level extends Scene {
     protected currentLevel:  new (...args: any) => Scene;
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
+    protected completed: Array<boolean> = [false, false, false, false, false, false];
 
     /* The Past */
     protected pastPosition: Vec2 = new Vec2(0,0);
@@ -233,6 +234,10 @@ export default abstract class HW3Level extends Scene {
         this.healthFrame2.scale = scaleFactor(0.12, 0.12);
         this.pauseText.position = scaleFactor(150, 75);
         this.pauseText.scale = scaleFactor(0.12, 0.12);
+    }
+
+    protected unlockLevel(level: number): void {
+        this.completed[level-1] = true;
     }
 
     protected handleEvent(event: GameEvent): void {

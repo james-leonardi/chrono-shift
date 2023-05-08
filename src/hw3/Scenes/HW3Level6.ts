@@ -140,6 +140,7 @@ export default class Level6 extends HW3Level {
      * Unload resources for level 2
      */
     public unloadScene(): void {
+        super.unlockLevel(6);
         // TODO decide which resources to keep/cull 
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level6.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
