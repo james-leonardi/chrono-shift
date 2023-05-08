@@ -132,6 +132,9 @@ export default abstract class HW3Level extends Scene {
     protected deadgeAudioKey: string;
     protected enemyKillAudioKey: string;
     protected bossKillAudioKey: string;
+    protected enemyShootAudioKey1: string;
+    protected enemyShootAudioKey2: string;
+    protected enemyShootAudioKey3: string;
 
     protected tutorialText: Label;
 
@@ -803,5 +806,15 @@ export default abstract class HW3Level extends Scene {
     }
     public getBossKillAudioKey(): string {
         return this.bossKillAudioKey;
+    }
+    public getEnemyShootAudioKey(): string {
+        switch(Math.floor(Math.random() * 3)) {
+            case 0:
+                return this.enemyShootAudioKey1;
+            case 1:
+                return this.enemyShootAudioKey2;
+            case 2:
+                return this.enemyShootAudioKey3;
+        }
     }
 }
