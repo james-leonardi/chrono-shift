@@ -21,7 +21,9 @@ export default class Dead extends BossState {
     public handleInput(event: GameEvent): void { }
 
     // Empty update method - if the boss is dead, don't update anything
-    public update(deltaT: number): void {}
+    public update(deltaT: number): void {
+        
+    }
 
     public onExit(): Record<string, any> { return {}; }
     
