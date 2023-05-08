@@ -98,6 +98,7 @@ export default abstract class HW3Level extends Scene {
     protected currentLevel:  new (...args: any) => Scene;
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
+    protected levelEndLabel2: Label;
 
     /* The Past */
     protected pastPosition: Vec2 = new Vec2(0,0);
@@ -230,6 +231,7 @@ export default abstract class HW3Level extends Scene {
         this.healthBar.position = scaleFactor(81, 24);
         this.healthBarBg.position = scaleFactor(81, 24);
         this.levelEndLabel.position = scaleFactor(-300, 100);
+        this.levelEndLabel2.position = scaleFactor(-300, 115);
         this.tutorialText.position = scaleFactor(220, 30);
         this.levelTransitionScreen.position = scaleFactor(300, 200);
         this.healthFrame.position = scaleFactor(60, 27);
@@ -385,6 +387,7 @@ export default abstract class HW3Level extends Scene {
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");
+            this.levelEndLabel2.tweens.play("slideIn");
         }
     }
 
@@ -534,6 +537,16 @@ export default abstract class HW3Level extends Scene {
         this.levelEndLabel.fontSize = 48;
         this.levelEndLabel.font = "MyFont";
 
+        // End of level label2 (start off screen)
+        this.levelEndLabel2 = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(-300, 200), text: "You can now grapple to ice and clouds." });
+        this.levelEndLabel2.size.set(0, 0);
+        this.levelEndLabel2.borderRadius = 0;
+        this.levelEndLabel2.backgroundColor = new Color(34, 32, 52);
+        this.levelEndLabel2.textColor = Color.WHITE;
+        this.levelEndLabel2.textColor.a = 0;
+        this.levelEndLabel2.fontSize = 48;
+        this.levelEndLabel2.font = "MyFont";
+
         // Tutorial Textbox
         this.tutorialText = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(220, 30), text: "Use A and D to move left and right." });
         this.tutorialText.size.set(550, 180);
@@ -583,6 +596,20 @@ export default abstract class HW3Level extends Scene {
 
         // Add a tween to move the label on screen
         this.levelEndLabel.tweens.add("slideIn", {
+            startDelay: 0,
+            duration: 1000,
+            effects: [
+                {
+                    property: TweenableProperties.posX,
+                    start: -300,
+                    end: 150,
+                    ease: EaseFunctionType.OUT_SINE
+                }
+            ]
+        });
+
+        // Add a tween to move the label on screen
+        this.levelEndLabel2.tweens.add("slideIn", {
             startDelay: 0,
             duration: 1000,
             effects: [

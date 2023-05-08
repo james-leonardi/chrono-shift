@@ -12,6 +12,7 @@ import Level2 from "./HW3Level2";
 import Level3 from "./HW3Level3";
 import Level4 from "./HW3Level4";
 import Level6 from "./HW3Level6";
+import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 
 /**
  * The second level
@@ -25,7 +26,7 @@ export default class Level5 extends HW3Level {
     public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
 
-    public static readonly BOSS_SPAWN = new Vec2(132, 608);
+    public static readonly BOSS_SPAWN = new Vec2(2138, 608);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -105,9 +106,9 @@ export default class Level5 extends HW3Level {
 
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
-        this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
+        this.levelEndHalfSize = new Vec2(0, 0).mult(this.tilemapScale);
         this.levelEnd2Position = new Vec2(54, 132).mult(this.tilemapScale);
-        this.levelEnd2HalfSize = new Vec2(32, 32).mult(this.tilemapScale);
+        this.levelEnd2HalfSize = new Vec2(0, 0).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
 
@@ -173,28 +174,29 @@ export default class Level5 extends HW3Level {
         this.currentLevel = Level5;
         this.level = 5;
         
+        this.levelEndLabel2.size.set(1200, 60);
+        this.levelEndLabel2.textColor.a = 1;
+
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
         // Add new enemies here
-        // const presentPositions = [
-        //     [711, 1288, 0],[763, 1272, 0],
-        //     [963, 1208, 0],[718, 920, 0],
-        //     [683, 920, 0],[726, 504, 0],
-        //     [889, 504, 0],[936, 520, 0],
-        //     [1352, 888, 0],[1414, 552, 0]];
-        // for (const pos of presentPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
-        // }
+        const presentPositions = [
+            [376, 632, 0], [774, 632, 0],
+            [390, 1048, 0], [434, 1352, 0],
+            [727, 1208, 0], [1037, 1272, 0],
+            [1556, 1336, 0], [2232, 1336, 0],
+            [1848, 1076, 0]];
+        for (const pos of presentPositions) {
+            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
+        }
 
-        // const pastPositions = [
-        //     [290, 3704, 0],[507, 3544, 0],
-        //     [835, 3480, 0],[1012, 3096, 0],
-        //     [819, 3112, 0],[1147, 2792, 0],
-        //     [280, 2968, 0],[481, 2776, 0],
-        //     [1942, 2888, 0],[2104, 2920, 0],[2120, 2904, 0]];
-        // for (const pos of pastPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
-        // }
+        const pastPositions = [
+            [848, 3080, 0], [611, 3608, 0],
+            [1174, 3608, 0], [1681, 3576, 0],
+            [2260, 3352, 0], [1488, 2872, 0]];
+        for (const pos of pastPositions) {
+            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
+        }
     }
 
     /**
