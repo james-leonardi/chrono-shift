@@ -22,6 +22,7 @@ import { HW3Events } from "../HW3Events";
 import Dead from "./PlayerStates/Dead";
 import { HW3PhysicsGroups } from "../HW3PhysicsGroups";
 import Line from "../../Wolfie2D/Nodes/Graphics/Line";
+import Particle from "../../Wolfie2D/Nodes/Graphics/Particle";
 
 /**
  * Animation keys for the player spritesheet
@@ -91,7 +92,6 @@ export default class PlayerController extends StateMachineAI {
     protected lastHitTime: Date = new Date();
 
     protected receiver: Receiver;
-
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
         this.owner = owner;
@@ -224,7 +224,6 @@ export default class PlayerController extends StateMachineAI {
                 this.switchedQ = false;
                 this.switch_last_used = Date.now();
                 this.emitter.fireEvent("SWITCH");
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                 const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
                 console.log(`New pos: ${newPos}`);
                 const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
@@ -232,10 +231,11 @@ export default class PlayerController extends StateMachineAI {
                     console.log("COLLIDABLE!");
                 } else {
                     console.log("Switch!");
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                     console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
                     this.owner.position.y += newPos;
                     console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
-                    this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false });
+                    this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false, position: this.owner.position.clone() });
                 }
             } else console.log("CD!");
         }
@@ -247,13 +247,13 @@ export default class PlayerController extends StateMachineAI {
             this.peeking = true
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
-            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: true });
+            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: true, position: undefined });
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking && !this.paused) {
             this.peeking = false;
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
-            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false });
+            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false, position: undefined });
         }
 
         if(Input.isJustPressed(HW3Controls.GETPOS) && !this.paused) {
@@ -281,6 +281,16 @@ export default class PlayerController extends StateMachineAI {
                 if (this.grapple.isSystemRunning()) this.grapple.pauseSystem(); 
                 if (this.weapon.isSystemRunning()) this.weapon.pauseSystem();
                 this.emitter.fireEvent("PAUSE");
+            }
+        }
+
+        if (Input.isJustPressed(HW3Controls.MENU)) {
+            if (this.paused) {
+                // go to main menu
+                console.log("Going to main menu");
+                this.paused = false;
+                this.emitter.fireEvent("UNPAUSE");
+                this.emitter.fireEvent(HW3Events.MAIN_MENU);
             }
         }
 

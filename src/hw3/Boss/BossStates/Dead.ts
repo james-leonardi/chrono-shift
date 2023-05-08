@@ -13,8 +13,8 @@ export default class Dead extends BossState {
         this.owner.freeze();
         /* this.owner.animation.play("DYING", false, undefined);
         this.owner.animation.queue("DEATH", false, HW3Events.BOSS_DEAD); */
-        let deadgeAudio = this.owner.getScene().getDeadgeAudioKey();
-        //this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: deadgeAudio, loop: false, holdReference: false});
+        let bossKillAudio = this.owner.getScene().getBossKillAudioKey();
+        this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: bossKillAudio, loop: false, holdReference: false});
     }
 
     // Ignore all events from the rest of the game

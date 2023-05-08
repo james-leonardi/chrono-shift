@@ -16,6 +16,7 @@ import { HW3Controls } from "./hw3/HW3Controls";
             {name: HW3Controls.SWITCH, keys: ["s"]},
             {name: HW3Controls.ATTACK, keys: ["x"]},
             {name: HW3Controls.PAUSE, keys: ["escape"]},
+            {name: HW3Controls.MENU, keys: ["space"]},
             {name: HW3Controls.GRAPPLE, keys: ["right_click"]},
             {name: HW3Controls.PEEK, keys: ["e"]},
             {name: HW3Controls.DASH, keys: ["shift"]},

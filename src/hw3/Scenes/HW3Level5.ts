@@ -52,6 +52,21 @@ export default class Level5 extends HW3Level {
     public static readonly DEADGE_AUDIO_KEY = "PLAYER_DEADGE";
     public static readonly DEADGE_AUDIO_PATH = "hw4_assets/sounds/deadge.mp3";
 
+    public static readonly ENEMY_KILL_AUDIO_KEY = "ENEMY_KILL";
+    public static readonly ENEMY_KILL_AUDIO_PATH = "hw4_assets/sounds/enemykill.mp3";
+
+    public static readonly ENEMY_SHOOT_AUDIO1_KEY = "ENEMY_SHOOT1";
+    public static readonly ENEMY_SHOOT_AUDIO1_PATH = "hw4_assets/sounds/shotgun.mp3";
+
+    public static readonly ENEMY_SHOOT_AUDIO2_KEY = "ENEMY_SHOOT2";
+    public static readonly ENEMY_SHOOT_AUDIO2_PATH = "hw4_assets/sounds/shotgun2.mp3";
+
+    public static readonly ENEMY_SHOOT_AUDIO3_KEY = "ENEMY_SHOOT3";
+    public static readonly ENEMY_SHOOT_AUDIO3_PATH = "hw4_assets/sounds/shotgun3.mp3";
+
+    public static readonly BOSS_KILL_AUDIO_KEY = "BOSS_KILL";
+    public static readonly BOSS_KILL_AUDIO_PATH = "hw4_assets/sounds/bosskill.mp3";
+
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
@@ -82,6 +97,11 @@ export default class Level5 extends HW3Level {
         this.tileDestroyedAudioKey = Level5.TILE_DESTROYED_KEY;
         this.damagedAudioKey = Level5.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level5.DEADGE_AUDIO_KEY;
+        this.enemyKillAudioKey = Level5.ENEMY_KILL_AUDIO_KEY;
+        this.bossKillAudioKey = Level5.BOSS_KILL_AUDIO_KEY;
+        this.enemyShootAudioKey1 = Level5.ENEMY_SHOOT_AUDIO1_KEY;
+        this.enemyShootAudioKey2 = Level5.ENEMY_SHOOT_AUDIO2_KEY;
+        this.enemyShootAudioKey3 = Level5.ENEMY_SHOOT_AUDIO3_KEY;
 
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
@@ -109,9 +129,15 @@ export default class Level5 extends HW3Level {
         this.load.audio(this.tileDestroyedAudioKey, Level5.TILE_DESTROYED_PATH);
         this.load.audio(this.damagedAudioKey, Level5.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level5.DEADGE_AUDIO_PATH);
+        this.load.audio(this.enemyKillAudioKey, Level5.ENEMY_KILL_AUDIO_PATH);
+        this.load.audio(this.enemyShootAudioKey1, Level5.ENEMY_SHOOT_AUDIO1_PATH);
+        this.load.audio(this.enemyShootAudioKey2, Level5.ENEMY_SHOOT_AUDIO2_PATH);
+        this.load.audio(this.enemyShootAudioKey3, Level5.ENEMY_SHOOT_AUDIO3_PATH);
+        this.load.audio(this.bossKillAudioKey, Level5.BOSS_KILL_AUDIO_PATH);
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);
+        this.load.image(HW3Level.cswitchKey, HW3Level.cswitchPath);
         //this.load.audio("GRAPPLE_0", "hw4_assets/sounds/grapple_0.mp3");
         //this.load.audio("GRAPPLE_1", "hw4_assets/sounds/grapple_1.mp3");
         //this.load.audio("GRAPPLE_2", "hw4_assets/sounds/grapple_2.mp3");
@@ -128,6 +154,7 @@ export default class Level5 extends HW3Level {
      * Unload resources for level 2
      */
     public unloadScene(): void {
+        //super.completedLevel(5);
         // TODO decide which resources to keep/cull 
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level5.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
@@ -137,12 +164,14 @@ export default class Level5 extends HW3Level {
         this.load.keepSpritesheet(this.playerSpriteKey);
         this.load.keepImage(HW3Level.healthFrameKey);
         this.load.keepImage(HW3Level.healthFrame2Key);
+        this.load.keepImage(HW3Level.cswitchKey);
     }
 
     public startScene(): void {
         super.startScene();
         this.nextLevel = Level6;
         this.currentLevel = Level5;
+        this.level = 5;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 

@@ -75,10 +75,15 @@ export default abstract class HW3Level extends Scene {
     private healthBarBg: Label;
     private healthFrame: Sprite;
     private healthFrame2: Sprite;
+    private cswitch: Sprite;
     public static readonly healthFrameKey = "HEALTH_FRAME";
     public static readonly healthFramePath = "hw4_assets/HealthFrame.png";
     public static readonly healthFrame2Key = "HEALTH_FRAME2";
     public static readonly healthFrame2Path = "hw4_assets/HealthFrame2.png";
+    public static readonly cswitchKey = "CPARTICLE";
+    public static readonly cswitchPath = "hw4_assets/Logo.png";
+    public static unlocked: Array<boolean> = [true, false, false, false, false, false];
+    protected level: number;
 
 
     /** The end of level stuff */
@@ -126,6 +131,11 @@ export default abstract class HW3Level extends Scene {
     protected damagedAudioKey: string;
     protected tileDestroyedAudioKey: string;
     protected deadgeAudioKey: string;
+    protected enemyKillAudioKey: string;
+    protected bossKillAudioKey: string;
+    protected enemyShootAudioKey1: string;
+    protected enemyShootAudioKey2: string;
+    protected enemyShootAudioKey3: string;
 
     protected tutorialText: Label;
 
@@ -141,21 +151,23 @@ export default abstract class HW3Level extends Scene {
     protected lastZoom: number;
     protected pauseButton: Button;
     protected pauseMenu: Rect;
+    protected pauseText: Label;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
-            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS"],
+            groupNames: ["GROUND", "PLAYER", "ENEMY", "WEAPON", "EWEAPON", "DESTRUCTABLE", "DEATH", "GRAPPLE_ONLY", "ICE", "BOSS", "GUN"],
             collisions: [
-            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
-            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
-            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1], // eventually add grapple to enemy
-            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0], // decouple grapple and weapon
-            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0],
-            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1],
-            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1],
-            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0], // eventually add grapple to enemy
-            /* ICE      */  [0,1,1,1,1,0,0,0,0,1],
-            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0]]
+            /* GROUND   */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1,0],
+            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1,0],
+            /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0,0],
+            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0,1],
+            /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* DEATH    */  [0,1,1,0,0,0,0,0,0,1,0],
+            /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0,0],
+            /* ICE      */  [0,1,1,1,1,0,0,0,0,1,1],
+            /* BOSS     */  [1,1,1,0,0,1,1,0,1,0,0],
+            /* BULLET   */  [1,0,0,0,1,1,0,0,1,0,0]]
          }});
         this.add = new HW3FactoryManager(this, this.tilemaps);
     }
@@ -199,6 +211,8 @@ export default abstract class HW3Level extends Scene {
 
         // this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
 
+        if (this.cswitch.position.y > 0) this.cswitch.position.y -= 0.4;
+
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
         this.lastZoom = zoomLevel;
@@ -222,6 +236,13 @@ export default abstract class HW3Level extends Scene {
         this.healthFrame.scale = scaleFactor(0.12, 0.12);
         this.healthFrame2.position = scaleFactor(60, 27);
         this.healthFrame2.scale = scaleFactor(0.12, 0.12);
+        this.pauseText.position = scaleFactor(150, 75);
+        this.pauseText.scale = scaleFactor(0.12, 0.12);
+    }
+
+    protected completedLevel(level: number): void {
+        if (level > 5 || level < 0) return;
+        HW3Level.unlocked[level] = true;
     }
 
     protected handleEvent(event: GameEvent): void {
@@ -297,13 +318,30 @@ export default abstract class HW3Level extends Scene {
             }
             case "PAUSE": {
                 this.pauseMenu.tweens.play("fadeIn");
+                this.pauseText.tweens.play("fadeIn")
                 break;
             }
             case "UNPAUSE": {
                 this.pauseMenu.tweens.play("fadeOut");
+                this.pauseText.tweens.play("fadeOut")
+                break;
+            }
+            case HW3Events.MAIN_MENU: {
+                this.sceneManager.changeToScene(MainMenu);
+                break;
+            }
+            case HW3Events.PERSPECTIVE: {
+                if (event.data.get("position") !== undefined) this.showCswitch(event.data.get("position"));
                 break;
             }
         }
+    }
+
+    protected showCswitch(position: Vec2): void {
+        console.log("SHOWING PARTICLE");
+        this.cswitch.position = position.add(new Vec2(0, 0));
+        this.cswitch.visible = true;
+        this.cswitch.tweens.play("fadeOut");
     }
 
     protected handleParticleHit(particleId: number): void {
@@ -343,6 +381,7 @@ export default abstract class HW3Level extends Scene {
 
     protected handleEnteredLevelEnd(): void {
         // If the timer hasn't run yet, start the end level animation
+        this.completedLevel(this.level);
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");
@@ -385,6 +424,7 @@ export default abstract class HW3Level extends Scene {
         this.destructable.addPhysics();
         this.destructable.setGroup("DESTRUCTABLE");
         this.destructable.setTrigger("WEAPON", "PARTICLE", undefined);
+        this.destructable.setTrigger("GUN", "PARTICLE", undefined);
         this.walls.setGroup("GROUND");
         this.death.addPhysics();
         this.death.setGroup("DEATH");
@@ -415,6 +455,8 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PAUSE");
         this.receiver.subscribe("UNPAUSE");
         this.receiver.subscribe("CHANGE_FRAME");
+        this.receiver.subscribe(HW3Events.MAIN_MENU);
+        this.receiver.subscribe(HW3Events.PERSPECTIVE);
     }
 
     protected initializeUI(): void {
@@ -437,6 +479,42 @@ export default abstract class HW3Level extends Scene {
         this.healthBarBg.borderColor = Color.BLACK;
         this.healthBarBg.borderRadius = 20;
         this.healthBarBg.borderWidth = 2;
+
+        // CSwitch
+        this.cswitch = this.add.sprite(HW3Level.cswitchKey, HW3Layers.PRIMARY);
+        this.cswitch.position.set(0, 0);
+        this.cswitch.scale.set(0.05, 0.05);
+        this.cswitch.visible = false;
+        this.cswitch.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "alpha",
+                    start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleX",
+                    start: 0.05,
+                    end: 0.04,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleY",
+                    start: 0.05,
+                    end: 0.04,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                }/*,
+                {
+                    property: "positionY",
+                    start: this.cswitch.position.y,
+                    end: this.cswitch.position.y-25,
+                    ease: EaseFunctionType.IN_SINE
+                }*/
+            ]
+        });
 
         // HealthBar Frame
         this.healthFrame = this.add.sprite(HW3Level.healthFrameKey, HW3Layers.UI);
@@ -548,7 +626,7 @@ export default abstract class HW3Level extends Scene {
             onEnd: HW3Events.LEVEL_START
         });
 
-        this.pauseMenu = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.UI, { position: new Vec2(300, 200), size: new Vec2(600, 400) });
+        this.pauseMenu = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.UI, { position: new Vec2(300, 200), size: new Vec2(2000, 2000) });
         this.pauseMenu.color = new Color(34, 32, 52);
         this.pauseMenu.alpha = 0;
 
@@ -571,6 +649,41 @@ export default abstract class HW3Level extends Scene {
                 {
                     property: TweenableProperties.alpha,
                     start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+
+        this.pauseText = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(150, 75), text: "ESC to unpause. SPACE to go to Main Menu." })
+        this.pauseText.size.set(550, 180);
+        this.pauseText.borderRadius = 25;
+        this.pauseText.backgroundColor = new Color(34, 32, 52, 0);
+        this.pauseText.textColor = Color.WHITE;
+        this.pauseText.textColor.a = 0;
+        this.pauseText.fontSize = 24;
+        this.pauseText.font = "MyFont";
+        this.pauseText.alpha = 0;
+
+        this.pauseText.tweens.add("fadeIn", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: "textColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+        this.pauseText.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: "textColor.alpha",
+                    start: 1,
                     end: 0,
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
@@ -690,5 +803,21 @@ export default abstract class HW3Level extends Scene {
     }
     public getDeadgeAudioKey(): string {
         return this.deadgeAudioKey;
+    }
+    public getEnemyKillAudioKey(): string {
+        return this.enemyKillAudioKey;
+    }
+    public getBossKillAudioKey(): string {
+        return this.bossKillAudioKey;
+    }
+    public getEnemyShootAudioKey(): string {
+        switch(Math.floor(Math.random() * 3)) {
+            case 0:
+                return this.enemyShootAudioKey1;
+            case 1:
+                return this.enemyShootAudioKey2;
+            case 2:
+                return this.enemyShootAudioKey3;
+        }
     }
 }
