@@ -126,6 +126,7 @@ export default abstract class HW3Level extends Scene {
     protected damagedAudioKey: string;
     protected tileDestroyedAudioKey: string;
     protected deadgeAudioKey: string;
+    protected enemyKillAudioKey: string;
 
     protected tutorialText: Label;
 
@@ -690,5 +691,8 @@ export default abstract class HW3Level extends Scene {
     }
     public getDeadgeAudioKey(): string {
         return this.deadgeAudioKey;
+    }
+    public getEnemyKillAudioKey(): string {
+        return this.enemyKillAudioKey;
     }
 }
