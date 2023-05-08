@@ -136,7 +136,7 @@ export default class Level2 extends HW3Level {
 
         const presentPositions = [
             [450,590,100],[700,550,100],
-            [1218,1065,100],[1617,1000,100],
+            [1218,1065,50],[1617,1000,100],
 
         ];
         const pastPositions = [
