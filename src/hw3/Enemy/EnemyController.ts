@@ -175,7 +175,7 @@ export default class EnemyController extends StateMachineAI {
                 this.changeState(EnemyStates.DEAD);
                 this.owner.disablePhysics(); // make it hit ground before disabling physics?
                 this.weapon.stopSystem();
-                //this.weapon.pauseSystem();
+                this.weapon.pauseSystem();
                 this.owner.setAIActive(false, undefined);
                 break;
             }
