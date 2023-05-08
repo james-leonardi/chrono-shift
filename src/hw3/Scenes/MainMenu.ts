@@ -361,7 +361,7 @@ export default class MainMenu extends Scene {
                 position: new Vec2(size.x, size.y + 45), text: "a device that, when activated, allows him to travel back in time. However,"
             });
             let line4 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
-                position: new Vec2(size.x, size.y + 75), text: "when he touched the device, it unleashed several anomalous time clones."
+                position: new Vec2(size.x, size.y + 75), text: "when he picked up the device, it unleashed countless anomalous time clones."
             });
             let line5 = <Label>this.add.uiElement(UIElementType.LABEL, MenuLayers.ABOUT, {
                 position: new Vec2(size.x, size.y + 105), text: "Using his newfound god-like powers, he decided that it is his duty"
