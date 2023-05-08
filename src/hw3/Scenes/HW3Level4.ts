@@ -18,14 +18,14 @@ import Level6 from "./HW3Level6";
  */
 export default class Level4 extends HW3Level {
 
-    public static readonly PLAYER_SPAWN = new Vec2(42, 470);
+    public static readonly PLAYER_SPAWN = new Vec2(45, 640);
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
     public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
 
-    public static readonly BOSS_SPAWN = new Vec2(132, 608);
+    public static readonly BOSS_SPAWN = new Vec2(2711, 522);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -35,6 +35,7 @@ export default class Level4 extends HW3Level {
     public static readonly DESTRUCTIBLE_LAYER_KEY = "Main";
     public static readonly DEATH_LAYER_KEY = "Death";
     public static readonly WALLS_LAYER_KEY = "Main";
+    public static readonly GRAPPLE_ONLY_LAYER_KEY = "OnlyGrapple";
 
     public static readonly LEVEL_MUSIC_KEY = "LEVEL_MUSIC";
     public static readonly LEVEL_MUSIC_PATH = "hw4_assets/music/jungle.mp3";
@@ -65,6 +66,7 @@ export default class Level4 extends HW3Level {
         this.destructibleLayerKey = Level4.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level4.WALLS_LAYER_KEY;
         this.deathLayerKey = Level4.DEATH_LAYER_KEY;
+        this.grappleOnlyLayerKey = Level4.GRAPPLE_ONLY_LAYER_KEY;
 
         this.playerSpriteKey = Level4.PLAYER_SPRITE_KEY;
         this.playerSpawn = Level4.PLAYER_SPAWN;
@@ -144,25 +146,24 @@ export default class Level4 extends HW3Level {
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
-        // const presentPositions = [
-        //     [711, 1288, 0],[763, 1272, 0],
-        //     [963, 1208, 0],[718, 920, 0],
-        //     [683, 920, 0],[726, 504, 0],
-        //     [889, 504, 0],[936, 520, 0],
-        //     [1352, 888, 0],[1414, 552, 0]];
-        // for (const pos of presentPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
-        // }
+        const presentPositions = [
+            [671, 562, 0], // entrance pit, right top enemy
+            [592, 671, 20], // entrance pit, right enemy
+            [476, 671, 50], // entrance pit, left enemy
+            [2382, 634, 20], // exit left
+            [2495, 603, 25], // exit right
+        ];
+        for (const pos of presentPositions) {
+            super.addNewEnemy(Level4.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
+        }
 
-        // const pastPositions = [
-        //     [290, 3704, 0],[507, 3544, 0],
-        //     [835, 3480, 0],[1012, 3096, 0],
-        //     [819, 3112, 0],[1147, 2792, 0],
-        //     [280, 2968, 0],[481, 2776, 0],
-        //     [1942, 2888, 0],[2104, 2920, 0],[2120, 2904, 0]];
-        // for (const pos of pastPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
-        // }
+        const pastPositions = [
+            [146, 2892, 100], // entrance
+            [2389, 2862, 0], // exit
+        ];
+        for (const pos of pastPositions) {
+            super.addNewEnemy(Level4.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
+        }
     }
 
     /**

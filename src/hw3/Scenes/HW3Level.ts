@@ -175,7 +175,7 @@ export default abstract class HW3Level extends Scene {
         // Initialize the viewport - this must come after the player has been initialized
         this.initializeViewport();
         this.subscribeToEvents();
-        this.initializeLevelEnds();
+        //this.initializeLevelEnds();
         this.initializeThePast();
 
         this.levelTransitionTimer = new Timer(500);
