@@ -177,6 +177,7 @@ export default class EnemyController extends StateMachineAI {
                 this.weapon.stopSystem();
                 this.weapon.pauseSystem();
                 this.owner.setAIActive(false, undefined);
+                this.mou_shindeiru = true;
                 break;
             }
             case HW3Events.ENEMY_DEAD: {
