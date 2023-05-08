@@ -637,8 +637,8 @@ export default abstract class HW3Level extends Scene {
     protected clearEnemies(): void {
         this.enemies = new Array<Enemy>();
     }
-    protected addNewEnemy(key: string, position: Vec2, in_present: boolean) {
-        this.enemies.push(new Enemy(key, this, position, this.player, in_present));
+    protected addNewEnemy(key: string, position: Vec2, in_present: boolean, move_distance: number = 0) {
+        this.enemies.push(new Enemy(key, this, position, this.player, in_present, move_distance));
     }
     /**
      * Initializes the viewport

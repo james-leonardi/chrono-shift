@@ -145,7 +145,7 @@ export default class Level2 extends HW3Level {
 
 
         for (const pos of presentPositions) {
-            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true);
+            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, 100);
         }
         for (const pos of pastPositions) {
             super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false);
