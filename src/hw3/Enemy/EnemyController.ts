@@ -280,6 +280,8 @@ export default class EnemyController extends StateMachineAI {
                 // this.owner.animation.queue("IDLE");
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());
+                let enemyShootAudio = this.owner.getScene().getEnemyShootAudioKey();
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: enemyShootAudio, loop: false, holdReference: false});
             }
         }
 
