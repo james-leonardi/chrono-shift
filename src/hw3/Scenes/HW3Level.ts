@@ -90,6 +90,7 @@ export default abstract class HW3Level extends Scene {
     protected levelEnd2HalfSize: Vec2;
     protected levelEnd2Area: Rect;
     protected nextLevel: new (...args: any) => Scene;
+    protected currentLevel:  new (...args: any) => Scene;
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
 
@@ -287,7 +288,7 @@ export default abstract class HW3Level extends Scene {
             }
             case HW3Events.PLAYER_DEAD: {
                 console.log("Player dead event");
-                this.sceneManager.changeToScene(MainMenu);
+                this.sceneManager.changeToScene(this.currentLevel);
                 break;
             }
             case HW3Events.INVINCIBILITY: {
