@@ -92,9 +92,6 @@ export default class PlayerController extends StateMachineAI {
     protected lastHitTime: Date = new Date();
 
     protected receiver: Receiver;
-
-    protected chronoParticle: Particle;
-
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>){
         this.owner = owner;
@@ -238,7 +235,7 @@ export default class PlayerController extends StateMachineAI {
                     console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
                     this.owner.position.y += newPos;
                     console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
-                    this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false });
+                    this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false, position: this.owner.position.clone() });
                 }
             } else console.log("CD!");
         }
@@ -250,13 +247,13 @@ export default class PlayerController extends StateMachineAI {
             this.peeking = true
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
-            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: true });
+            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: true, position: undefined });
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking && !this.paused) {
             this.peeking = false;
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
-            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false });
+            this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false, position: undefined });
         }
 
         if(Input.isJustPressed(HW3Controls.GETPOS) && !this.paused) {

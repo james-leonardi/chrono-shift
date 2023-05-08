@@ -75,10 +75,13 @@ export default abstract class HW3Level extends Scene {
     private healthBarBg: Label;
     private healthFrame: Sprite;
     private healthFrame2: Sprite;
+    private cswitch: Sprite;
     public static readonly healthFrameKey = "HEALTH_FRAME";
     public static readonly healthFramePath = "hw4_assets/HealthFrame.png";
     public static readonly healthFrame2Key = "HEALTH_FRAME2";
     public static readonly healthFrame2Path = "hw4_assets/HealthFrame2.png";
+    public static readonly cswitchKey = "CPARTICLE";
+    public static readonly cswitchPath = "hw4_assets/Logo.png";
 
 
     /** The end of level stuff */
@@ -199,6 +202,8 @@ export default abstract class HW3Level extends Scene {
 
         // this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
 
+        if (this.cswitch.position.y > 0) this.cswitch.position.y -= 0.4;
+
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
         this.lastZoom = zoomLevel;
@@ -303,7 +308,18 @@ export default abstract class HW3Level extends Scene {
                 this.pauseMenu.tweens.play("fadeOut");
                 break;
             }
+            case HW3Events.PERSPECTIVE: {
+                if (event.data.get("position") !== undefined) this.showCswitch(event.data.get("position"));
+                break;
+            }
         }
+    }
+
+    protected showCswitch(position: Vec2): void {
+        console.log("SHOWING PARTICLE");
+        this.cswitch.position = position.add(new Vec2(0, 0));
+        this.cswitch.visible = true;
+        this.cswitch.tweens.play("fadeOut");
     }
 
     protected handleParticleHit(particleId: number): void {
@@ -415,6 +431,7 @@ export default abstract class HW3Level extends Scene {
         this.receiver.subscribe("PAUSE");
         this.receiver.subscribe("UNPAUSE");
         this.receiver.subscribe("CHANGE_FRAME");
+        this.receiver.subscribe(HW3Events.PERSPECTIVE);
     }
 
     protected initializeUI(): void {
@@ -437,6 +454,42 @@ export default abstract class HW3Level extends Scene {
         this.healthBarBg.borderColor = Color.BLACK;
         this.healthBarBg.borderRadius = 20;
         this.healthBarBg.borderWidth = 2;
+
+        // CSwitch
+        this.cswitch = this.add.sprite(HW3Level.cswitchKey, HW3Layers.PRIMARY);
+        this.cswitch.position.set(0, 0);
+        this.cswitch.scale.set(0.05, 0.05);
+        this.cswitch.visible = false;
+        this.cswitch.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 500,
+            effects: [
+                {
+                    property: "alpha",
+                    start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleX",
+                    start: 0.05,
+                    end: 0.04,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                },
+                {
+                    property: "scaleY",
+                    start: 0.05,
+                    end: 0.04,
+                    ease: EaseFunctionType.IN_OUT_SINE
+                }/*,
+                {
+                    property: "positionY",
+                    start: this.cswitch.position.y,
+                    end: this.cswitch.position.y-25,
+                    ease: EaseFunctionType.IN_SINE
+                }*/
+            ]
+        });
 
         // HealthBar Frame
         this.healthFrame = this.add.sprite(HW3Level.healthFrameKey, HW3Layers.UI);
