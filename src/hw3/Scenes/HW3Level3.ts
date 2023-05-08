@@ -26,7 +26,7 @@ export default class Level3 extends HW3Level {
     public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
     public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
 
-    public static readonly BOSS_SPAWN = new Vec2(132, 608);
+    public static readonly BOSS_SPAWN = new Vec2(2004, 1414);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -82,9 +82,9 @@ export default class Level3 extends HW3Level {
         this.damagedAudioKey = Level3.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level3.DEADGE_AUDIO_KEY;
 
-        this.levelEndPosition = new Vec2(1006, 685).mult(this.tilemapScale);
+        this.levelEndPosition = new Vec2(-1006, -685).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
-        this.levelEnd2Position = new Vec2(54, 132).mult(this.tilemapScale);
+        this.levelEnd2Position = new Vec2(-54, -132).mult(this.tilemapScale);
         this.levelEnd2HalfSize = new Vec2(32, 32).mult(this.tilemapScale);
         this.pastPosition = new Vec2(688, 1584).mult(this.tilemapScale);
     }
@@ -140,25 +140,31 @@ export default class Level3 extends HW3Level {
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
-        // const presentPositions = [
-        //     [711, 1288, 0],[763, 1272, 0],
-        //     [963, 1208, 0],[718, 920, 0],
-        //     [683, 920, 0],[726, 504, 0],
-        //     [889, 504, 0],[936, 520, 0],
-        //     [1352, 888, 0],[1414, 552, 0]];
-        // for (const pos of presentPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
-        // }
+        const presentPositions = [
+            [211, 648, 15],[374, 632, 12],
+            [766, 600, 8],[1030, 648, 0],
+            [816, 1032, 10],[445, 1432, 10],
+            [1090, 1432, 8],[990, 1432, 8],
+            [1625, 1320, 6],[1665, 1320, 6],
+            [1288, 920, 14],[1180, 728, 18],
+            [2307, 1384, 8],[2184, 1400, 20]];
+        for (const pos of presentPositions) {
+            super.addNewEnemy(Level3.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true, pos[2]);
+        }
 
-        // const pastPositions = [
-        //     [290, 3704, 0],[507, 3544, 0],
-        //     [835, 3480, 0],[1012, 3096, 0],
-        //     [819, 3112, 0],[1147, 2792, 0],
-        //     [280, 2968, 0],[481, 2776, 0],
-        //     [1942, 2888, 0],[2104, 2920, 0],[2120, 2904, 0]];
-        // for (const pos of pastPositions) {
-        //     super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
-        // }
+        const pastPositions = [
+            [417, 2872, 8],[704, 2824, 6],
+            [227, 3416, 10],[202, 3416, 10],
+            [175, 3416, 10],[150, 3416, 10],
+            [126, 3416, 10],[100, 3416, 10],
+            [76, 3416, 10],[131, 3704, 20],
+            [151, 3704, 20],[1177, 3656, 8],
+            [1448, 3528, 10],[1508, 3224, 0],
+            [1437, 2968, 6],[1458, 2840, 8],
+            [2420, 3608, 4],[2088, 3640, 0]];
+        for (const pos of pastPositions) {
+            super.addNewEnemy(Level3.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false, pos[2]);
+        }
     }
 
     protected initializeViewport(): void {
