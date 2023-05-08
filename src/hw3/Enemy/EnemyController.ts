@@ -81,6 +81,7 @@ export default class EnemyController extends StateMachineAI {
     protected i_position: Vec2;
     protected going_left: boolean = false;
     protected stuck: number = 0;
+    protected follow_override: boolean = false;
 
     protected tilemap: OrthogonalTilemap;
     // protected cannon: Sprite;
@@ -129,7 +130,6 @@ export default class EnemyController extends StateMachineAI {
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
         this.receiver.subscribe(HW3Events.KILL_ENEMY);
         this.receiver.subscribe(HW3Events.ENEMY_DEAD);
-        this.receiver.subscribe("ENEMY_CLOSE");
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -165,15 +165,6 @@ export default class EnemyController extends StateMachineAI {
                     this.owner.unfreeze();
                     this.owner.enablePhysics();
                     this.owner.visible = true;
-                }
-                break;
-            }
-            case "ENEMY_CLOSE": {
-                if (this.enable && !this.weapon.isSystemRunning()) {
-                    const playerPos: Vec2 = event.data.get("playerPos");
-                    if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) > 100) break;
-                    this.weapon.setPlayerPos(playerPos?.clone());
-                    this.weapon.startSystem(500, 0, this.owner.position.clone());
                 }
                 break;
             }
@@ -224,6 +215,10 @@ export default class EnemyController extends StateMachineAI {
         this.stuck++;
     }
     public get inputDir(): Vec2 {
+        if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
+            this.follow_override = true;
+            return new Vec2(this.owner.position.x < this.player.position.x ? 1 : -1, 0);
+        }
 		if (this.walk_distance === 0) return Vec2.ZERO;
         if (this.going_left) {  // Go left
             if (this.stuck >= 3 || this.owner.position.x < this.i_position.x - this.walk_distance) {  // If we've gone too far, go right
@@ -254,8 +249,14 @@ export default class EnemyController extends StateMachineAI {
         }
 
         // DO AI STUFF HERE
-        if (this.enable) {
-            // console.log(this.owner.position.x + " " + this.owner.position.y);
+        const playerPos: Vec2 = this.enable ? this.player.position.clone() : undefined;
+
+        // Attempt to shoot at player
+        if (!this.weapon.isSystemRunning()) {
+            if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
+                this.weapon.setPlayerPos(playerPos?.clone());
+                this.weapon.startSystem(500, 0, this.owner.position.clone());
+            }
         }
 
         if (Input.isJustPressed(HW3Controls.PAUSE)) {

@@ -110,7 +110,6 @@ export default class BossController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
-        this.receiver.subscribe("ENEMY_CLOSE");
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -146,15 +145,6 @@ export default class BossController extends StateMachineAI {
                     this.owner.enablePhysics();
                     this.owner.visible = true;
                 }
-            }
-            case "ENEMY_CLOSE": {
-                if (this.enable && !this.weapon.isSystemRunning()) {
-                    const playerPos: Vec2 = event.data.get("playerPos");
-                    if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) > 100) break;
-                    this.weapon.setPlayerPos(playerPos?.clone());
-                    this.weapon.startSystem(500, 0, this.owner.position.clone());
-                }
-                break;
             }
             // case HW3Events.GRAPPLE_HIT: {
             //     console.log("Grapple!");
@@ -203,8 +193,12 @@ export default class BossController extends StateMachineAI {
         }
 
         // DO AI STUFF HERE
-        if (this.enable) {
-            // console.log(this.owner.position.x + " " + this.owner.position.y);
+        if (this.enable && !this.weapon.isSystemRunning()) {
+            const playerPos: Vec2 = this.player.position.clone();
+            if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
+                this.weapon.setPlayerPos(playerPos?.clone());
+                this.weapon.startSystem(500, 0, this.owner.position.clone());
+            }
         }
 
         if (Input.isJustPressed(HW3Controls.PAUSE)) {
