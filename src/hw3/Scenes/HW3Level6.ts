@@ -67,7 +67,7 @@ export default class Level6 extends HW3Level {
         this.destructibleLayerKey = Level6.DESTRUCTIBLE_LAYER_KEY;
         this.wallsLayerKey = Level6.WALLS_LAYER_KEY;
         this.deathLayerKey = Level6.DEATH_LAYER_KEY;
-        this.grappleOnlyLayerKey = Level3.GRAPPLE_ONLY_LAYER_KEY;
+        this.grappleOnlyLayerKey = Level6.GRAPPLE_ONLY_LAYER_KEY;
 
         this.playerSpriteKey = Level6.PLAYER_SPRITE_KEY;
         this.playerSpawn = Level6.PLAYER_SPAWN;

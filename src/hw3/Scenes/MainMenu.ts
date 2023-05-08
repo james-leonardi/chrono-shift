@@ -48,7 +48,7 @@ export default class MainMenu extends Scene {
     public static readonly L3PREVIEW_KEY = "L3PREVIEW";
     public static readonly L3PREVIEW_PATH = "hw4_assets/tilemaps/L3Preview.jpg";
     public static readonly L4PREVIEW_KEY = "L4PREVIEW";
-    public static readonly L4PREVIEW_PATH = "hw4_assets/tilemaps/L3Preview.jpg"; /* TODO: Change this to L4Preview.jpg */
+    public static readonly L4PREVIEW_PATH = "hw4_assets/tilemaps/L4Preview.jpg";
     public static readonly L5PREVIEW_KEY = "L5PREVIEW";
     public static readonly L5PREVIEW_PATH = "hw4_assets/tilemaps/L5Preview.jpg";
     public static readonly L6PREVIEW_KEY = "L6PREVIEW";
