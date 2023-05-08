@@ -13,6 +13,7 @@ import Level3 from "./HW3Level3";
 import Level4 from "./HW3Level4";
 import Level5 from "./HW3Level5";
 import Level6 from "./HW3Level6";
+import HW3Level from "./HW3Level";
 
 
 // Layers for the main menu scene
@@ -41,6 +42,7 @@ export default class MainMenu extends Scene {
     public static readonly CONTROLS_KEY = "CONTROLS";
     public static readonly CONTROLS_PATH = "hw4_assets/Controls.png";
 
+    // Unlocked versions
     public static readonly L1PREVIEW_KEY = "L1PREVIEW";
     public static readonly L1PREVIEW_PATH = "hw4_assets/tilemaps/L1Preview.jpg";
     public static readonly L2PREVIEW_KEY = "L2PREVIEW";
@@ -53,8 +55,19 @@ export default class MainMenu extends Scene {
     public static readonly L5PREVIEW_PATH = "hw4_assets/tilemaps/L5Preview.jpg";
     public static readonly L6PREVIEW_KEY = "L6PREVIEW";
     public static readonly L6PREVIEW_PATH = "hw4_assets/tilemaps/L6Preview.jpg";
-
-
+    // Locked versions
+    public static readonly L1LOCK_KEY = "L1LOCK";
+    public static readonly L1LOCK_PATH = "hw4_assets/tilemaps/L1Lock.png";
+    public static readonly L2LOCK_KEY = "L2LOCK";
+    public static readonly L2LOCK_PATH = "hw4_assets/tilemaps/L2Lock.png";
+    public static readonly L3LOCK_KEY = "L3LOCK";
+    public static readonly L3LOCK_PATH = "hw4_assets/tilemaps/L3Lock.png";
+    public static readonly L4LOCK_KEY = "L4LOCK";
+    public static readonly L4LOCK_PATH = "hw4_assets/tilemaps/L4Lock.png";
+    public static readonly L5LOCK_KEY = "L5LOCK";
+    public static readonly L5LOCK_PATH = "hw4_assets/tilemaps/L5Lock.png";
+    public static readonly L6LOCK_KEY = "L6LOCK";
+    public static readonly L6LOCK_PATH = "hw4_assets/tilemaps/L6Lock.png";
 
     private mainMenu: Layer;
     private splash: Layer;
@@ -85,6 +98,12 @@ export default class MainMenu extends Scene {
         this.load.image(MainMenu.L4PREVIEW_KEY, MainMenu.L4PREVIEW_PATH);
         this.load.image(MainMenu.L5PREVIEW_KEY, MainMenu.L5PREVIEW_PATH);
         this.load.image(MainMenu.L6PREVIEW_KEY, MainMenu.L6PREVIEW_PATH);
+        this.load.image(MainMenu.L1LOCK_KEY, MainMenu.L1LOCK_PATH);
+        this.load.image(MainMenu.L2LOCK_KEY, MainMenu.L2LOCK_PATH);
+        this.load.image(MainMenu.L3LOCK_KEY, MainMenu.L3LOCK_PATH);
+        this.load.image(MainMenu.L4LOCK_KEY, MainMenu.L4LOCK_PATH);
+        this.load.image(MainMenu.L5LOCK_KEY, MainMenu.L5LOCK_PATH);
+        this.load.image(MainMenu.L6LOCK_KEY, MainMenu.L6LOCK_PATH);
         this.load.audio(MainMenu.MUSIC_KEY, MainMenu.MUSIC_PATH);
     }
 
@@ -199,7 +218,7 @@ export default class MainMenu extends Scene {
             bacc.fontSize = 28;
             bacc.setPadding(new Vec2(50, 15));
 
-            let preview1 = <Sprite>this.add.sprite(MainMenu.L1PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview1 = <Sprite>this.add.sprite(HW3Level.unlocked[0] ? MainMenu.L1PREVIEW_KEY : MainMenu.L1LOCK_KEY, MenuLayers.LEVELSELECT);
             preview1.position.set(size.x - 325, size.y + 35);
             preview1.scale.set(0.28, 0.29);
             let lvl1 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 325, size.y + 35), text: "" });
@@ -211,9 +230,9 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level1);
             }
-            lvl1.onClick = changeToLvl1;
+            if (HW3Level.unlocked[0]) lvl1.onClick = changeToLvl1;
 
-            let preview2 = <Sprite>this.add.sprite(MainMenu.L2PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview2 = <Sprite>this.add.sprite(HW3Level.unlocked[1] ? MainMenu.L2PREVIEW_KEY : MainMenu.L2LOCK_KEY, MenuLayers.LEVELSELECT);
             preview2.position.set(size.x, size.y + 35);
             preview2.scale.set(0.28, 0.29);
             let lvl2 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 35), text: "" });
@@ -225,9 +244,9 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level2);
             }
-            lvl2.onClick = changeToLvl2;
+            if (HW3Level.unlocked[1]) lvl2.onClick = changeToLvl2;
 
-            let preview3 = <Sprite>this.add.sprite(MainMenu.L3PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview3 = <Sprite>this.add.sprite(HW3Level.unlocked[2] ? MainMenu.L3PREVIEW_KEY : MainMenu.L3LOCK_KEY, MenuLayers.LEVELSELECT);
             preview3.position.set(size.x + 325, size.y + 35);
             preview3.scale.set(0.28, 0.29);
             let lvl3 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 35), text: "" });
@@ -239,9 +258,9 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level3);
             }
-            lvl3.onClick = changeToLvl3;
+            if (HW3Level.unlocked[2]) lvl3.onClick = changeToLvl3;
 
-            let preview4 = <Sprite>this.add.sprite(MainMenu.L4PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview4 = <Sprite>this.add.sprite(HW3Level.unlocked[3] ? MainMenu.L4PREVIEW_KEY : MainMenu.L4LOCK_KEY, MenuLayers.LEVELSELECT);
             preview4.position.set(size.x - 325, size.y + 220);
             preview4.scale.set(0.28, 0.29);
             let lvl4 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x - 325, size.y + 220), text: "" });
@@ -253,9 +272,9 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level4);
             }
-            lvl4.onClick = changeToLvl4;
+            if (HW3Level.unlocked[3]) lvl4.onClick = changeToLvl4;
 
-            let preview5 = <Sprite>this.add.sprite(MainMenu.L5PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview5 = <Sprite>this.add.sprite(HW3Level.unlocked[4] ? MainMenu.L5PREVIEW_KEY : MainMenu.L5LOCK_KEY, MenuLayers.LEVELSELECT);
             preview5.position.set(size.x, size.y + 220);
             preview5.scale.set(0.28, 0.29);
             let lvl5 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x, size.y + 220), text: "" });
@@ -267,9 +286,9 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level5);
             }
-            lvl5.onClick = changeToLvl5;
+            if (HW3Level.unlocked[4]) lvl5.onClick = changeToLvl5;
 
-            let preview6 = <Sprite>this.add.sprite(MainMenu.L6PREVIEW_KEY, MenuLayers.LEVELSELECT);
+            let preview6 = <Sprite>this.add.sprite(HW3Level.unlocked[5] ? MainMenu.L6PREVIEW_KEY : MainMenu.L6LOCK_KEY, MenuLayers.LEVELSELECT);
             preview6.position.set(size.x + 325, size.y + 220);
             preview6.scale.set(0.28, 0.29);
             let lvl6 = <Button>this.add.uiElement(UIElementType.BUTTON, MenuLayers.LEVELSELECT, { position: new Vec2(size.x + 325, size.y + 220), text: "" });
@@ -281,7 +300,7 @@ export default class MainMenu extends Scene {
                 this.lastClick = new Date();
                 this.sceneManager.changeToScene(Level6);
             }
-            lvl6.onClick = changeToLvl6;
+            if (HW3Level.unlocked[5]) lvl6.onClick = changeToLvl6;
 
 
             bacc.onClick = () => {
