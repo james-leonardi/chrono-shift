@@ -82,6 +82,8 @@ export default abstract class HW3Level extends Scene {
     public static readonly healthFrame2Path = "hw4_assets/HealthFrame2.png";
     public static readonly cswitchKey = "CPARTICLE";
     public static readonly cswitchPath = "hw4_assets/Logo.png";
+    public static unlocked: Array<boolean> = [true, false, false, false, false, false];
+    protected level: number;
 
 
     /** The end of level stuff */
@@ -96,7 +98,6 @@ export default abstract class HW3Level extends Scene {
     protected currentLevel:  new (...args: any) => Scene;
     protected levelEndTimer: Timer;
     protected levelEndLabel: Label;
-    protected completed: Array<boolean> = [false, false, false, false, false, false];
 
     /* The Past */
     protected pastPosition: Vec2 = new Vec2(0,0);
@@ -239,8 +240,9 @@ export default abstract class HW3Level extends Scene {
         this.pauseText.scale = scaleFactor(0.12, 0.12);
     }
 
-    protected unlockLevel(level: number): void {
-        this.completed[level-1] = true;
+    protected completedLevel(level: number): void {
+        if (level > 5 || level < 0) return;
+        HW3Level.unlocked[level] = true;
     }
 
     protected handleEvent(event: GameEvent): void {
@@ -379,6 +381,7 @@ export default abstract class HW3Level extends Scene {
 
     protected handleEnteredLevelEnd(): void {
         // If the timer hasn't run yet, start the end level animation
+        this.completedLevel(this.level);
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");

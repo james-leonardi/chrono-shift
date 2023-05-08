@@ -138,7 +138,7 @@ export default class Level2 extends HW3Level {
     }
 
     public unloadScene(): void {
-        super.unlockLevel(2);
+        //super.completedLevel(2);
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level2.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
         this.load.keepAudio(this.tileDestroyedAudioKey);
@@ -159,6 +159,7 @@ export default class Level2 extends HW3Level {
         super.startScene();
         this.nextLevel = Level3;
         this.currentLevel = Level2;
+        this.level = 2;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 

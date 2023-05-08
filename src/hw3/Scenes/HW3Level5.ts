@@ -154,7 +154,7 @@ export default class Level5 extends HW3Level {
      * Unload resources for level 2
      */
     public unloadScene(): void {
-        super.unlockLevel(5);
+        //super.completedLevel(5);
         // TODO decide which resources to keep/cull 
         this.emitter.fireEvent(GameEventType.STOP_SOUND, {key: Level5.LEVEL_MUSIC_KEY});
         this.load.keepAudio(this.jumpAudioKey);
@@ -171,6 +171,7 @@ export default class Level5 extends HW3Level {
         super.startScene();
         this.nextLevel = Level6;
         this.currentLevel = Level5;
+        this.level = 5;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
