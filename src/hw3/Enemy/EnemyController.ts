@@ -93,6 +93,7 @@ export default class EnemyController extends StateMachineAI {
     protected grapple_enabled: boolean = true;
 
     protected mou_shindeiru: boolean = false;
+    // protected mou_dead: boolean = false;
     protected switchedQ: boolean = false;
     protected switch_last_used: number;
     protected switch_cooldown: number = 500;
@@ -173,10 +174,9 @@ export default class EnemyController extends StateMachineAI {
                 if (event.data.get("node") !== this.owner.id) break;
                 console.log("KILL ENEMY RECEIVED");
                 this.changeState(EnemyStates.DEAD);
-                this.owner.disablePhysics(); // make it hit ground before disabling physics?
                 this.weapon.stopSystem();
-                //this.weapon.pauseSystem();
                 this.owner.setAIActive(false, undefined);
+                this.mou_shindeiru = true;
                 break;
             }
             case HW3Events.ENEMY_DEAD: {
@@ -245,11 +245,19 @@ export default class EnemyController extends StateMachineAI {
     public get faceDir(): Vec2 { return this.owner.position.dirTo(this.player.position); }
 
     public update(deltaT: number): void {
-        if (this.mou_shindeiru) return;
+        // if (this.mou_shindeiru) return;
 		super.update(deltaT);
         while (this.receiver.hasNextEvent()) {
             this.handleEvent(this.receiver.getNextEvent());
         }
+
+        // if (this.mou_shindeiru && !this.mou_dead) {
+        //     if (this.owner.onGround) {
+        //         this.owner.freeze();
+        //         this.owner.disablePhysics();
+        //         this.mou_dead = true;
+        //     }
+        // }
 
         // DO AI STUFF HERE
         const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
@@ -257,8 +265,8 @@ export default class EnemyController extends StateMachineAI {
         // Attempt to shoot at player
         if (!this.weapon.isSystemRunning()) {
             if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
-                this.owner.animation.play("ATTACKING");
-                this.owner.animation.queue("IDLE");
+                if (!this.mou_shindeiru) this.owner.animation.play("ATTACKING");
+                // this.owner.animation.queue("IDLE");
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());
             }
