@@ -53,6 +53,9 @@ export default class Level6 extends HW3Level {
     public static readonly DEADGE_AUDIO_KEY = "PLAYER_DEADGE";
     public static readonly DEADGE_AUDIO_PATH = "hw4_assets/sounds/deadge.mp3";
 
+    public static readonly ENEMY_KILL_AUDIO_KEY = "ENEMY_KILL";
+    public static readonly ENEMY_KILL_AUDIO_PATH = "hw4_assets/sounds/enemykill.mp3";
+
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
@@ -83,6 +86,7 @@ export default class Level6 extends HW3Level {
         this.tileDestroyedAudioKey = Level6.TILE_DESTROYED_KEY;
         this.damagedAudioKey = Level6.DAMAGED_AUDIO_KEY;
         this.deadgeAudioKey = Level6.DEADGE_AUDIO_KEY;
+        this.enemyKillAudioKey = Level6.ENEMY_KILL_AUDIO_KEY;
 
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
@@ -110,6 +114,7 @@ export default class Level6 extends HW3Level {
         this.load.audio(this.tileDestroyedAudioKey, Level6.TILE_DESTROYED_PATH);
         this.load.audio(this.damagedAudioKey, Level6.DAMAGED_AUDIO_PATH);
         this.load.audio(this.deadgeAudioKey, Level6.DEADGE_AUDIO_PATH);
+        this.load.audio(this.enemyKillAudioKey, Level6.ENEMY_KILL_AUDIO_PATH);
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);
