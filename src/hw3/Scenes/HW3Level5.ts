@@ -22,6 +22,9 @@ export default class Level5 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
+
     public static readonly BOSS_SPAWN = new Vec2(132, 608);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
@@ -92,11 +95,13 @@ export default class Level5 extends HW3Level {
      * Load in our resources for level 1
      */
     public loadScene(): void {
+        this.viewport.setCurrentZoom(0);
         // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level5.TILEMAP_PATH);
         // Load in the player's sprite
         this.load.spritesheet(this.playerSpriteKey, Level5.PLAYER_SPRITE_PATH);
         this.load.spritesheet(this.bossSpriteKey, Level5.BOSS_SPRITE_PATH);
+        this.load.spritesheet(Level5.ENEMY_SPRITE_KEY, Level5.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level5.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level5.JUMP_AUDIO_PATH);

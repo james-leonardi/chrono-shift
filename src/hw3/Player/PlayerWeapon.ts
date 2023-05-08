@@ -18,7 +18,7 @@ export default class PlayerWeapon extends ParticleSystem {
         let mpos: Vec2 = Input.getGlobalMousePosition();
         let cpos: Vec2 = particle.position;
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
-        vec.normalize().scale(350);
+        vec.normalize().scale(275);
         particle.vel = vec;
         particle.color = Color.YELLOW;
         particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);

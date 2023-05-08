@@ -10,14 +10,12 @@ import EnemyWeapon from "./EnemyWeapon";
 export default class Enemy {
   protected weaponSystem: EnemyWeapon;
   protected grappleSystem: EnemyGrapple;
-  protected in_present: boolean;
 
   protected level: HW3Level;
 
   protected enemy: AnimatedSprite;
 
-  public constructor(key: string, level: HW3Level, location: Vec2, player: AnimatedSprite) {
-    this.in_present = true; // todo: parameter?
+  public constructor(key: string, level: HW3Level, location: Vec2, player: AnimatedSprite, in_present: boolean) {
     this.level = level;
     this.grappleSystem = new EnemyGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
     this.grappleSystem.initializePool(this.level, HW3Layers.PRIMARY);
@@ -40,7 +38,7 @@ export default class Enemy {
         grappleSystem: this.grappleSystem,
         tilemap: "Destructable",
         player: player,
-        enemy_in_present: this.in_present
+        enemy_in_present: in_present
     });
   }
 }

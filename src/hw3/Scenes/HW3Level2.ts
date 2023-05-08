@@ -19,6 +19,9 @@ export default class Level2 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
+
     public static readonly BOSS_SPAWN = new Vec2(1790, 3672);
     public static readonly BOSS_SPRITE_KEY = "BOSS_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
@@ -81,9 +84,11 @@ export default class Level2 extends HW3Level {
     }
 
     public loadScene(): void {
+        this.viewport.setCurrentZoom(0);
         this.load.tilemap(this.tilemapKey, Level2.TILEMAP_PATH);
         this.load.spritesheet(this.playerSpriteKey, Level2.PLAYER_SPRITE_PATH);
         this.load.spritesheet(this.bossSpriteKey, Level2.BOSS_SPRITE_PATH);
+        this.load.spritesheet(Level2.ENEMY_SPRITE_KEY, Level2.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level2.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level2.JUMP_AUDIO_PATH);
@@ -127,6 +132,24 @@ export default class Level2 extends HW3Level {
         this.nextLevel = Level3;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
+
+        const presentPositions = [
+            [450, 590],[700, 550],
+            [1218,1065],[1617,1061],
+
+        ];
+        const pastPositions = [
+            [665, 2800],[1000,2800],
+            [1826,3298]
+        ];
+
+
+        for (const pos of presentPositions) {
+            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true);
+        }
+        for (const pos of pastPositions) {
+            super.addNewEnemy(Level2.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false);
+        }
     }
 
     protected initializeViewport(): void {

@@ -96,6 +96,7 @@ export default class Level6 extends HW3Level {
      * Load in our resources for level 1
      */
     public loadScene(): void {
+        this.viewport.setCurrentZoom(0);
         // Load in the tilemap
         this.load.tilemap(this.tilemapKey, Level6.TILEMAP_PATH);
         // Load in the player's sprite
@@ -152,7 +153,7 @@ export default class Level6 extends HW3Level {
             [889, 504],[936, 520],
             [1352, 888],[1414, 552]];
         for (const pos of enemyPositions) {
-            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]));
+            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), true);
         }
 
         const enemyPositions2 = [
@@ -162,7 +163,7 @@ export default class Level6 extends HW3Level {
             [280, 2968],[481, 2776],
             [1942, 2888],[2104, 2920],[2120, 2904]];
         for (const pos of enemyPositions2) {
-            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]));
+            super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]), false);
         }
         
     }

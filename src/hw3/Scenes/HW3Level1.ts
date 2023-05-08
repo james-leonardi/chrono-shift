@@ -24,8 +24,10 @@ export default class Level1 extends HW3Level {
     public static readonly PLAYER_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly PLAYER_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
+    public static readonly ENEMY_SPRITE_KEY = "ENEMY_SPRITE_KEY";
+    public static readonly ENEMY_SPRITE_PATH = "hw4_assets/spritesheets/Enemy.json";
+
     public static readonly BOSS_SPAWN = new Vec2(100, 3480);
-    // public static readonly BOSS_SPAWN = new Vec2(132, 2870);  // for testing
     public static readonly BOSS_SPRITE_KEY = "PLAYER_SPRITE_KEY";
     public static readonly BOSS_SPRITE_PATH = "hw4_assets/spritesheets/Tepster.json";
 
@@ -88,9 +90,11 @@ export default class Level1 extends HW3Level {
     }
 
     public loadScene(): void {
+        this.viewport.setCurrentZoom(0);
         this.load.tilemap(this.tilemapKey, Level1.TILEMAP_PATH);
         this.load.spritesheet(this.playerSpriteKey, Level1.PLAYER_SPRITE_PATH);
         this.load.spritesheet(this.bossSpriteKey, Level1.BOSS_SPRITE_PATH);
+        this.load.spritesheet(Level1.ENEMY_SPRITE_KEY, Level1.ENEMY_SPRITE_PATH);
         // Audio and music
         this.load.audio(this.levelMusicKey, Level1.LEVEL_MUSIC_PATH);
         this.load.audio(this.jumpAudioKey, Level1.JUMP_AUDIO_PATH);
@@ -209,8 +213,8 @@ export default class Level1 extends HW3Level {
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
-        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(50, 0)));
-        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(100, 0)));
+        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(50, 0)), false);
+        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(70, 0)), false);
     }
 
     protected initializeViewport(): void {
