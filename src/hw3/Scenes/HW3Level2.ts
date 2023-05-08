@@ -130,6 +130,7 @@ export default class Level2 extends HW3Level {
     public startScene(): void {
         super.startScene();
         this.nextLevel = Level3;
+        this.currentLevel = Level2;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
