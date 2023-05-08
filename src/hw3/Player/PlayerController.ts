@@ -224,7 +224,6 @@ export default class PlayerController extends StateMachineAI {
                 this.switchedQ = false;
                 this.switch_last_used = Date.now();
                 this.emitter.fireEvent("SWITCH");
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                 const newPos = (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
                 console.log(`New pos: ${newPos}`);
                 const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
@@ -232,6 +231,7 @@ export default class PlayerController extends StateMachineAI {
                     console.log("COLLIDABLE!");
                 } else {
                     console.log("Switch!");
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
                     console.log(`Old coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
                     this.owner.position.y += newPos;
                     console.log(`New coordinates: ${this.owner.position.x} ${this.owner.position.y}`)
