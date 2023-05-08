@@ -17,6 +17,7 @@ export default class Walk extends BossState {
 
         // Get the input direction from the boss controller
 		let dir = this.parent.inputDir;
+        if (dir === undefined) return;
 
         // If the boss is not moving - transition to the Idle state
 		if(dir.isZero()){

@@ -18,8 +18,6 @@ export default class Walk extends EnemyState {
         // Call the update method in the parent class - updates the direction the enemy is facing
         super.update(deltaT);
 
-        console.log("GROUND:           " + this.owner.onGround);
-
         // Get the input direction from the enemy controller
 		let dir = this.parent.inputDir;
         if (dir === undefined) return;

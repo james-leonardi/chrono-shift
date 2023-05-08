@@ -43,6 +43,7 @@ export default class Particle extends Point {
     setParticleInactive(){
         this.inUse = false;
         this.visible = false;
+        this.position.x = -1;
     }
 
     set velY(y: number){

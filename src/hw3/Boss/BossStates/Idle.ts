@@ -19,6 +19,7 @@ export default class Idle extends BossState {
 
         // Get the direction of the boss's movement
 		let dir = this.parent.inputDir;
+        if (dir === undefined) return;
 
         // If the boss is moving along the x-axis, transition to the walking state
 		if (!dir.isZero() && dir.y === 0){

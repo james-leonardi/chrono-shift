@@ -92,6 +92,7 @@ export default class BossController extends StateMachineAI {
 
     protected enable: boolean;
     protected paused: boolean = false;
+    protected follow_override: boolean = false;
 
     
     public initializeAI(owner: HW3AnimatedSprite, options: Record<string, any>) {
@@ -110,6 +111,7 @@ export default class BossController extends StateMachineAI {
         this.receiver = new Receiver();
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);  // todo: unload on level change?
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
+        this.receiver.subscribe(HW3Events.KILL_BOSS);
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
@@ -133,18 +135,31 @@ export default class BossController extends StateMachineAI {
 
     handleEvent(event: GameEvent): void {
         switch (event.type) {
-            case HW3Events.PERSPECTIVE: {  // Todo: potentially differentiate peeking and switching
+            case HW3Events.PERSPECTIVE: {
                 if (this.enable) {
+                    this.owner.visible = false;
                     this.enable = false;
                     this.owner.freeze();
                     this.owner.disablePhysics();
-                    this.owner.visible = false;
                 } else {
-                    this.enable = true;
-                    this.owner.unfreeze();
-                    this.owner.enablePhysics();
                     this.owner.visible = true;
+                    this.enable = true;
+                    if (!event.data.get("peek")) {
+                        this.owner.unfreeze();
+                        this.owner.enablePhysics();
+                    }
                 }
+                break;
+            }
+            case HW3Events.KILL_BOSS: {
+                if (event.data.get("node") !== this.owner.id) break;
+                console.log("KILL ENEMY RECEIVED");
+                this.changeState(BossStates.DEAD);
+                this.owner.disablePhysics(); // make it hit ground before disabling physics?
+                // this.weapon.stopSystem();
+                // this.weapon.pauseSystem();
+                this.owner.setAIActive(false, undefined);
+                break;
             }
             // case HW3Events.GRAPPLE_HIT: {
             //     console.log("Grapple!");
@@ -175,10 +190,13 @@ export default class BossController extends StateMachineAI {
 	 * Get the inputs from the keyboard, or Vec2.Zero if nothing is being pressed
 	 */
     public get inputDir(): Vec2 {
-        let direction = Vec2.ZERO;
-		// direction.x = (Input.isPressed(HW3Controls.MOVE_LEFT) ? -1 : 0) + (Input.isPressed(HW3Controls.MOVE_RIGHT) ? 1 : 0);
-		// direction.y = (Input.isJustPressed(HW3Controls.JUMP) ? -1 : 0);
-		return direction;
+        if (!this.player.visible) return undefined;
+        if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
+            this.follow_override = true;
+            // (basically it makes the enemy follow the player until 50 units away)
+            return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), 0);
+        }
+        return Vec2.ZERO;
     }
     /** 
      * Gets the direction of the mouse from the boss's position as a Vec2
@@ -193,8 +211,10 @@ export default class BossController extends StateMachineAI {
         }
 
         // DO AI STUFF HERE
-        if (this.enable && !this.weapon.isSystemRunning()) {
-            const playerPos: Vec2 = this.player.position.clone();
+        const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
+
+        // Attempt to shoot at player
+        if (!this.weapon.isSystemRunning()) {
             if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());

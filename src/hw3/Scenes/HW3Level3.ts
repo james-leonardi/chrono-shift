@@ -139,7 +139,7 @@ export default class Level3 extends HW3Level {
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
-        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(50, 0)), false);
+        super.addNewEnemy(this.bossSpriteKey, this.bossSpawn.clone().add(new Vec2(50, 0)), true, 1);
     }
 
     protected initializeViewport(): void {

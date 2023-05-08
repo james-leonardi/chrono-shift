@@ -43,11 +43,7 @@ export default class EnemyWeapon extends ParticleSystem {
         let vec = new Vec2(mpos.x - cpos.x, mpos.y-cpos.y);
         vec.normalize().scale(150);
         particle.vel = RandUtils.randVec(vec.x-50, vec.x+50, vec.y-32, vec.y+32);
-        particle.color = Color.BLACK;
-        particle.scale.set(0.1, 0.1);
-        // todo: change to enemy weapon eventually
-        // particle.setGroup(HW3PhysicsGroups.PLAYER_WEAPON);
-        // particle.setTrigger("DESTRUCTABLE", "PARTICLE", undefined);
+        particle.color = Color.YELLOW;
         particle.setGroup("EWEAPON");
         particle.setTrigger(HW3PhysicsGroups.PLAYER, "HIT_PLAYER", undefined);
 
@@ -67,19 +63,7 @@ export default class EnemyWeapon extends ParticleSystem {
                     start: 0,
                     end: 4*Math.PI,
                     ease: EaseFunctionType.IN_OUT_SINE
-                },
-                // {
-                //     property: "scaleX",
-                //     start: 0.1,
-                //     end: 0.1,
-                //     ease: EaseFunctionType.IN_OUT_SINE
-                // },
-                // {
-                //     property: "scaleY",
-                //     start: 0.1,
-                //     end: 0.1,
-                //     ease: EaseFunctionType.IN_OUT_SINE
-                // }
+                }
             ]
         });
     }

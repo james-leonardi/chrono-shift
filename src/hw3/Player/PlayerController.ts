@@ -86,6 +86,7 @@ export default class PlayerController extends StateMachineAI {
     protected dash: boolean = true;
     protected invincible: boolean = false;
     protected paused: boolean = false;
+    protected won: boolean = false;
 
     protected lastHitTime: Date = new Date();
 
@@ -107,6 +108,8 @@ export default class PlayerController extends StateMachineAI {
         this.receiver.subscribe(HW3Events.BULLET);
         this.receiver.subscribe("HIT_PLAYER");
         this.receiver.subscribe("DYING");
+        this.receiver.subscribe(HW3Events.KILL_ENEMY);
+        this.receiver.subscribe(HW3Events.KILL_BOSS);
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
         this.speed = 400;
         this.velocity = Vec2.ZERO;
@@ -135,19 +138,26 @@ export default class PlayerController extends StateMachineAI {
                 break;
             }
             case "HIT_PLAYER": {
-                if(!this.invincible) {
-                    if (this.lastHitTime.getTime() + 1000 >= Date.now()) break;
-                    console.log("Player hit!");
-                    this.lastHitTime = new Date();
-                    this.health--;
-                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "player_hit", loop: false, holdReference: false });
-                    this.owner.animation.play(PlayerAnimations.TAKING_DAMAGE);
-                    this.owner.animation.queue("IDLE", false, undefined);
-                    if(this.health <= 0) {
-                        this.changeState(PlayerStates.DEAD);
-                    }
-
+                if (this.won || this.invincible) break;
+                if (this.lastHitTime.getTime() + 1000 >= Date.now()) break;
+                console.log("Player hit!");
+                this.lastHitTime = new Date();
+                this.health--;
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "player_hit", loop: false, holdReference: false });
+                this.owner.animation.play(PlayerAnimations.TAKING_DAMAGE);
+                this.owner.animation.queue("IDLE", false, undefined);
+                if(this.health <= 0) {
+                    this.changeState(PlayerStates.DEAD);
                 }
+                break;
+            }
+            case HW3Events.KILL_BOSS: {
+                this.won = true;
+                this.weapon.stopSystem();
+                break;
+            }
+            case HW3Events.KILL_ENEMY: {
+                this.weapon.stopSystem();
                 break;
             }
             case HW3Events.BULLET: {
@@ -157,7 +167,8 @@ export default class PlayerController extends StateMachineAI {
                 break;
             }
             case "DYING": {
-                if(!this.invincible) this.changeState(PlayerStates.DEAD);
+                if(this.invincible || this.won) break;
+                this.changeState(PlayerStates.DEAD);
                 break;
             }
         }

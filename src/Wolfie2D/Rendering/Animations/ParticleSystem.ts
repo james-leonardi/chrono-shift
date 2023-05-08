@@ -104,7 +104,7 @@ export default class ParticleSystem implements Updateable {
             if (particle.inUse) {
                 particle.setParticleInactive();
             }
-            particle.position.set(this.sourcePoint.x, this.sourcePoint.y);
+            particle.position.set(this.sourcePoint.x, -1);//this.sourcePoint.y);
         }
     }
 

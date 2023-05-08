@@ -39,6 +39,7 @@ export default class Dash extends BossState {
         else {
             // Get the input direction from the boss
             let dir = this.parent.inputDir;  // todo: change?
+            if (dir === undefined) return;
             // Update the horizontal velocity of the boss
             if (dir.x !== 0) this.parent.velocity.x += dir.x * this.parent.speed / 3.5 - 0.3 * this.parent.velocity.x;
             // Update the vertical velocity of the boss

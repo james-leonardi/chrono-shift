@@ -173,9 +173,9 @@ export default class EnemyController extends StateMachineAI {
                 if (event.data.get("node") !== this.owner.id) break;
                 console.log("KILL ENEMY RECEIVED");
                 this.changeState(EnemyStates.DEAD);
-                this.owner.disablePhysics();
+                this.owner.disablePhysics(); // make it hit ground before disabling physics?
                 this.weapon.stopSystem();
-                this.weapon.pauseSystem();
+                //this.weapon.pauseSystem();
                 this.owner.setAIActive(false, undefined);
                 break;
             }
