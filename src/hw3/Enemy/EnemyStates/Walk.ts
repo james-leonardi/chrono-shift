@@ -2,8 +2,11 @@ import { EnemyStates, EnemyAnimations } from "../EnemyController";
 import Input from "../../../Wolfie2D/Input/Input";
 import { HW3Controls } from "../../HW3Controls";
 import EnemyState from "./EnemyState";
+import Vec2 from "../../../Wolfie2D/DataTypes/Vec2";
 
 export default class Walk extends EnemyState {
+
+    protected lastPos: Vec2;
 
 	onEnter(options: Record<string, any>): void {
         // console.log("WALK ENTER");
@@ -15,8 +18,11 @@ export default class Walk extends EnemyState {
         // Call the update method in the parent class - updates the direction the enemy is facing
         super.update(deltaT);
 
+        console.log("GROUND:           " + this.owner.onGround);
+
         // Get the input direction from the enemy controller
 		let dir = this.parent.inputDir;
+        if (dir === undefined) return;
 
         // If the enemy is not moving - transition to the Idle state
 		if(dir.isZero()){
@@ -33,9 +39,11 @@ export default class Walk extends EnemyState {
         // Otherwise, move the enemy
         else {
             // Update the vertical velocity of the enemy
+            if (this.lastPos !== undefined && this.lastPos.equals(this.owner.position)) this.parent.raiseStuck();  // if enemy is stuck, raise stuck flag
             this.parent.velocity.y += this.gravity*deltaT; 
             this.parent.velocity.x = dir.x * this.parent.speed
             this.owner.move(this.parent.velocity.scaled(deltaT));
+            this.lastPos = this.owner.position.clone();  // update lastPos
         }
         if (this.owner.onCeiling && this.parent.velocity.y < 0) this.parent.velocity.y = Math.min(-this.parent.velocity.y, 20);
 	}

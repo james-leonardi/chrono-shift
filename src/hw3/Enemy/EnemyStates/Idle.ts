@@ -19,6 +19,7 @@ export default class Idle extends EnemyState {
 
         // Get the direction of the enemy's movement
 		let dir = this.parent.inputDir;
+        if (dir === undefined) return;
 
         // If the enemy is moving along the x-axis, transition to the walking state
 		if (!dir.isZero() && dir.y === 0){

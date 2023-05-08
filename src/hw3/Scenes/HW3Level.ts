@@ -148,9 +148,9 @@ export default abstract class HW3Level extends Scene {
             collisions: [
             /* GROUND   */  [0,1,1,1,1,0,0,0,0,1],
             /* PLAYER   */  [1,0,1,0,1,1,1,0,1,1],
-            /* ENEMY    */  [1,1,0,0,0,1,1,0,1,1], // eventually add grapple to enemy
+            /* ENEMY    */  [1,1,1,0,0,1,1,0,1,1], // eventually add grapple to enemy
             /* WEAPON   */  [1,0,0,0,1,1,0,1,1,0], // decouple grapple and weapon
-            /* EWEAPON  */  [1,1,0,1,0,1,0,0,1,0],
+            /* EWEAPON  */  [1,0,0,1,0,1,0,0,1,0],
             /* DESTRUCT */  [0,1,1,1,1,0,0,0,0,1],
             /* DEATH    */  [0,1,1,0,0,0,0,0,0,1],
             /* GRAPPLE  */  [0,0,0,1,0,0,0,0,0,0], // eventually add grapple to enemy
@@ -197,7 +197,7 @@ export default abstract class HW3Level extends Scene {
     public updateScene(deltaT: number) {
         while (this.receiver.hasNextEvent()) this.handleEvent(this.receiver.getNextEvent());
 
-        this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
+        // this.emitter.fireEvent("ENEMY_CLOSE", {playerPos: this.player.position});
 
         const zoomLevel: number = 5-this.viewport.getZoomLevel();
         if (zoomLevel == this.lastZoom) return; // no need to update if zoom level hasn't changed
@@ -638,8 +638,8 @@ export default abstract class HW3Level extends Scene {
     protected clearEnemies(): void {
         this.enemies = new Array<Enemy>();
     }
-    protected addNewEnemy(key: string, position: Vec2, in_present: boolean) {
-        this.enemies.push(new Enemy(key, this, position, this.player, in_present));
+    protected addNewEnemy(key: string, position: Vec2, in_present: boolean, move_distance: number = 0) {
+        this.enemies.push(new Enemy(key, this, position, this.player, in_present, move_distance));
     }
     /**
      * Initializes the viewport

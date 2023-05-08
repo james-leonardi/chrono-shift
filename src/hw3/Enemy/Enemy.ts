@@ -15,7 +15,7 @@ export default class Enemy {
 
   protected enemy: AnimatedSprite;
 
-  public constructor(key: string, level: HW3Level, location: Vec2, player: AnimatedSprite, in_present: boolean) {
+  public constructor(key: string, level: HW3Level, location: Vec2, player: AnimatedSprite, in_present: boolean, walk_distance: number = 0) {
     this.level = level;
     this.grappleSystem = new EnemyGrapple(1, Vec2.ZERO, 1000, 2, 0, 1);
     this.grappleSystem.initializePool(this.level, HW3Layers.PRIMARY);
@@ -38,7 +38,8 @@ export default class Enemy {
         grappleSystem: this.grappleSystem,
         tilemap: "Destructable",
         player: player,
-        enemy_in_present: in_present
+        enemy_in_present: in_present,
+        walk_distance: walk_distance
     });
   }
 }

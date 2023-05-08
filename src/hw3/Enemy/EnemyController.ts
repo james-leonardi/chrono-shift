@@ -77,6 +77,12 @@ export default class EnemyController extends StateMachineAI {
     protected _velocity: Vec2;
 	protected _speed: number;
 
+    protected walk_distance: number;
+    protected i_position: Vec2;
+    protected going_left: boolean = false;
+    protected stuck: number = 0;
+    protected follow_override: boolean = false;
+
     protected tilemap: OrthogonalTilemap;
     // protected cannon: Sprite;
     protected weapon: EnemyWeapon;
@@ -108,6 +114,8 @@ export default class EnemyController extends StateMachineAI {
         this.owner = owner;
         this.player = options.player;
         this.enable = options.enemy_in_present;
+        this.walk_distance = options.walk_distance;
+        this.i_position = this.owner.position.clone();
 
         this.weapon = options.weaponSystem;
         this.grapple = options.grappleSystem;
@@ -122,11 +130,10 @@ export default class EnemyController extends StateMachineAI {
         this.receiver.subscribe(HW3Events.PERSPECTIVE);
         this.receiver.subscribe(HW3Events.KILL_ENEMY);
         this.receiver.subscribe(HW3Events.ENEMY_DEAD);
-        this.receiver.subscribe("ENEMY_CLOSE");
         // this.receiver.subscribe(HW3Events.GRAPPLE_HIT);
         // this.receiver.subscribe("DYING");
         this.tilemap = this.owner.getScene().getTilemap(options.tilemap) as OrthogonalTilemap;
-        this.speed = 400;
+        this.speed = 300;
         this.velocity = Vec2.ZERO;
 
         this.health = 5
@@ -146,27 +153,19 @@ export default class EnemyController extends StateMachineAI {
 
     handleEvent(event: GameEvent): void {
         switch (event.type) {
-            case HW3Events.PERSPECTIVE: {  // Todo: potentially differentiate peeking and switching
+            case HW3Events.PERSPECTIVE: {
                 if (this.enable) {
-                    if (Math.abs(this.owner.position.y - event.data.get("y")) < 1000) break;
+                    this.owner.visible = false;
                     this.enable = false;
                     this.owner.freeze();
                     this.owner.disablePhysics();
-                    this.owner.visible = false;
                 } else {
-                    this.enable = true;
-                    this.owner.unfreeze();
-                    this.owner.enablePhysics();
                     this.owner.visible = true;
-                }
-                break;
-            }
-            case "ENEMY_CLOSE": {
-                if (this.enable && !this.weapon.isSystemRunning()) {
-                    const playerPos: Vec2 = event.data.get("playerPos");
-                    if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) > 100) break;
-                    this.weapon.setPlayerPos(playerPos?.clone());
-                    this.weapon.startSystem(500, 0, this.owner.position.clone());
+                    this.enable = true;
+                    if (!event.data.get("peek")) {
+                        this.owner.unfreeze();
+                        this.owner.enablePhysics();
+                    }
                 }
                 break;
             }
@@ -213,11 +212,32 @@ export default class EnemyController extends StateMachineAI {
     /** 
 	 * Get the inputs from the keyboard, or Vec2.Zero if nothing is being pressed
 	 */
+    public raiseStuck(): void {
+        this.stuck++;
+    }
     public get inputDir(): Vec2 {
-        let direction = Vec2.ZERO;
-		// direction.x = (Input.isPressed(HW3Controls.MOVE_LEFT) ? -1 : 0) + (Input.isPressed(HW3Controls.MOVE_RIGHT) ? 1 : 0);
-		// direction.y = (Input.isJustPressed(HW3Controls.JUMP) ? -1 : 0);
-		return direction;
+        if (!this.player.visible) return undefined;
+        if (this.follow_override || this.owner.position.distanceTo(this.player.position) < 100) {
+            this.follow_override = true;
+            // (basically it makes the enemy follow the player until 50 units away)
+            return new Vec2((this.owner.position.x < this.player.position.x ? 1 : -1)*(Math.abs(this.owner.position.x - this.player.position.x) > 50 ? 1 : 0), 0);
+        }
+        if (this.walk_distance === 0) return Vec2.ZERO;
+        if (this.going_left) {  // Go left
+            if (this.stuck >= 3 || this.owner.position.x < this.i_position.x - this.walk_distance) {  // If we've gone too far, go right
+                this.going_left = false;
+                this.stuck = 0;
+                return new Vec2(1, 0);
+            }
+            return new Vec2(-1, 0);  // Else move left
+        } else {
+            if (this.stuck >= 3 || this.owner.position.x > this.i_position.x + this.walk_distance) {  // If we've gone too far, go left
+                this.going_left = true;
+                this.stuck = 0;
+                return new Vec2(-1, 0);
+            } 
+            return new Vec2(1, 0);  // Else move right
+        }
     }
     /** 
      * Gets the direction of the mouse from the enemy's position as a Vec2
@@ -232,8 +252,14 @@ export default class EnemyController extends StateMachineAI {
         }
 
         // DO AI STUFF HERE
-        if (this.enable) {
-            // console.log(this.owner.position.x + " " + this.owner.position.y);
+        const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
+
+        // Attempt to shoot at player
+        if (!this.weapon.isSystemRunning()) {
+            if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
+                this.weapon.setPlayerPos(playerPos?.clone());
+                this.weapon.startSystem(500, 0, this.owner.position.clone());
+            }
         }
 
         if (Input.isJustPressed(HW3Controls.PAUSE)) {
