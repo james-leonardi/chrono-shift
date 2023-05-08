@@ -12,6 +12,7 @@ import Level2 from "./HW3Level2";
 import Level3 from "./HW3Level3";
 import Level4 from "./HW3Level4";
 import Level6 from "./HW3Level6";
+import Label from "../../Wolfie2D/Nodes/UIElements/Label";
 
 /**
  * The second level
@@ -173,6 +174,9 @@ export default class Level5 extends HW3Level {
         this.currentLevel = Level5;
         this.level = 5;
         
+        this.levelEndLabel2.size.set(1200, 60);
+        this.levelEndLabel2.textColor.a = 1;
+
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
         // Add new enemies here
