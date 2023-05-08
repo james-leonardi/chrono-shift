@@ -147,6 +147,7 @@ export default abstract class HW3Level extends Scene {
     protected lastZoom: number;
     protected pauseButton: Button;
     protected pauseMenu: Rect;
+    protected pauseText: Label;
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
         super(viewport, sceneManager, renderingManager, {...options, physics: {
@@ -310,10 +311,12 @@ export default abstract class HW3Level extends Scene {
             }
             case "PAUSE": {
                 this.pauseMenu.tweens.play("fadeIn");
+                this.pauseText.tweens.play("fadeIn")
                 break;
             }
             case "UNPAUSE": {
                 this.pauseMenu.tweens.play("fadeOut");
+                this.pauseText.tweens.play("fadeOut")
                 break;
             }
             case HW3Events.MAIN_MENU: {
@@ -638,6 +641,41 @@ export default abstract class HW3Level extends Scene {
                 {
                     property: TweenableProperties.alpha,
                     start: 0.5,
+                    end: 0,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+
+        this.pauseText = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(150, 75), text: "ESC to unpause. SPACE to go to Main Menu." })
+        this.pauseText.size.set(550, 180);
+        this.pauseText.borderRadius = 25;
+        this.pauseText.backgroundColor = new Color(34, 32, 52, 0);
+        this.pauseText.textColor = Color.WHITE;
+        this.pauseText.textColor.a = 0;
+        this.pauseText.fontSize = 24;
+        this.pauseText.font = "MyFont";
+        this.pauseText.alpha = 0;
+
+        this.pauseText.tweens.add("fadeIn", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: "textColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                }
+            ]
+        });
+        this.pauseText.tweens.add("fadeOut", {
+            startDelay: 0,
+            duration: 200,
+            effects: [
+                {
+                    property: "textColor.alpha",
+                    start: 1,
                     end: 0,
                     ease: EaseFunctionType.IN_OUT_QUAD
                 }
