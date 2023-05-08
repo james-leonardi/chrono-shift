@@ -148,6 +148,7 @@ export default class EnemyController extends StateMachineAI {
         switch (event.type) {
             case HW3Events.PERSPECTIVE: {  // Todo: potentially differentiate peeking and switching
                 if (this.enable) {
+                    if (Math.abs(this.owner.position.y - event.data.get("y")) < 1000) break;
                     this.enable = false;
                     this.owner.freeze();
                     this.owner.disablePhysics();
@@ -158,6 +159,7 @@ export default class EnemyController extends StateMachineAI {
                     this.owner.enablePhysics();
                     this.owner.visible = true;
                 }
+                break;
             }
             case "ENEMY_CLOSE": {
                 if (this.enable && !this.weapon.isSystemRunning()) {
@@ -172,6 +174,9 @@ export default class EnemyController extends StateMachineAI {
                 if (event.data.get("node") !== this.owner.id) break;
                 console.log("KILL ENEMY RECEIVED");
                 this.changeState(EnemyStates.DEAD);
+                this.owner.disablePhysics();
+                this.weapon.stopSystem();
+                this.weapon.pauseSystem();
                 this.owner.setAIActive(false, undefined);
                 break;
             }

@@ -145,12 +145,22 @@ export default class Level6 extends HW3Level {
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
-        const enemyPositions = [[711, 1288],[763, 1272],[963, 1208],[718, 920],[683, 920],[726, 504],[889, 504],[936, 520],[1352, 888],[1414, 552]];
+        const enemyPositions = [
+            [711, 1288],[763, 1272],
+            [963, 1208],[718, 920],
+            [683, 920],[726, 504],
+            [889, 504],[936, 520],
+            [1352, 888],[1414, 552]];
         for (const pos of enemyPositions) {
             super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]));
         }
 
-        const enemyPositions2 = [[290, 3704],[507, 3544],[835, 3480],[1012, 3096],[819, 3112],[280, 2968],[481, 2776],[1942, 2888],[2104, 2920],[2120, 2904]];
+        const enemyPositions2 = [
+            [290, 3704],[507, 3544],
+            [835, 3480],[1012, 3096],
+            [819, 3112],[1147, 2792],
+            [280, 2968],[481, 2776],
+            [1942, 2888],[2104, 2920],[2120, 2904]];
         for (const pos of enemyPositions2) {
             super.addNewEnemy(Level6.ENEMY_SPRITE_KEY, new Vec2(pos[0], pos[1]));
         }
