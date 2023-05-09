@@ -274,7 +274,7 @@ export default class EnemyController extends StateMachineAI {
         const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
 
         // Attempt to shoot at player
-        if (!this.weapon.isSystemRunning()) {
+        if (!this.paused && !this.weapon.isSystemRunning()) {
             if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < 100) {
                 if (!this.mou_shindeiru) this.owner.animation.play("ATTACKING");
                 // this.owner.animation.queue("IDLE");
