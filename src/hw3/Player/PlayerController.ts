@@ -114,8 +114,8 @@ export default class PlayerController extends StateMachineAI {
         this.speed = 400;
         this.velocity = Vec2.ZERO;
 
-        this.health = 5
-        this.maxHealth = 5;
+        this.health = 12;
+        this.maxHealth = 12;
 
 		this.addState(PlayerStates.IDLE, new Idle(this, this.owner));
 		this.addState(PlayerStates.WALK, new Walk(this, this.owner));
