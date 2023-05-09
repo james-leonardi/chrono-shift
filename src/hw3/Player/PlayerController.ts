@@ -249,12 +249,14 @@ export default class PlayerController extends StateMachineAI {
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.freeze(); this.owner.disablePhysics(); this.owner.visible = false;
             this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: true, position: undefined });
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PEEK", loop: false, holdReference: false });
         } 
         if (!Input.isPressed(HW3Controls.PEEK) && this.peeking && !this.paused) {
             this.peeking = false;
             this.owner.position.y += (this.owner.position.y < this.switch_dist_y) ? this.switch_dist_y : -this.switch_dist_y;
             this.owner.unfreeze(); this.owner.enablePhysics(); this.owner.visible = true;
             this.emitter.fireEvent(HW3Events.PERSPECTIVE, { peek: false, position: undefined });
+            this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "PEEK", loop: false, holdReference: false });
         }
 
         if(Input.isJustPressed(HW3Controls.GETPOS) && !this.paused) {
