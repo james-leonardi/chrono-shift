@@ -137,6 +137,7 @@ export default abstract class HW3Level extends Scene {
     protected enemyShootAudioKey1: string;
     protected enemyShootAudioKey2: string;
     protected enemyShootAudioKey3: string;
+    protected switchErrAudioKey: string;
     public bossShootAudioKey: string;
     public bossDamageAudioKey: string;
 
@@ -347,7 +348,6 @@ export default abstract class HW3Level extends Scene {
     }
 
     public showCswitch(position: Vec2, big: boolean = false): void {
-        console.log("SHOWING PARTICLE");
         this.cswitch.position = position;
         this.cswitch.visible = true;
         this.cswitch.tweens.play(big ? "fadeOutBig" : "fadeOut");

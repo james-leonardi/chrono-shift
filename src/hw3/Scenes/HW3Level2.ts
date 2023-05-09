@@ -65,6 +65,9 @@ export default class Level2 extends HW3Level {
 
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
+    
+    public static readonly SWITCH_ERR_KEY = "SWITCH_ERR";
+    public static readonly SWITCH_ERR_PATH = "hw4_assets/sounds/err.mp3";
 
     public static readonly LEVEL_END = new AABB(new Vec2(928, 3632), new Vec2(24, 16));
 
@@ -96,6 +99,7 @@ export default class Level2 extends HW3Level {
         this.enemyShootAudioKey1 = Level2.ENEMY_SHOOT_AUDIO1_KEY;
         this.enemyShootAudioKey2 = Level2.ENEMY_SHOOT_AUDIO2_KEY;
         this.enemyShootAudioKey3 = Level2.ENEMY_SHOOT_AUDIO3_KEY;
+        this.switchErrAudioKey = Level2.SWITCH_ERR_KEY;
 
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(32, 32).mult(this.tilemapScale);
@@ -122,6 +126,7 @@ export default class Level2 extends HW3Level {
         this.load.audio(this.enemyShootAudioKey2, Level2.ENEMY_SHOOT_AUDIO2_PATH);
         this.load.audio(this.enemyShootAudioKey3, Level2.ENEMY_SHOOT_AUDIO3_PATH);
         this.load.audio(this.bossKillAudioKey, Level2.BOSS_KILL_AUDIO_PATH);
+        this.load.audio(this.switchErrAudioKey, Level2.SWITCH_ERR_PATH);
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);
@@ -135,6 +140,7 @@ export default class Level2 extends HW3Level {
         this.load.audio("SHOOT", "hw4_assets/sounds/gunshot.mp3");
         this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
         this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
+        this.load.audio("PEEK", "hw4_assets/sounds/peek.mp3");
         //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 
@@ -167,12 +173,18 @@ export default class Level2 extends HW3Level {
         const presentPositions = [
             [450,590,100],[700,550,100],
             [1218,1065,50],[1617,1000,100],
-
+            [1208, 712, 0], // on the way down
+            [1448, 594, 20], // right of first hole
+            [2477, 1071, 0], // left of second hole
+            [2450, 1407, 100], // bottom of second hole
         ];
         const pastPositions = [
             [665,2800,100],
             [1000,2800,100],
-            [1826,3298,100]
+            [1826,3298,100],
+            [1304, 2856, 200], // on breaking ground
+            [2351, 3295, 100], // left of second hole
+            [2339, 3660, 0], [2391, 3660, 0], [2433, 3661, 0]
         ];
 
         for (const pos of presentPositions) {
