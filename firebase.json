@@ -23,7 +23,7 @@
         "type": 301
       },
       {
-        "source": "/benchmark4",
+        "source": "/",
         "destination": "/benchmark4/dist/index.html",
         "type": 301
       }
