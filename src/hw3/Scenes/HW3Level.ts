@@ -234,10 +234,13 @@ export default abstract class HW3Level extends Scene {
         /* this.healthLabel.position = scaleFactor(15, 15); */
         this.healthBar.position = scaleFactor(81, 24);
         this.healthBarBg.position = scaleFactor(81, 24);
-        this.levelEndLabel.position = scaleFactor(-300, 100);
-        this.levelEndLabel2.position = scaleFactor(-300, 115);
+        this.levelEndLabel.position = scaleFactor(150, 100);
+        this.levelEndLabel.size = scaleFactor(1200, 60);
+        this.levelEndLabel2.position = scaleFactor(150, (this.levelEndLabel.position.y/zoomfactor)*1.15*1.15);
+        this.levelEndLabel2.size = scaleFactor(1200, 60);
         this.tutorialText.position = scaleFactor(220, 30);
         this.levelTransitionScreen.position = scaleFactor(300, 200);
+        this.levelTransitionScreen.size = scaleFactor(600, 400);
         this.healthFrame.position = scaleFactor(60, 27);
         this.healthFrame.scale = scaleFactor(0.12, 0.12);
         this.healthFrame2.position = scaleFactor(60, 27);
@@ -391,7 +394,8 @@ export default abstract class HW3Level extends Scene {
         if (!this.levelEndTimer.hasRun() && this.levelEndTimer.isStopped()) {
             this.levelEndTimer.start();
             this.levelEndLabel.tweens.play("slideIn");
-            this.levelEndLabel2.tweens.play("slideIn");
+            console.log(this.level);
+            if (this.level == 5) this.levelEndLabel2.tweens.play("slideIn");
         }
     }
 
@@ -563,20 +567,23 @@ export default abstract class HW3Level extends Scene {
         this.healthFrame2.scale.set(0.12, 0.12);
 
         // End of level label (start off screen)
-        this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(-300, 100), text: "Level Complete" });
+        this.levelEndLabel = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(150, 100), text: "Level Complete" });
         this.levelEndLabel.size.set(1200, 60);
         this.levelEndLabel.borderRadius = 0;
         this.levelEndLabel.backgroundColor = new Color(34, 32, 52);
         this.levelEndLabel.textColor = Color.WHITE;
         this.levelEndLabel.fontSize = 48;
+        this.levelEndLabel.backgroundColor.a = 0;
+        this.levelEndLabel.textColor.a = 0;
         this.levelEndLabel.font = "MyFont";
 
         // End of level label2 (start off screen)
-        this.levelEndLabel2 = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(-300, 200), text: "You can now grapple to ice and clouds." });
+        this.levelEndLabel2 = <Label>this.add.uiElement(UIElementType.LABEL, HW3Layers.UI, { position: new Vec2(150, 115), text: "You can now grapple to ice and clouds." });
         this.levelEndLabel2.size.set(0, 0);
         this.levelEndLabel2.borderRadius = 0;
         this.levelEndLabel2.backgroundColor = new Color(34, 32, 52);
         this.levelEndLabel2.textColor = Color.WHITE;
+        this.levelEndLabel2.backgroundColor.a = 0; 
         this.levelEndLabel2.textColor.a = 0;
         this.levelEndLabel2.fontSize = 48;
         this.levelEndLabel2.font = "MyFont";
@@ -634,10 +641,16 @@ export default abstract class HW3Level extends Scene {
             duration: 1000,
             effects: [
                 {
-                    property: TweenableProperties.posX,
-                    start: -300,
-                    end: 150,
-                    ease: EaseFunctionType.OUT_SINE
+                    property: "backgroundColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                },
+                {
+                    property: "textColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ]
         });
@@ -648,10 +661,16 @@ export default abstract class HW3Level extends Scene {
             duration: 1000,
             effects: [
                 {
-                    property: TweenableProperties.posX,
-                    start: -300,
-                    end: 150,
-                    ease: EaseFunctionType.OUT_SINE
+                    property: "backgroundColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
+                },
+                {
+                    property: "textColor.alpha",
+                    start: 0,
+                    end: 1,
+                    ease: EaseFunctionType.IN_OUT_QUAD
                 }
             ]
         });

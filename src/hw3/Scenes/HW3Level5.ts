@@ -176,7 +176,7 @@ export default class Level5 extends HW3Level {
         this.level = 5;
         
         this.levelEndLabel2.size.set(1200, 60);
-        this.levelEndLabel2.textColor.a = 1;
+        this.levelEndLabel2.textColor.a = 0;
 
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
