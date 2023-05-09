@@ -193,7 +193,11 @@ export default class Level6 extends HW3Level {
         this.currentLevel = Level6;
         this.level = 6;
 
-        this.levelEndLabel.text = "Congratulations! All Anomalies Eliminated!"
+        this.levelEndLabel.text = "Congratulations! All Anomalies Eliminated!";
+        
+        this.levelEndLabel2.text = "Thanks for Playing!";
+        this.levelEndLabel2.size.set(1200, 60);
+        this.levelEndLabel2.textColor.a = 0;
         
         this.receiver.subscribe(HW3Events.LEVEL_CHANGE);
 
