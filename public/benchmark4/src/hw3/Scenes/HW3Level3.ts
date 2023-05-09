@@ -48,7 +48,7 @@ export default class Level3 extends HW3Level {
     public static readonly DASH_AUDIO_PATH = "hw4_assets/sounds/dash.mp3";
     
     public static readonly DAMAGED_AUDIO_KEY = "PLAYER_DAMAGED";
-    public static readonly DAMAGED_AUDIO_PATH = "hw4_assets/sounds/takedamage.mp3";
+    public static readonly DAMAGED_AUDIO_PATH = "hw4_assets/sounds/pdamage.wav";
 
     public static readonly DEADGE_AUDIO_KEY = "PLAYER_DEADGE";
     public static readonly DEADGE_AUDIO_PATH = "hw4_assets/sounds/deadge.mp3";
@@ -147,6 +147,8 @@ export default class Level3 extends HW3Level {
         this.load.audio("SWITCH_1", "hw4_assets/sounds/switch1.wav");
         this.load.audio("SWITCH_2", "hw4_assets/sounds/switch2.wav");
         this.load.audio("PEEK", "hw4_assets/sounds/peek.mp3");
+        this.load.audio("PDAMAGE2", "hw4_assets/sounds/pdamage2.wav");
+        //this.load.audio("PDAMAGE", "hw4_assets/sounds/oof1.mp3");
         //this.load.audio("WIN", "hw4_assets/sounds/imsosorry.mp3");
     }
 

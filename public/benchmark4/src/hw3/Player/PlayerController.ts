@@ -143,7 +143,7 @@ export default class PlayerController extends StateMachineAI {
                 console.log("Player hit!");
                 this.lastHitTime = new Date();
                 this.health--;
-                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "player_hit", loop: false, holdReference: false });
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: Math.random() < 0.5 ? "PLAYER_DAMAGED" : "PDAMAGE2", loop: false, holdReference: false });
                 this.owner.animation.play(PlayerAnimations.TAKING_DAMAGE);
                 this.owner.animation.queue("IDLE", false, undefined);
                 if(this.health <= 0) {
@@ -168,6 +168,7 @@ export default class PlayerController extends StateMachineAI {
             }
             case "DYING": {
                 if(this.invincible || this.won) break;
+                this.health = 0.1;
                 this.changeState(PlayerStates.DEAD);
                 break;
             }
