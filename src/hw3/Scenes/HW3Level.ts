@@ -345,7 +345,6 @@ export default abstract class HW3Level extends Scene {
     }
 
     public showCswitch(position: Vec2, big: boolean = false): void {
-        console.log("SHOWING PARTICLE");
         this.cswitch.position = position;
         this.cswitch.visible = true;
         this.cswitch.tweens.play(big ? "fadeOutBig" : "fadeOut");
