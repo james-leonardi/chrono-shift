@@ -197,7 +197,7 @@ export default class Level1 extends HW3Level {
         tutorialZoomTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_ZOOM", null);
         tutorialZoomTrigger.color = new Color(255, 0, 255, 0);
 
-        const tutorialShootTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(156, 3480), size: new Vec2(200, 100) });
+        const tutorialShootTrigger = <Rect>this.add.graphic(GraphicType.RECT, HW3Layers.PRIMARY, { position: new Vec2(240, 3480), size: new Vec2(200, 100) });
         tutorialShootTrigger.addPhysics(undefined, undefined, false, true);
         tutorialShootTrigger.setTrigger(HW3PhysicsGroups.PLAYER, "TUTORIAL_SHOOT", null);
         tutorialShootTrigger.color = new Color(255, 0, 255, 0);
