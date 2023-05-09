@@ -137,6 +137,8 @@ export default abstract class HW3Level extends Scene {
     protected enemyShootAudioKey1: string;
     protected enemyShootAudioKey2: string;
     protected enemyShootAudioKey3: string;
+    public bossShootAudioKey: string;
+    public bossDamageAudioKey: string;
 
     protected tutorialText: Label;
 

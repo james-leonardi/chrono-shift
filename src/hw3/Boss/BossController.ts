@@ -183,6 +183,7 @@ export default class BossController extends StateMachineAI {
                     break;
                 }
                 this.owner.animation.play("TAKING_DAMAGE");
+                this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: "BOSS_DAMAGE", loop: false, holdReference: false});
                 break;
             }
             // case HW3Events.GRAPPLE_HIT: {
@@ -238,11 +239,11 @@ export default class BossController extends StateMachineAI {
         const playerPos: Vec2 = (this.enable && this.player.visible) ? this.player.position.clone() : undefined;
 
         // Attempt to shoot at player
-        if (!this.weapon.isSystemRunning()) {
+        if (!this.paused && !this.weapon.isSystemRunning()) {
             if (playerPos !== undefined && this.owner.position.distanceTo(playerPos) < (this.final_boss ? 200 : 100)) {
                 this.weapon.setPlayerPos(playerPos?.clone());
                 this.weapon.startSystem(500, 0, this.owner.position.clone());
-                let enemyShootAudio = this.owner.getScene().getEnemyShootAudioKey();
+                let enemyShootAudio = this.final_boss ? this.owner.getScene().bossShootAudioKey : this.owner.getScene().getEnemyShootAudioKey();
                 this.emitter.fireEvent(GameEventType.PLAY_SOUND, {key: enemyShootAudio, loop: false, holdReference: false});
             }
         }

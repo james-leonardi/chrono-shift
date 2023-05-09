@@ -17,7 +17,7 @@ export default class Walk extends BossState {
 
         if (this.parent.final_boss) {
             // check if last hit was recent
-            if (Date.now() - this.parent.lasthit.getTime() < 400) return;
+            if (Date.now() - this.parent.lasthit.getTime() < 800) return;
         }
 
         // Get the input direction from the boss controller

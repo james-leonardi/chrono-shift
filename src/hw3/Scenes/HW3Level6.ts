@@ -66,7 +66,13 @@ export default class Level6 extends HW3Level {
     public static readonly ENEMY_SHOOT_AUDIO3_PATH = "hw4_assets/sounds/shotgun3.mp3";
 
     public static readonly BOSS_KILL_AUDIO_KEY = "BOSS_KILL";
-    public static readonly BOSS_KILL_AUDIO_PATH = "hw4_assets/sounds/bosskill.mp3";
+    public static readonly BOSS_KILL_AUDIO_PATH = "hw4_assets/sounds/final_kill.mp3";
+
+    public static readonly BOSS_SHOOT_AUDIO_KEY = "BOSS_SHOOT";
+    public static readonly BOSS_SHOOT_AUDIO_PATH = "hw4_assets/sounds/final_shoot.mp3";
+
+    public static readonly BOSS_DMG_AUDIO_KEY = "BOSS_DAMAGE";
+    public static readonly BOSS_DMG_AUDIO_PATH = "hw4_assets/sounds/boss_dmg.mp3";
 
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
@@ -104,6 +110,8 @@ export default class Level6 extends HW3Level {
         this.enemyShootAudioKey1 = Level6.ENEMY_SHOOT_AUDIO1_KEY;
         this.enemyShootAudioKey2 = Level6.ENEMY_SHOOT_AUDIO2_KEY;
         this.enemyShootAudioKey3 = Level6.ENEMY_SHOOT_AUDIO3_KEY;
+        this.bossShootAudioKey = Level6.BOSS_SHOOT_AUDIO_KEY;
+        this.bossDamageAudioKey = Level6.BOSS_DMG_AUDIO_KEY;
 
         // Level end size and position
         this.levelEndPosition = new Vec2(54, 132).mult(this.tilemapScale);
@@ -136,6 +144,8 @@ export default class Level6 extends HW3Level {
         this.load.audio(this.enemyShootAudioKey2, Level6.ENEMY_SHOOT_AUDIO2_PATH);
         this.load.audio(this.enemyShootAudioKey3, Level6.ENEMY_SHOOT_AUDIO3_PATH);
         this.load.audio(this.bossKillAudioKey, Level6.BOSS_KILL_AUDIO_PATH);
+        this.load.audio(this.bossDamageAudioKey, Level6.BOSS_DMG_AUDIO_PATH);
+        this.load.audio(this.bossShootAudioKey, Level6.BOSS_SHOOT_AUDIO_PATH);
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);
