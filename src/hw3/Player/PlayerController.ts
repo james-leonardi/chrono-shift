@@ -168,6 +168,7 @@ export default class PlayerController extends StateMachineAI {
             }
             case "DYING": {
                 if(this.invincible || this.won) break;
+                this.health = 0.1;
                 this.changeState(PlayerStates.DEAD);
                 break;
             }
