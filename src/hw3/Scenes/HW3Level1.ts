@@ -71,6 +71,9 @@ export default class Level1 extends HW3Level {
     public static readonly TILE_DESTROYED_KEY = "TILE_DESTROYED";
     public static readonly TILE_DESTROYED_PATH = "hw4_assets/sounds/switch.wav";
 
+    public static readonly SWITCH_ERR_KEY = "SWITCH_ERR";
+    public static readonly SWITCH_ERR_PATH = "hw4_assets/sounds/err.mp3";
+
     public static readonly LEVEL_END = new AABB(new Vec2(928, 3632), new Vec2(24, 16));
 
     public constructor(viewport: Viewport, sceneManager: SceneManager, renderingManager: RenderingManager, options: Record<string, any>) {
@@ -102,6 +105,7 @@ export default class Level1 extends HW3Level {
         this.enemyShootAudioKey1 = Level1.ENEMY_SHOOT_AUDIO1_KEY;
         this.enemyShootAudioKey2 = Level1.ENEMY_SHOOT_AUDIO2_KEY;
         this.enemyShootAudioKey3 = Level1.ENEMY_SHOOT_AUDIO3_KEY;
+        this.switchErrAudioKey = Level1.SWITCH_ERR_KEY;
 
         this.levelEndPosition = new Vec2(36, 620).mult(this.tilemapScale);
         this.levelEndHalfSize = new Vec2(0, 0).mult(this.tilemapScale);
@@ -128,6 +132,7 @@ export default class Level1 extends HW3Level {
         this.load.audio(this.enemyShootAudioKey2, Level1.ENEMY_SHOOT_AUDIO2_PATH);
         this.load.audio(this.enemyShootAudioKey3, Level1.ENEMY_SHOOT_AUDIO3_PATH);
         this.load.audio(this.bossKillAudioKey, Level1.BOSS_KILL_AUDIO_PATH);
+        this.load.audio(this.switchErrAudioKey, Level1.SWITCH_ERR_PATH);
 
         this.load.image(HW3Level.healthFrameKey, HW3Level.healthFramePath);
         this.load.image(HW3Level.healthFrame2Key, HW3Level.healthFrame2Path);

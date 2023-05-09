@@ -229,6 +229,7 @@ export default class PlayerController extends StateMachineAI {
                 const tile = this.tilemap.getColRowAt(new Vec2(this.owner.position.x, this.owner.position.y + newPos));
                 if ((this.owner.getScene().getTilemap("Main") as OrthogonalTilemap).isTileCollidable(tile.x, tile.y)) {
                     console.log("COLLIDABLE!");
+                    this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: "SWITCH_ERR", loop: false, holdReference: false });
                 } else {
                     console.log("Switch!");
                     this.emitter.fireEvent(GameEventType.PLAY_SOUND, { key: ((this.owner.position.y < this.switch_dist_y) ? "SWITCH_1" : "SWITCH_2"), loop: false, holdReference: false });
